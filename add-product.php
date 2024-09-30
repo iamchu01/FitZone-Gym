@@ -54,8 +54,8 @@ $conn->close();
                     <div class="col-sm-12">
                         <h3 class="page-title">Add New Product</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item active">Product Management</li>
-                            <li class="breadcrumb-item">Add Product</li>
+                        <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>   
+                        <li class="breadcrumb-item"><a href="inventory.php">Product List</a></li>   
                         </ul>
                     </div>
                 </div>

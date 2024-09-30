@@ -25,23 +25,18 @@ $page = $components[2];
                     <a href="events.php"><i class="la la-calendar"></i> <span>Calendar</span></a>
                 </li>
                  <!-- //* CALENDAR -->
-
-                <li class="menu-title"> 
-                    <span>File Maintenance</span>
-                </li>
-
-                <!-- //* INVENTORY -->
-                 <li class="submenu">
-                    <a href="#" ><i class="la la-box"></i> <span> Product</span> <span class="menu-arrow"></span></a>
+                  <!-- //* file maintinance -->
+                <li class=" submenu"> 
+                <a href="#" ><i class="la la-box"></i> <span> File maintinance</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
-                        <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>
-                        <li><a class="<?php echo ($page == 'add-category.php')?'active':'';?>" href="add-category.php">Add Category</a></li>
+                        <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                 
                         <li><a class="<?php echo ($page == 'inventory.php')?'active':'';?>" href="inventory.php">Product List</a></li>
-                        <li><a class="<?php echo ($page == 'add-product.php')?'active':'';?>" href="add-product.php">Add Product</a></li>      
-                        <li><a class="<?php echo ($page == 'stock-in.php')?'active':'';?>" href="stock-in.php">Stock In</a></li>
-                        <li><a class="<?php echo ($page == 'stock-out.php')?'active':'';?>" href="stock-out.php">Stock Out</a></li>
+                        <li><a class="<?php echo ($page == 'offered-programs.php')?'active':'';?>" href="offered-programs.php">Offered Programs</a></li>  
+                        <li><a class="<?php echo ($page == 'targeted-exercise.php')?'active':'';?>" href="targeted-exercise.php">Targeted Exercise</a></li>
                     </ul>
                 </li>
+
+          
                 <!-- //* INVENTORY -->
 
                 <!-- //* CUSTOMER MANAGEMENT -->
@@ -58,17 +53,6 @@ $page = $components[2];
                 </li>
                 <!-- //* CUSTOMER MANAGEMENT -->
 
-                <!-- //* PROGRAMS and WORKOUTS -->
-                 <li class="submenu">
-                    <a href="#" ><i class="la la-dumbbell"></i> <span> Programs & Workouts</span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li><a class="<?php echo ($page == 'offered-programs.php')?'active':'';?>" href="offered-programs.php">Offered Programs</a></li>
-                        <li><a class="<?php echo ($page == 'create-program.php')?'active':'';?>" href="create-program.php">Create Program</a></li>
-                        <li><a class="<?php echo ($page == 'targeted-exercise.php')?'active':'';?>" href="targeted-exercise.php">Targeted Exercise</a></li>
-                    </ul>
-                </li>
-                <!-- //* PROGRAMS and WORKOUTS -->
-
                 <li class="menu-title"> 
                     <span>Transaction</span>
                 </li>
@@ -84,6 +68,8 @@ $page = $components[2];
                 </li>
                 <li class="<?php echo ($page == 'discount.php')?'active':'';?>" href="discount.php"> 
                     <a href="discount.php"> <i class="la la-gem"></i> <span>Discounts</span></a>
+                    <li><a class="<?php echo ($page == 'stock-in.php')?'active':'';?>" href="stock-in.php">Stock In</a></li>
+                    <li><a class="<?php echo ($page == 'stock-out.php')?'active':'';?>" href="stock-out.php">Stock Out</a></li>
                 </li>
                 <li class="<?php echo ($page == 'archive.php')?'active':'';?>" href="archive.php"> 
                     <a href="archive.php"> <i class="fas fa-archive"></i> <span>Archive</span></a>
