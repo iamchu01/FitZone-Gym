@@ -119,8 +119,8 @@ $conn->close();
                     <div class="col-sm-12">
                         <h3 class="page-title">Add New Category</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item active">Product Management</li>
-                            <li class="breadcrumb-item">Add Category</li>
+                            <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>                   
+                            <li class="breadcrumb-item"><a href="category-list.php">Category List</a></li>   
                         </ul>
                     </div>
                 </div>
