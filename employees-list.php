@@ -58,10 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="page-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="page-title">Member List</h3>
+                            <h3 class="page-title">Members</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Member List</li>
+                                <li class="breadcrumb-item active">Members</li>
                             </ul>
                         </div>
                     </div>
