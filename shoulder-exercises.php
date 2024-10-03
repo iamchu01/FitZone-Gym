@@ -35,7 +35,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         }
         .card.active {
             border: 2px solid #28a745;
-            background-color: #d1e7dd;
+            background-color: #48c92f;
         }
         .page-wrapper{
             width: 80%;
@@ -57,10 +57,10 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                 <div class="page-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3 class="page-title"> Welcome Admin!</h3>
+                            <h3 class="page-title"> Shoulder Exercises</h3>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item fa fa-chevron-left"><a href="targeted-exercise.php"> Muscle groups</a></li>
-                                <li class="breadcrumb-item active"> Shoulder Exercises</li>
+                            <li class="breadcrumb-item active"> Shoulder Exercises</li>
+                            <li class="breadcrumb-item "><a href="targeted-exercise.php"> Muscle groups</a></li>
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">                   
@@ -91,7 +91,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                 </div>
             </div>
 
-            <div class="row" id="exercise-list">
+            <div class="row " id="exercise-list">
                 <!-- Exercise items will be inserted here dynamically -->
             </div>
 
@@ -104,7 +104,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
+                        <form id="exerciseFormAdd" enctype="multipart/form-data">
                                 <input type="hidden" id="exercise_id" name="exercise_id" value="">
                                 <div class="mb-3 text-center">
                                     <label for="exerciseImage" class="form-label">Exercise Image/GIF</label>
@@ -147,8 +147,8 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" id="exerciseIdEdit" name="exercise_id" value="">
+                            <form id="exerciseFormEdit" enctype="multipart/form-data">
+                            <input type="hidden" id="exerciseIdEdit" name="exercise_id" value="">
 
 
                                     <div class="mb-3 text-center">
@@ -184,26 +184,24 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
 
-            <!-- Success Modal -->
-            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="successModalLabel">Success</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center">
-                            <div class="success-icon" style="font-size: 48px; color: #28a745;">
-                                <i class="fa fa-check-circle"></i>
-                            </div>
-                            <h5 id="successMessage">Action completed successfully.</h5>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
+       <!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
          <!-- Delete Modal -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -291,13 +289,47 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
             xhr.send();
         }
 
-        // Show success modal with custom message
-        function showSuccessModal(message) {
-            document.getElementById('successMessage').textContent = message;
-            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        }
+        document.getElementById('exerciseFormEdit').addEventListener('submit', handleFormSubmit);
 
+// Attach the event listener to another form (for example, exerciseFormAdd)
+document.getElementById('exerciseFormAdd').addEventListener('submit', handleFormSubmit);
+function handleFormSubmit(event) {
+    event.preventDefault();
+        event.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(this); // Get form data
+
+        fetch('save-exercise.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json(); // Parse the JSON response
+        })
+        .then(data => {
+            if (data.success) {
+                // Display the success message in the modal
+                document.getElementById('successMessage').innerText = data.message; // Set message
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show(); // Show the modal
+                // Optionally, close the edit modal
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('exerciseModalEdit'));
+                editModal.hide();
+            } else {
+                alert('Failed to update the exercise: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error case (show error message in modal or alert)
+            document.getElementById('successMessage').innerText = 'An error occurred while updating the exercise.';
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show(); // Show the modal with error message
+        });
+    };
      
         function openEditModal(exerciseId, exerciseName, exerciseDescription, muscleCategory, exerciseImage) {
     // Populate modal fields with existing data

@@ -25,7 +25,7 @@ if (isset($_GET['exercise_id'])) {
         echo json_encode(['error' => 'Exercise not found']);
     }
 
-    $stmt->close(); 
+    $stmt->close();
     $conn->close();
 } else {
     echo json_encode(['error' => 'No exercise ID provided']);

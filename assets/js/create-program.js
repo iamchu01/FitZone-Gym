@@ -8,37 +8,216 @@ function previewImage(event) {
     reader.readAsDataURL(event.target.files[0]);
 
 }
-document.addEventListener('DOMContentLoaded', function() {
-    const decrementButton = document.getElementById('decrement_duration');
-    const incrementButton = document.getElementById('increment_duration');
-    const durationInput = document.getElementById('program_duration');
 
-    decrementButton.addEventListener('click', function() {
-        let value = parseInt(durationInput.value || durationInput.placeholder, 10);
-        if (value > 0) {
-            value--;
-            durationInput.value = value;
+//anti refresh 
+// window.addEventListener('beforeunload', function (e) {
+//     const message = 'Are you sure you want to leave this page? Your changes may not be saved.';
+//     e.preventDefault(); 
+//     e.returnValue = message; 
+
+//     return message; 
+// });
+//day exercise
+// Create the exercise table only once
+const exerciseTable = document.createElement('table');
+exerciseTable.className = 'table table-bordered';
+const thead = document.createElement('thead');
+thead.innerHTML = `
+    <tr>
+        <th>Exercise</th>
+        <th>Set</th>
+        <th>Rep</th>
+        <th>Time</th>
+        <th>Muscle Group</th>
+        <th>Action</th>
+    </tr>
+`;
+exerciseTable.appendChild(thead);
+const tbody = document.createElement('tbody');
+exerciseTable.appendChild(tbody);
+
+// Append the exercise table to the exerciseContainer
+document.getElementById('exerciseContainer').appendChild(exerciseTable);
+
+// Function to create a dropdown for muscle groups
+function createMuscleGroupDropdown(muscleGroups) {
+    const select = document.createElement('select');
+    select.className = 'form-select';
+    select.addEventListener('change', function() {
+        const selectedMuscleGroup = this.value;
+        fetchExercisesByMuscleGroup(selectedMuscleGroup);
+    });
+
+    muscleGroups.forEach(group => {
+        const option = document.createElement('option');
+        option.value = group.toLowerCase().replace(/\s+/g, '-'); // Use kebab-case for values
+        option.textContent = group;
+        select.appendChild(option);
+    });
+
+    return select;
+}
+
+// Function to fetch muscle groups from the server
+function fetchMuscleGroups() {
+    return fetch('get-muscle-groups.php') // Update with your actual PHP endpoint
+        .then(response => response.json())
+        .catch(error => {
+            console.error('Error fetching muscle groups:', error);
+            return [];
+        });
+}
+
+function fetchExercisesByMuscleGroup(muscleGroup) {
+    const formattedMuscleGroup = muscleGroup.replace(/-/g, ' '); // Convert kebab-case back to normal
+    return fetch(`get-exercise-program.php?muscle_group=${encodeURIComponent(formattedMuscleGroup)}`) // Encode the parameter
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return []; // Return an empty array if there's an error
+            }
+            return data; // Return the array of exercises
+        })
+        .then(exercises => {
+            populateExerciseList(exercises);
+        })
+        .catch(error => {
+            console.error('Error fetching exercises:', error);
+        });
+}
+
+
+function populateExerciseList(exercises) {
+    const exerciseList = document.getElementById('exerciseList');
+    exerciseList.innerHTML = ''; // Clear previous exercises
+
+    if (exercises.length === 0) {
+        exerciseList.innerHTML = '<p>No exercises found for this muscle group.</p>';
+        return;
+    }
+
+    exercises.forEach(exercise => {
+        const exerciseItem = document.createElement('div');
+        exerciseItem.className = 'form-check';
+        exerciseItem.innerHTML = `
+            <input class="form-check-input" type="radio" name="exercise" value="${exercise.me_id}" id="exercise-${exercise.me_id}">
+            <label class="form-check-label" for="exercise-${exercise.me_id}">
+                ${exercise.me_name}
+            </label>
+        `;
+        exerciseList.appendChild(exerciseItem);
+    });
+}
+
+// Function to add a new exercise row
+async function addExerciseRow() {
+    const muscleGroups = await fetchMuscleGroups(); // Fetch muscle groups
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>
+            <input type="text" class="form-control exercise-input" placeholder="Exercise" readonly>
+        </td>
+        <td><input type="number" class="form-control"></td>
+        <td><input type="number" class="form-control"></td>
+        <td><input type="text" class="form-control"></td>
+        <td>
+            <div>
+                <label>
+                    <input type="checkbox" class="include-muscle-group"> Include Muscle Group
+                </label>
+            </div>
+            <div class="muscle-group-dropdown" style="display: none;"></div>
+        </td>
+        <td><button class="btn btn-danger remove-exercise">Remove</button></td>
+    `;
+
+    // Append the muscle group dropdown to the new row
+    const muscleGroupCell = row.querySelector('div.muscle-group-dropdown');
+    muscleGroupCell.appendChild(createMuscleGroupDropdown(muscleGroups));
+
+    // Add event listener to show/hide the dropdown based on checkbox state
+    const checkbox = row.querySelector('.include-muscle-group');
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            muscleGroupCell.style.display = 'block'; // Show the muscle group dropdown
+        } else {
+            muscleGroupCell.style.display = 'none'; // Hide the dropdown
+            row.querySelector('.exercise-input').value = ''; // Clear exercise input
         }
     });
 
-    incrementButton.addEventListener('click', function() {
-        let value = parseInt(durationInput.value || durationInput.placeholder, 10);
-        value++;
-        durationInput.value = value;
+    // Add event listener for the exercise cell click
+    const exerciseCell = row.querySelector('.exercise-input');
+    exerciseCell.addEventListener('click', function() {
+        // Fetch exercises based on the selected muscle group when the cell is clicked
+        if (checkbox.checked) {
+            const selectedMuscleGroup = muscleGroupCell.querySelector('select').value;
+            fetchExercisesByMuscleGroup(selectedMuscleGroup); // Fetch exercises based on selected muscle group
+            $('#exerciseSelectionModal').modal('show'); // Show the modal
+        }
     });
+
+    // Event listener for exercise selection confirmation
+    document.getElementById('confirmExercise').addEventListener('click', function() {
+        const selectedExercise = document.querySelector('input[name="exercise"]:checked');
+        if (selectedExercise) {
+            const exerciseId = selectedExercise.value;
+            const exerciseName = selectedExercise.nextElementSibling.textContent; // Get exercise name from label
+            exerciseCell.value = exerciseName; // Set selected exercise name
+            $('#exerciseSelectionModal').modal('hide'); // Hide modal
+        } else {
+            alert('Please select an exercise');
+        }
+    });
+
+    tbody.appendChild(row);
+
+    // Add event listener for the newly created remove button
+    row.querySelector('.remove-exercise').addEventListener('click', function() {
+        tbody.removeChild(row); // Remove the specific row
+    });
+}
+
+
+// Add event listener for the Add Exercise button
+document.getElementById('addExercise').addEventListener('click', function() {
+    addExerciseRow();
 });
-// weekly 
+
+// Add event listener for the Clear All button
+document.getElementById('removeExercise').addEventListener('click', function() {
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild); // Remove all rows from tbody
+    }
+});
+
+//end of create exercise day
+
+//week and title
 document.addEventListener('DOMContentLoaded', function () {
     const programDurationInput = document.getElementById('program_duration');
     const weekTableContainer = document.getElementById('week-table-container');
     let programDuration = 0;
+    let selectedWeek = 1;
+    let selectedDay = "Monday";
 
-    // Function to update the modal header
+    // Function to update the modal header and display week/day
     function updateModalHeader(week, day) {
-        const modalLabel = document.getElementById('dayModalLabel');
-        modalLabel.textContent = `Week ${week} ${day}`;
+        selectedWeek = week;
+        selectedDay = day;
+
+        const selectedWeekDay = document.getElementById('selectedWeekDay');
+        selectedWeekDay.textContent = `Week ${week} - ${day}`;
     }
 
+    // Function to update the week table with day buttons
     function updateWeekTable() {
         weekTableContainer.innerHTML = ''; // Clear existing table
         
@@ -81,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     dayButton.setAttribute('data-bs-toggle', 'modal');
                     dayButton.setAttribute('data-bs-target', '#dayModal');
 
-                    // Add event listener to update modal header
+                    // Add event listener to update modal header and pass correct week/day
                     dayButton.addEventListener('click', function() {
                         updateModalHeader(i, day);
                     });
@@ -98,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Event listener to update the week table whenever the program duration changes
     document.getElementById('increment_duration').addEventListener('click', function () {
         programDuration++;
         programDurationInput.value = programDuration;
@@ -112,49 +292,88 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-//anti refresh 
-window.addEventListener('beforeunload', function (e) {
-    const message = 'Are you sure you want to leave this page? Your changes may not be saved.';
-    e.preventDefault(); 
-    e.returnValue = message; 
 
-    return message; 
-});
-//day exercise
-document.getElementById('addExercise').addEventListener('click', function() {
-    const table = document.createElement('table');
-    table.className = 'table table-bordered';
-    
-    const thead = document.createElement('thead');
-    thead.innerHTML = `
-      <tr>
-        <th>Exercise</th>
-        <th>Set</th>
-        <th>Rep</th>
-        <th>Time</th>
-      </tr>
-    `;
-    
-    table.appendChild(thead);
-    
-    const tbody = document.createElement('tbody');
-    tbody.innerHTML = `
-      <tr>
-        <td><input type="text" class="form-control"></td>
-        <td><input type="number" class="form-control"></td>
-        <td><input type="number" class="form-control"></td>
-        <td><input type="text" class="form-control"></td>
-      </tr>
-    `;
-    
-    table.appendChild(tbody);
-    
-    document.getElementById('exerciseContainer').appendChild(table);
-  });
-  
-  document.getElementById('removeExercise').addEventListener('click', function() {
-    const exerciseContainer = document.getElementById('exerciseContainer');
-    if (exerciseContainer.lastChild) {
-      exerciseContainer.removeChild(exerciseContainer.lastChild);
+// Save the day plan when the "Save Plan" button is clicked
+document.getElementById('saveDayPlan').addEventListener('click', function () {
+    const dayTitle = document.getElementById('dayTitle').value;
+
+    if (dayTitle.trim() === '') {
+        alert('Please enter a title for this day.');
+        return;
     }
-  });
+
+    const exerciseTable = document.getElementById('exerciseContainer').querySelector('table');
+    if (!exerciseTable) {
+        alert('Please add at least one exercise.');
+        return;
+    }
+
+    // Clone the exercise table to append it to the weekly plan
+    const clonedTable = exerciseTable.cloneNode(true);
+
+    // Create a section for this day in the weekly plan
+    const weeklyPlanContainer = document.getElementById('week-table-container');
+    const daySection = document.createElement('div');
+    daySection.classList.add('day-section', 'mb-3');
+
+    // Append the day title and week/day to the section
+    const dayTitleElement = document.createElement('h5');
+    dayTitleElement.textContent = `Week ${selectedWeek} - ${selectedDay}: ${dayTitle}`;
+    daySection.appendChild(dayTitleElement);
+
+    // Append the cloned exercise table
+    daySection.appendChild(clonedTable);
+
+    // Add the day section to the weekly plan
+    weeklyPlanContainer.appendChild(daySection);
+
+    // Reset modal content for next day
+    document.getElementById('dayTitle').value = '';
+    document.getElementById('exerciseContainer').innerHTML = ''; // Clear exercises for the next day
+});
+
+// Function to create a dropdown for exercises based on the selected muscle group
+function fetchExercisesByMuscleGroup(muscleGroup) {
+    console.log("Fetching exercises for muscle group:", muscleGroup); // Debug log
+    return fetch(`get-exercise.php?muscle_group=${muscleGroup}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return []; // Return an empty array if there's an error
+            }
+            return data; // Return the array of exercises
+        })
+        .then(exercises => {
+            populateExerciseList(exercises);
+        })
+        .catch(error => {
+            console.error('Error fetching exercises:', error);
+        });
+}
+
+// Function to create a dropdown for muscle groups
+function createMuscleGroupDropdown(muscleGroups) {
+    const select = document.createElement('select');
+    select.className = 'form-select';
+    select.addEventListener('change', function() {
+        const selectedMuscleGroup = this.value;
+        fetchExercisesByMuscleGroup(selectedMuscleGroup); // Fetch exercises for selected muscle group
+    });
+
+    muscleGroups.forEach(group => {
+        const option = document.createElement('option');
+        option.value = group.toLowerCase().replace(/\s+/g, '-'); // Convert to kebab-case
+        option.textContent = group;
+        select.appendChild(option);
+    });
+
+    return select;
+}
+
+

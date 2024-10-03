@@ -9,6 +9,7 @@
 
     <?php include 'layouts/head-css.php'; ?>
 
+
 </head>
 
 <body>
@@ -95,28 +96,71 @@
         
         </div>          
     </div>
-<!--create exercise per day -->
-    <div class="modal fade" id="dayModal" tabindex="-1" aria-labelledby="dayModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- Create exercise per day -->
+<div class="modal fade custom-modal" id="dayModal" tabindex="-1" aria-labelledby="dayModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Make modal larger -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="dayModalLabel">Day Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="d-flex justify-content-between mb-2">
-          <button type="button" class="btn btn-success" id="addExercise">+ Add Exercise</button>
-          <button type="button" class="btn btn-danger" id="removeExercise">- Remove Exercise</button>
+        <!-- Display the selected week and day -->
+        <div class="mb-3">
+          <p id="selectedWeekDay" class="fw-bold">Week 1 - Monday</p> <!-- This will be updated dynamically -->
         </div>
-        <div id="exerciseContainer"></div>
+
+        <!-- Title input for the day (e.g., "Chest Day") -->
+        <div class="mb-3">
+          <label for="dayTitle" class="form-label">Day Title</label>
+          <input type="text" class="form-control" id="dayTitle" placeholder="Enter day title (e.g., Chest Day)">
+        </div>
+
+        <!-- Exercise controls -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-success" id="addExercise">+ Add Exercise</button>
+            <button type="button" class="btn btn-danger" id="removeExercise">Clear All</button>
+          </div>
+        </div>
+
+        <!-- Container for exercises -->
+        <div id="exerciseContainer" class="mb-3"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Add Plan</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveDayPlan">Save Plan</button>
       </div>
     </div>
   </div>
 </div>
-
+<!-- Exercise Selection Modal -->
+<div class="modal fade" id="exerciseSelectionModal" tabindex="-1" aria-labelledby="exerciseSelectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exerciseSelectionModalLabel">Select Exercise</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="exerciseListTable">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Exercise Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exerciseList">
+                        <!-- Exercises will be populated here -->
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary" id="confirmExercise">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
 <!-- end main wrapper-->

@@ -1,16 +1,17 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/db-connection.php'; ?>
-
 <?php 
 $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
 
  ?>
 
 
- 
 <head>
     <title>Dashboard - GYYMS Admin</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
     <style>
@@ -37,7 +38,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         }
         .card.active {
             border: 2px solid #28a745;
-            background-color: #d1e7dd;
+            background-color: #48c92f;
         }
         .page-wrapper{
             width: 80%;
@@ -47,6 +48,14 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
             transform: scale(1.05);
             background-color: #48c92f;
         }
+        
+        .table {
+    table-layout: fixed;
+    width: 100%;
+    overflow: hidden; /* or a specific width */
+}
+
+
     </style>
 </head>
 
@@ -61,9 +70,8 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                         <div class="col-sm-12">
                             <h3 class="page-title"> Chest Exercises</h3>
                             <ul class="breadcrumb">
-                                 <li class="breadcrumb-item active"> Chest Exercises</li>
-                                <li class="breadcrumb-item "><a href="targeted-exercise.php"> Muscle groups</a></li>
-                                
+                            <li class="breadcrumb-item active"> chest Exercises</li>
+                            <li class="breadcrumb-item "><a href="targeted-exercise.php"> Muscle groups</a></li>
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">                   
@@ -72,31 +80,35 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
             </div>
-            <h4>Targeted muscle</h4>
+
             <div class="row card-container">
                 <div class="col card" id="upper-chest" onclick="showExercises('upper chest', this)">       
-                    <img src="assets/img/c1.JPG" alt="upper-chest">
+                    <img src="assets/img/c1.JPG" alt="upper chest">
                     <div class="card-body">
                         <h5 class="card-title">Upper chest</h5> 
                     </div>
                 </div>
                 <div class="col card" id="middle-chest" onclick="showExercises('middle chest', this)">              
-                    <img src="assets/img/c2.JPG" alt="middle-chest">
+                    <img src="assets/img/c2.JPG" alt="middle chest">
                     <div class="card-body">
                         <h5 class="card-title">Middle chest</h5> 
                     </div>
                 </div>
                 <div class="col card" id="lower-chest" onclick="showExercises('lower chest', this)">             
-                    <img src="assets/img/c3.JPG" alt="lower-chest"> 
+                    <img src="assets/img/c3.JPG" alt="lower chest">
                     <div class="card-body">
                         <h5 class="card-title">Lower chest</h5> 
                     </div>
                 </div>
             </div>
-
-            <div class="row" id="exercise-list">
-                <!-- Exercise items will be inserted here dynamically -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row table-responsive" id="exercise-list">
+                        <!-- Exercise items will be inserted here dynamically -->
+                    </div>
+                </div>
             </div>
+            
 
             <!-- Add Exercise Modal -->
             <div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
@@ -107,8 +119,8 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" id="exercise_id" name="exercise_id" value="<?php echo htmlspecialchars($exercise_id); ?>">
+                            <form id="exerciseFormAdd" enctype="multipart/form-data">
+                                <input type="hidden" id="exercise_id" name="exercise_id" value="">
                                 <div class="mb-3 text-center">
                                     <label for="exerciseImage" class="form-label">Exercise Image/GIF</label>
                                     <input type="file" class="form-control" id="exerciseImage" name="exerciseImage" accept="image/*,video/*" required onchange="previewImage(event)">
@@ -127,9 +139,9 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                                 <div class="mb-3">
                                     <label for="muscleCategory" class="form-label">Muscle Category</label>
                                     <select class="form-select" id="muscleCategory" name="muscleCategory" required>
-                                        <option value="upper chest">upper chest</option>
-                                        <option value="middle chest">middle chest</option>
-                                        <option value="lower chest">lower chest</option>
+                                        <option value="upper chest">Upper chest</option>
+                                        <option value="middle chest">Middle chest</option>
+                                        <option value="lower chest">Lower chest</option>
                                     </select>
                                 </div>
                                 <div class="modal-footer">
@@ -141,90 +153,91 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
             </div>
+             <!-- Edit Exercise Modal -->
+                <div class="modal fade" id="exerciseModalEdit" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exerciseModalLabel">Exercise Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <form id="exerciseFormEdit" enctype="multipart/form-data">
+                            <input type="hidden" id="exerciseIdEdit" name="exercise_id" value="">
 
- <!-- Edit Exercise Modal -->
-<div class="modal fade" id="exerciseModalEdit" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+
+                                    <div class="mb-3 text-center">
+                                        <label for="exerciseImageEdit" class="form-label">Exercise Image/GIF</label>
+                                        <input type="file" class="form-control" id="exerciseImageEdit" name="exerciseImage" accept="image/*,video/*" onchange="previewImage(event)">
+                                    </div>
+                                    <div class="mb-3 text-center">
+                                        <img id="imagePreviewEdit" src="" alt="Image Preview" style="display: none; max-width: 100%; height: auto;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exerciseNameEdit" class="form-label">Exercise Name</label>
+                                        <input type="text" class="form-control" id="exerciseNameEdit" name="exerciseName" placeholder="Enter exercise name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exerciseDescriptionEdit" class="form-label">Description</label>
+                                        <textarea class="form-control" id="exerciseDescriptionEdit" name="exerciseDescription" rows="4" placeholder="Enter exercise description" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="muscleCategoryEdit" class="form-label">Muscle Category</label>
+                                        <select class="form-select" id="muscleCategoryEdit" name="muscleCategory" required>
+                                            <option value="upper chest">Upper chest</option>
+                                            <option value="middle chest">Middle chest</option>
+                                            <option value="lower chest">Lower chest</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save exercise</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exerciseModalLabel">Exercise Details</h5>
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="update-exercise.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="exercise_id" name="exercise_id" value="<?php echo $exercise_id; ?>">
-
-                    <!-- Current Image Display -->
-                    <div>
-                        <label>Current Image:</label>
-                        <img id="imagePreviewEdit" src="" alt="Current Item Image" style="max-width: 100px; max-height: 100px; display: none;">
-                        <p id="noImageMessage" style="display: none;">No image available.</p>
-                    </div>
-                    <div>
-                        <label>Upload New Image:</label>
-                        <input type="file" class="form-control" id="exerciseImageEdit" name="exerciseImage" accept="image/*,video/*" onchange="previewImage(event)">
-                        <small>(Leave empty to keep the current image)</small>
-                    </div>
-
-                    <!-- Exercise Name -->
-                    <div class="mb-3">
-                        <label for="exerciseNameEdit" class="form-label">Exercise Name</label>
-                        <input type="text" class="form-control" id="exerciseNameEdit" name="exerciseName" placeholder="Enter exercise name" required>
-                    </div>
-                    
-                    <!-- Exercise Description -->
-                    <div class="mb-3">
-                        <label for="exerciseDescriptionEdit" class="form-label">Description</label>
-                        <textarea class="form-control" id="exerciseDescriptionEdit" name="exerciseDescription" rows="4" placeholder="Enter exercise description" required></textarea>
-                    </div>
-                    
-                    <!-- Muscle Category -->
-                    <div class="mb-3">
-                        <label for="muscleCategoryEdit" class="form-label">Muscle Category</label>
-                        <select class="form-select" id="muscleCategoryEdit" name="muscleCategory" required>
-                            <option value="upper chest">upper chest</option>
-                            <option value="middle chest">middle chest</option>
-                            <option value="lower chest">lower chest</option>
-                        </select>
-                    </div>
-
-                    <!-- Modal Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save exercise</button>
-                    </div>
-                </form>
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-                <!-- Delete exercise Modal -->
-            <div class="modal custom-modal fade" id="deleteModal" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="form-header">
-                                    <h3>Delete Exercise</h3>
-                                    <p>Are you sure you want to delete this exercise?</p>
-                                </div>
-                                <div class="modal-btn delete-action">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="javascript:void(0);" id="confirmDelete" class="btn btn-primary continue-btn">Delete</a>
-                                        </div>
-                                        <div class="col-6">
-                                            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+         <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this exercise?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a id="confirmDelete" class="btn btn-danger">Delete</a>
                         </div>
                     </div>
                 </div>
-      <!-- View Modal -->
+            </div>
+<!-- View Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -236,17 +249,9 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                 </div>
                 <!-- Right side: Details -->
                 <div style="flex: 2; border-left: 1px solid #dee2e6; padding-left: 20px;">
-                    <h1 class="card-title" id="viewModalTitle">Exercise Name</h1>
+                    <h5 class="card-title" id="viewModalTitle">Exercise Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Target Muscle: <span id="viewModalCategory"></span></h6>
-                    <div style="max-height: 200px; overflow-y: auto;" id="viewModalDescriptionContainer">
-                        <p class="card-text" id="viewModalDescription">
-                            <?php
-                                // Assuming $item['description'] holds the description
-                                $description = nl2br(htmlspecialchars($item['description'])); // Convert newlines to <br> and escape HTML
-                                echo $description;
-                            ?>
-                        </p>
-                    </div>
+                    <p class="card-text" id="viewModalDescription">Exercise Description</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -255,10 +260,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         </div>
     </div>
 </div>
-
-
-</div>
-            <?php include 'layouts/customizer.php'; ?>
+      <?php include 'layouts/customizer.php'; ?>
             <?php include 'layouts/vendor-scripts.php'; ?>
         </div>
     </div>
@@ -299,62 +301,91 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
             };
             xhr.send();
         }
-        function enableImageUpload() {
-    document.getElementById('exerciseImageEdit').style.display = 'block';
-    document.getElementById('uploadButton').style.display = 'none'; // Hide the button once clicked
-}
-
-// Function to preview the selected image
-function previewImage(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        const output = document.getElementById('imagePreviewEdit');
-        output.src = reader.result;
-        output.style.display = 'block'; // Show the preview
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
+         // add / edit modal
+        function openViewModal(exerciseId, exerciseName, exerciseDescription, muscleCategory, exerciseImage) {
+            // Populate the modal with exercise details
+            console.log("View Modal Called", exerciseId, exerciseName, exerciseDescription, muscleCategory, exerciseImage);
 
 
-function openEditModal(me_id, me_name, me_description, muscle_category, me_image) {
-    document.getElementById('exercise_id').value = me_id;
-    document.getElementById('exerciseNameEdit').value = me_name;
-    document.getElementById('exerciseDescriptionEdit').value = me_description;
-    document.getElementById('muscleCategoryEdit').value = muscle_category;
+            document.getElementById('viewModalTitle').innerText = exerciseName;
+            document.getElementById('viewModalCategory').innerText = muscleCategory;
+            
+            // Use innerHTML to preserve line breaks
+            document.getElementById('viewModalDescription').innerHTML = exerciseDescription.replace(/\n/g, '<br>'); // Convert newlines to <br>
 
-    // Set the image source directly to the Base64 string
-    if (me_image) {
-        const image = 'data:image/jpeg;base64,' + me_image; 
-        document.getElementById('imagePreviewEdit').src = image;
-        document.getElementById('imagePreviewEdit').style.display = 'block'; // Show the image
-        document.getElementById('noImageMessage').style.display = 'none'; // Hide no image message
-    } else {
-        document.getElementById('imagePreviewEdit').style.display = 'none'; // Hide image if no image
-        document.getElementById('noImageMessage').style.display = 'block'; // Show no image message
-    }
-
-    const exerciseModal = new bootstrap.Modal(document.getElementById('exerciseModalEdit'));
-    exerciseModal.show();
-}
-
-
-    // view modal
-         let description = "This is a description.\nIt has a new line.";
-
-
-        function openViewModal(id, name, description, category, image) {
-            // Populate your modal with exercise details here
-            document.getElementById('viewModalTitle').innerText = name;
-            document.getElementById('viewModalCategory').innerText = category;
-
-            // Use innerHTML to allow <br> tags, ensuring proper encoding
-            document.getElementById('viewModalDescription').innerHTML = description.replace(/\n/g, '<br>');
-
-            document.getElementById('viewModalImage').src = 'data:image/jpeg;base64,' + image;
+            document.getElementById('viewModalImage').src = 'data:image/jpeg;base64,' + exerciseImage;
 
             // Show the modal (assuming you're using Bootstrap modals)
-            $('#viewModal').modal('show');
+            const viewModal = new bootstrap.Modal(document.getElementById('viewModal'));
+            viewModal.show();
         }
+
+
+        function openEditModal(exerciseId, exerciseName, exerciseDescription, muscleCategory, exerciseImage) {
+            // Populate modal fields with existing data
+            document.getElementById('exerciseNameEdit').value = exerciseName;
+            document.getElementById('exerciseDescriptionEdit').value = exerciseDescription;
+            document.getElementById('muscleCategoryEdit').value = muscleCategory;
+
+            // Set the hidden input with exercise_id
+            document.getElementById('exerciseIdEdit').value = exerciseId;
+
+            // Set the image preview (if available)
+            const imagePreview = document.getElementById('imagePreviewEdit');
+            if (exerciseImage) {
+                imagePreview.src = 'data:image/jpeg;base64,' + exerciseImage;
+                imagePreview.style.display = 'block'; // Show the image preview
+            } else {
+                imagePreview.style.display = 'none';
+            }
+
+            // Show the edit modal
+            const exerciseModalEdit = new bootstrap.Modal(document.getElementById('exerciseModalEdit'));
+            exerciseModalEdit.show();
+        }
+
+        
+document.getElementById('exerciseFormEdit').addEventListener('submit', handleFormSubmit);
+
+// Attach the event listener to another form (for example, exerciseFormAdd)
+document.getElementById('exerciseFormAdd').addEventListener('submit', handleFormSubmit);
+function handleFormSubmit(event) {
+    event.preventDefault();
+        event.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(this); // Get form data
+
+        fetch('save-exercise.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json(); // Parse the JSON response
+        })
+        .then(data => {
+            if (data.success) {
+                // Display the success message in the modal
+                document.getElementById('successMessage').innerText = data.message; // Set message
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show(); // Show the modal
+                // Optionally, close the edit modal
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('exerciseModalEdit'));
+                editModal.hide();
+            } else {
+                alert('Failed to update the exercise: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error case (show error message in modal or alert)
+            document.getElementById('successMessage').innerText = 'An error occurred while updating the exercise.';
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show(); // Show the modal with error message
+        });
+    };
 
 
     // JavaScript to handle delete modal
@@ -369,9 +400,17 @@ function openEditModal(me_id, me_name, me_description, muscle_category, me_image
         confirmDelete.href = 'delete-exercise.php?id=' + exerciseId + '&redirect_url=' + redirectUrl;
     });
 });
-      
-        
+
+$(document).ready(function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
+
     </script>
-    
+    <script src="assets/js/success.js"></script>
+
 </body>
 </html>
