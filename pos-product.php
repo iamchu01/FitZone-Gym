@@ -6,8 +6,8 @@ $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : '';
 
 // Prepare SQL query based on whether a category is selected or not
 if ($category_id) {
-    // Filter by category
-    $sql = "SELECT * FROM products WHERE product_category = ?";
+    // Filter by category using category_id
+    $sql = "SELECT * FROM products WHERE category_id = ?"; // Updated here
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $category_id);
 } else {

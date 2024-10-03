@@ -7,11 +7,18 @@
     <?php include 'layouts/head-css.php'; ?>
     <link rel="stylesheet" href="assets/css/pos.css">
 </head>
-
+<style>
+          .main-wrapper {
+            width: 100%;
+            height: auto;
+            margin: 0%;
+            flex-direction: column;
+        }
+    </style>
 <?php include 'layouts/body.php'; ?>
 
 <!-- Main Wrapper -->
-<div class="position-absolute top-0 start-0">
+<div class="main-wrapper">
     <?php include 'layouts/menu.php'; ?>
     
     <!-- Page Wrapper -->
