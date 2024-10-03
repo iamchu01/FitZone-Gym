@@ -203,10 +203,10 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Attendance Tracking</h3>
+                        <h3 class="page-title">Attendance</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Attendance Tracking</li>
+                            <li class="breadcrumb-item active">Attendance</li>
                         </ul>
                     </div>
                 </div>

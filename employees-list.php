@@ -83,10 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-3">  
-                        <a href="#" class="btn btn-success w-100">Search</a>  
+                        <a href="#" class="btn btn-primary w-100">Search</a>  
                     </div>     
                     <div class="col-sm-6 col-md-3"> 
-                        <a href="#" class="btn btn-success w-100 add-btn" data-bs-toggle="modal" data-bs-target="#add_member"><i class="fa fa-plus"></i> Add Member</a>
+                        <a href="#" class="btn btn-primary w-100 add-btn" data-bs-toggle="modal" data-bs-target="#add_member"><i class="fa fa-plus"></i> Add Member</a>
                     </div>
                 </div>
                 <!-- /Search Filter -->
