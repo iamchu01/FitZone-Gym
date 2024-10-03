@@ -20,11 +20,19 @@ $page = $components[2];
                     <a href="admin-dashboard.php"><i class="la la-home"></i> <span>Dashboard</span></a>
                 </li>
                 
-                <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
+                 <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
 
                 <!-- //* CALENDAR -->
                  <li class="<?php echo ($page == 'events.php')?'active':'';?>" href="events.php"> 
                     <a href="events.php"><i class="la la-calendar"></i> <span>Calendar</span></a>
+                </li>
+
+                
+                <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
+
+                <!-- //* ATTENDANCE -->
+                <li class="<?php echo ($page == 'admin-dashboard.php') ?: ''; ?>">
+                    <a href="attendance-tracking.php"> <i class="la la-calendar-check"></i> <span>Attendance</span></a>
                 </li>
                 
                   <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
@@ -34,9 +42,9 @@ $page = $components[2];
                 <li class=" submenu"> 
                 <a href="#" ><i class="la la-box"></i> <span> File maintinance</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
-                        <li><a class="<?php echo ($page == 'add-instructor.php')?'active':'';?>" href="add-instructor.php">Add Instructor</a></li>
-                        <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Add Member</a></li>
-                        <li><a class="<?php echo ($page == 'create-membership.php')?'active':'';?>" href="create-membership.php">Create Membership</a></li>
+                        <li><a class="<?php echo ($page == 'add-instructor.php')?'active':'';?>" href="add-instructor.php">Instructors</a></li>
+                        <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Members</a></li>
+                        <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Create Subscription</a></li>
                         <li><a class="<?php echo ($page == 'inventory.php')?'active':'';?>" href="inventory.php">Product List</a></li>
                         <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                 
                         <li><a class="<?php echo ($page == 'offered-programs.php')?'active':'';?>" href="offered-programs.php">Offered Programs</a></li>  
@@ -92,6 +100,7 @@ $page = $components[2];
                         <li><a class="<?php echo ($page == 'sales-reports.php')?'active':'';?>" href="sales-reports.php">Sales Reports</a></li>
                         <li><a class="<?php echo ($page == 'inventory-reports.php')?'active':'';?>" href="inventory-reports.php">Inventory Reports</a></li>
                         <li><a class="<?php echo ($page == 'attendance-reports.php')?'active':'';?>" href="attendance-reports.php">Attendance Reports</a></li>
+                        <li><a class="<?php echo ($page == 'payments.php')?'active':'';?>" href="payments.php">Payments</a></li>
                     </ul>
                 </li>
                 <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
