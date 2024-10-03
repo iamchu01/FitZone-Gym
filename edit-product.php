@@ -8,12 +8,12 @@
     <?php include 'layouts/head-css.php'; ?>
 </head>
 <style>
-       .main-wrapper {
-            width: 100%;
-            height: auto;
-            margin: 0%;
-            flex-direction: column;
-        }
+    .main-wrapper {
+        width: 100%;
+        height: auto;
+        margin: 0%;
+        flex-direction: column;
+    }
 </style>
 
 <?php include 'layouts/body.php'; ?>
@@ -23,10 +23,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("Product ID is missing.");
 }
 
+
 $product_id = $_GET['id'];
 
-// Fetch product details
-$sql = "SELECT product_name, product_category, product_description, product_quantity, product_price, expire_date, product_image FROM products WHERE product_id = ?";
+// Fetch product details with category join
+$sql = "SELECT p.product_name, p.category_id, p.product_description, p.product_quantity, p.product_price, p.expire_date, p.product_image, c.category_name 
+        FROM products p 
+        LEFT JOIN category c ON p.category_id = c.category_id 
+        WHERE p.product_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $product_id);
 $stmt->execute();
@@ -37,16 +41,17 @@ if ($result->num_rows == 0) {
 }
 
 $product = $result->fetch_assoc();
-
-// Fetch categories
-$sql = "SELECT category_name FROM category";
+$expire_date = isset($product['expire_date']) ? $product['expire_date'] : null;
+$formatted_date = $expire_date ? date('Y-m-d', strtotime($expire_date)) : ''; // Ensures the date is in the correct format
+// Fetch categories with IDs
+$sql = "SELECT category_id, category_name FROM category";
 $result = $conn->query($sql);
 
 // Initialize an empty array for storing the categories
 $categories = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $categories[] = $row['category_name'];
+        $categories[] = $row; // store both ID and name
     }
 } else {
     echo "No categories found!";
@@ -76,8 +81,8 @@ if (!empty($product['product_image'])) {
                     <div class="col-sm-12">
                         <h3 class="page-title">Edit Product</h3>
                         <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                            <li class="breadcrumb-item">Edit Product</li>
+                            <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="inventory.php">Product List</a></li>
                         </ul>
                     </div>
                 </div>
@@ -109,8 +114,8 @@ if (!empty($product['product_image'])) {
                             <option value="" disabled>Select a category</option>
                             <?php
                             foreach ($categories as $category) {
-                                $selected = ($category == $product['product_category']) ? 'selected' : '';
-                                echo "<option value='" . htmlspecialchars($category) . "' $selected>" . htmlspecialchars($category) . "</option>";
+                                $selected = ($category['category_id'] == $product['category_id']) ? 'selected' : '';
+                                echo "<option value='" . htmlspecialchars($category['category_id']) . "' $selected>" . htmlspecialchars($category['category_name']) . "</option>";
                             }
                             ?>
                         </select>
@@ -128,18 +133,11 @@ if (!empty($product['product_image'])) {
                         <input type="number" class="form-control" id="product-price" name="product_price" step="0.01" value="<?php echo htmlspecialchars($product['product_price']); ?>" required>
                     </div>
                     <div class="form-group">
-    <label for="expire-date">Expire Date</label>
-    <?php
-    // Fetch the expiry date and format it for the input field
-    $expire_date = isset($product['expire_date']) ? $product['expire_date'] : '';
-    // Ensure the date format is correct (YYYY-MM-DD)
-    $formatted_date = date('Y-m-d', strtotime($expire_date));
-    ?>
-    <input type="date" class="form-control" id="expire-date" name="expire_date" value="<?php echo htmlspecialchars($formatted_date); ?>" required>
-</div>
+                        <label for="expire-date">Expire Date</label>
+                        <input type="date" class="form-control" id="expire-date" name="expire_date" value="<?php echo htmlspecialchars($formatted_date); ?>" required>
+                    </div>
                     <button type="submit" class="btn btn-primary">Update Product</button>
                 </form>
-
                 </div>
             </div>
             <!-- /Edit Product Form -->
@@ -152,7 +150,7 @@ if (!empty($product['product_image'])) {
 </div>
 <!-- /Main Wrapper -->
 
-<!-- success modal -->
+<!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -176,7 +174,7 @@ if (!empty($product['product_image'])) {
 <script>
     function previewImage(event) {
         var reader = new FileReader();
-        reader.onload = function(){
+        reader.onload = function() {
             var output = document.getElementById('image-preview');
             output.src = reader.result;
             output.style.display = 'block';

@@ -4,7 +4,7 @@ include 'layouts/db-connection.php';
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Ensure the ID is an integer
 
-    $sql = "SELECT category_image FROM category WHERE category_id = ?";
+    $sql = "SELECT product_image FROM products WHERE product_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();

@@ -67,21 +67,26 @@ $sql = "SELECT products.product_id, products.product_name, category.category_nam
         FROM products 
         INNER JOIN category ON products.category_id = category.category_id";
 
-$result = $conn->query($sql);
 
+
+$result = $conn->query($sql);
 if ($result->num_rows > 0) {
-    // Output data for each row
     while ($row = $result->fetch_assoc()) {
+        // Debugging lines
+        error_log("Product ID: " . $row['product_id']);
+        error_log("Description: " . $row['product_description']);
+        error_log("Expire Date: " . $row['expire_date']);
+
         echo "<tr>";
         echo "<td>" . htmlspecialchars($row['product_name']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['category_name']) . "</td>"; // Display category name
+        echo "<td>" . htmlspecialchars($row['category_name']) . "</td>";
         echo "<td>" . htmlspecialchars($row['product_description']) . "</td>";
         echo "<td>" . htmlspecialchars($row['expire_date']) . "</td>";
         echo "<td>" . htmlspecialchars($row['product_price']) . "</td>";
         echo "<td>" . htmlspecialchars($row['product_quantity']) . "</td>";
         echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
 
-        // Action buttons for View, Edit, Delete
+        // Action buttons
         echo "<td>
             <button class='btn btn-info btn-sm la la-eye view-product-button' data-bs-toggle='modal' data-bs-target='#viewProductModal' data-id='" . $row['product_id'] . "'></button>
             <a href='edit-product.php?id=" . $row['product_id'] . "' class='btn btn-warning btn-sm la la-edit'></a>
@@ -92,6 +97,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "<tr><td colspan='8'>No products found.</td></tr>";
 }
+
 
 $conn->close();
 ?>
@@ -121,8 +127,8 @@ $conn->close();
                             <img id="productImage" src="" alt="Product Image" class="img-fluid">
                         </div>
                         <div class="col-md-8">
-                            <h4 id="productName"></h4>
-                            <p id="productDescription"></p>
+                            <h1 id="productName"></h1>
+                            <p><strong>Discription:</strong> <span id="productDescription"></span></p>
                             <p><strong>Category:</strong> <span id="productCategory"></span></p>
                             <p><strong>Price:</strong> $<span id="productPrice"></span></p>
                             <p><strong>Quantity:</strong> <span id="productQuantity"></span></p>
@@ -132,11 +138,12 @@ $conn->close();
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+    
 
     <!-- Delete Product Modal -->
     <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
@@ -175,7 +182,7 @@ $conn->close();
                 }
                 $('#productName').text(product.product_name);
                 $('#productDescription').text(product.product_description);
-                $('#productCategory').text(product.category_name); // Make sure this matches the fetched data
+                $('#productCategory').text(product.category_name); // Ensure this matches the fetched data
                 $('#productPrice').text(product.product_price);
                 $('#productQuantity').text(product.product_quantity);
                 $('#productExpiry').text(product.expire_date);
@@ -187,6 +194,7 @@ $conn->close();
             }
         });
     });
+
 
     // Delete Product Modal
     $('#deleteProductModal').on('show.bs.modal', function (event) {

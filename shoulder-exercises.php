@@ -12,6 +12,11 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
     <style>
+        .sort-indicator {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: #888;
+}
         .card:hover {
             transition: transform 0.3s ease;
             transform: scale(1.05);
@@ -34,6 +39,11 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         }
         .page-wrapper{
             width: 80%;
+        }
+        .dropdown-item:hover{
+            transition: transform 0.3s ease;
+            transform: scale(1.05);
+            background-color: #48c92f;
         }
     </style>
 </head>
@@ -128,93 +138,51 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
             </div>
+             <!-- Edit Exercise Modal -->
+                <div class="modal fade" id="exerciseModalEdit" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exerciseModalLabel">Exercise Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" id="exerciseIdEdit" name="exercise_id" value="">
 
-        <!-- Edit Exercise Modal -->
-<div class="modal fade" id="exerciseModalEdit" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exerciseModalLabel">Exercise Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="exercise_id" name="exercise_id" value="">
-                    <div class="mb-3 text-center">
-                        <label for="exerciseImageEdit" class="form-label">Exercise Image/GIF</label>
-                        <input type="file" class="form-control" id="exerciseImageEdit" name="exerciseImage" accept="image/*,video/*" required onchange="previewImage(event)">
+
+                                    <div class="mb-3 text-center">
+                                        <label for="exerciseImageEdit" class="form-label">Exercise Image/GIF</label>
+                                        <input type="file" class="form-control" id="exerciseImageEdit" name="exerciseImage" accept="image/*,video/*" onchange="previewImage(event)">
+                                    </div>
+                                    <div class="mb-3 text-center">
+                                        <img id="imagePreviewEdit" src="" alt="Image Preview" style="display: none; max-width: 100%; height: auto;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exerciseNameEdit" class="form-label">Exercise Name</label>
+                                        <input type="text" class="form-control" id="exerciseNameEdit" name="exerciseName" placeholder="Enter exercise name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exerciseDescriptionEdit" class="form-label">Description</label>
+                                        <textarea class="form-control" id="exerciseDescriptionEdit" name="exerciseDescription" rows="4" placeholder="Enter exercise description" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="muscleCategoryEdit" class="form-label">Muscle Category</label>
+                                        <select class="form-select" id="muscleCategoryEdit" name="muscleCategory" required>
+                                            <option value="anterior deltiod">Anterior deltiod</option>
+                                            <option value="medial deltiod">Medial deltiod</option>
+                                            <option value="posterior deltiod">Posterior deltiod</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save exercise</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3 text-center">
-                        <img id="imagePreviewEdit" src="" alt="Image Preview" style="display: none; max-width: 100%; height: auto;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="exerciseNameEdit" class="form-label">Exercise Name</label>
-                        <input type="text" class="form-control" id="exerciseNameEdit" name="exerciseName" placeholder="Enter exercise name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exerciseDescriptionEdit" class="form-label">Description</label>
-                        <textarea class="form-control" id="exerciseDescriptionEdit" name="exerciseDescription" rows="4" placeholder="Enter exercise description" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="muscleCategoryEdit" class="form-label">Muscle Category</label>
-                        <select class="form-select" id="muscleCategoryEdit" name="muscleCategory" required>
-                            <option value="anterior deltiod">Anterior deltiod</option>
-                            <option value="medial deltiod">Medial deltiod</option>
-                            <option value="posterior deltiod">Posterior deltiod</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save exercise</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Edit Exercise Modal -->
-<div class="modal fade" id="exerciseModalEdit" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exerciseModalLabel">Exercise Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="exercise_id" name="exercise_id" value="">
-                    <div class="mb-3 text-center">
-                        <label for="exerciseImageEdit" class="form-label">Exercise Image/GIF</label>
-                        <input type="file" class="form-control" id="exerciseImageEdit" name="exerciseImage" accept="image/*,video/*" required onchange="previewImage(event)">
-                    </div>
-                    <div class="mb-3 text-center">
-                        <img id="imagePreviewEdit" src="" alt="Image Preview" style="display: none; max-width: 100%; height: auto;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="exerciseNameEdit" class="form-label">Exercise Name</label>
-                        <input type="text" class="form-control" id="exerciseNameEdit" name="exerciseName" placeholder="Enter exercise name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exerciseDescriptionEdit" class="form-label">Description</label>
-                        <textarea class="form-control" id="exerciseDescriptionEdit" name="exerciseDescription" rows="4" placeholder="Enter exercise description" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="muscleCategoryEdit" class="form-label">Muscle Category</label>
-                        <select class="form-select" id="muscleCategoryEdit" name="muscleCategory" required>
-                            <option value="anterior deltiod">Anterior deltiod</option>
-                            <option value="medial deltiod">Medial deltiod</option>
-                            <option value="posterior deltiod">Posterior deltiod</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save exercise</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
 
             <!-- Success Modal -->
             <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -330,31 +298,30 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
             successModal.show();
         }
 
-        // Display success message if set in session
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo "<script>showSuccessModal('" . addslashes($_SESSION['message']) . "');</script>";
-            unset($_SESSION['message']);
-        }
-        
-        ?>
-      function openEditModal(me_id, me_name, me_description, muscle_category, me_image) {
-        document.getElementById('exercise_id').value = me_id;
-        document.getElementById('exerciseNameEdit').value = me_name;
-        document.getElementById('exerciseDescriptionEdit').value = me_description;
-        document.getElementById('muscleCategoryEdit').value = muscle_category;
+     
+        function openEditModal(exerciseId, exerciseName, exerciseDescription, muscleCategory, exerciseImage) {
+    // Populate modal fields with existing data
+    document.getElementById('exerciseNameEdit').value = exerciseName;
+    document.getElementById('exerciseDescriptionEdit').value = exerciseDescription;
+    document.getElementById('muscleCategoryEdit').value = muscleCategory;
 
-        if (me_image) {
-            const image = 'data:image/jpeg;base64,' + me_image; 
-            document.getElementById('imagePreviewEdit').src = image;
-            document.getElementById('imagePreviewEdit').style.display = 'block';
-        } else {
-            document.getElementById('imagePreviewEdit').style.display = 'none';
-        }
+    // Set the hidden input with exercise_id
+    document.getElementById('exerciseIdEdit').value = exerciseId;
 
-        const exerciseModal = new bootstrap.Modal(document.getElementById('exerciseModalEdit'));
-        exerciseModal.show();
+    // Set the image preview (if available)
+    if (exerciseImage) {
+        const imagePreview = document.getElementById('imagePreviewEdit');
+        imagePreview.src = 'data:image/jpeg;base64,' + exerciseImage;
+        imagePreview.style.display = 'block'; // Show the image preview
+    } else {
+        document.getElementById('imagePreviewEdit').style.display = 'none';
     }
+
+    // Show the edit modal
+    const exerciseModalEdit = new bootstrap.Modal(document.getElementById('exerciseModalEdit'));
+    exerciseModalEdit.show();
+}
+
     function openViewModal(id, name, description, category, image) {
         // Populate your modal with exercise details here
         document.getElementById('viewModalTitle').innerText = name;

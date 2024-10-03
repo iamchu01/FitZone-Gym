@@ -20,14 +20,30 @@ if (isset($_GET['category'])) {
                 echo '<td>' . htmlspecialchars($row['me_name']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['muscle_category']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['me_description']) . '</td>';
-                echo '<td>
-                        <button class="btn btn-warning btn-sm la la-edit" onclick="openEditModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">Edit</button>
-                        <a href="delete-exercise.php?id=' . $row['me_id'] . '" class="btn btn-danger btn-sm la la-trash" onclick="return confirm(\'Are you sure you want to delete this exercise?\');">Delete</a>
+                echo '<td class="text-end">
+                        <div class="dropdown dropdown-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"  onclick="openViewModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">
+                                    <i class="fa fa-eye m-r-5"></i> View
+                                </a>
+                               <a class="dropdown-item" href="save-exercise.php" data-bs-toggle="modal"  
+   onclick="openEditModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">
+   <i class="fa fa-pencil m-r-5"></i> Edit
+</a>
+
+                                <a class="dropdown-item" href="delete-exercise.php?id=' . $row['me_id'] . '" onclick="return confirm(\'Are you sure you want to delete this exercise?\');">
+                                    <i class="fa fa-trash-o m-r-5"></i> Delete
+                                </a>
+                            </div>
+                        </div>
                       </td>';
                 echo '</tr>';
             }
             echo '</tbody>';
-            echo '</table>';
+            echo '</table>'; 
         } else {
             echo '<p>No exercises found in this category.</p>';
         }
