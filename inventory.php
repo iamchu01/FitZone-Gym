@@ -8,11 +8,12 @@
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
     <?php include 'layouts/db-connection.php'; ?>
+    <?php include 'layouts/session.php'; ?>
 
     <!-- Ensure Bootstrap CSS and jQuery are included -->
     <link rel="stylesheet" href="path/to/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="path/to/bootstrap.bundle.min.js"></script>
+ 
+
     
 </head>
 <body>
