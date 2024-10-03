@@ -11,6 +11,9 @@
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
 }
+.description-cell{
+  overflow: hidden;
+}
 
 .notifications .notification-list,
 .equal-height-cards .pricing-box ul,

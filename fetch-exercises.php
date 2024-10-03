@@ -11,16 +11,17 @@ if (isset($_GET['category'])) {
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
-            echo '<table class="table table-striped table-bordered">';
+            echo '<table class="table table-striped custom-table mb-0 datatable">';
             echo '<thead><tr><th>Illustration</th><th>Name</th><th>Muscle Category</th><th>Description</th><th>Actions</th></tr></thead>';
             echo '<tbody>';
             while ($row = $result->fetch_assoc()) {
-                echo '<tr>';
+                echo '<tr">';
                 echo '<td><img src="data:image/jpeg;base64,' . base64_encode($row['me_image']) . '" alt="' . htmlspecialchars($row['me_name'] . ' exercise image') . '" style="width: 100px;"></td>';
                 echo '<td>' . htmlspecialchars($row['me_name']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['muscle_category']) . '</td>';
-                echo '<td>' . htmlspecialchars($row['me_description']) . '</td>';
-                echo '<td class="text-end">
+                echo '<td class="description-cell" data-bs-toggle="tooltip" title="' . htmlspecialchars($row['me_description']) . '">' . 
+                nl2br(htmlspecialchars($row['me_description'])) . '</td>';
+                           echo '<td class="text-end">
                         <div class="dropdown dropdown-action">
                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
@@ -30,9 +31,9 @@ if (isset($_GET['category'])) {
                                     <i class="fa fa-eye m-r-5"></i> View
                                 </a>
                                <a class="dropdown-item" href="save-exercise.php" data-bs-toggle="modal"  
-   onclick="openEditModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">
-   <i class="fa fa-pencil m-r-5"></i> Edit
-</a>
+                                onclick="openEditModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">
+                                <i class="fa fa-pencil m-r-5"></i> Edit
+                                </a>
 
                                 <a class="dropdown-item" href="delete-exercise.php?id=' . $row['me_id'] . '" onclick="return confirm(\'Are you sure you want to delete this exercise?\');">
                                     <i class="fa fa-trash-o m-r-5"></i> Delete
@@ -54,3 +55,12 @@ if (isset($_GET['category'])) {
     $stmt->close();
 }
 ?>
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable({
+        "ordering": true,
+        "paging": true,
+        "searching": true
+    });
+});
+</script>
