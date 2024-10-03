@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h3 class="page-title">Members</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Members</li>
+                                <li class="breadcrumb-item active">Add Member</li>
                             </ul>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <td>" . $row["email"] . "</td>
                                                 <td>" . $row["phonenumber"] . "</td>
                                                 <td>" . date('d M Y', strtotime($row["created_at"])) . "</td>
-                                                <td><a class='btn bg-info btn-sm text-dark' style='cursor: default; pointer-events: none; color: white;'>Active</a></td>
+                                                <td><a class='btn bg-danger btn-sm text-white' style='cursor: default; pointer-events: none; color: white;'>No Membership</a></td>
                                                 <td class='text-end'>
                                                     <div class='dropdown dropdown-action'>
                                                         <a href='#' class='action-icon dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><i class='material-icons'>more_vert</i></a>
