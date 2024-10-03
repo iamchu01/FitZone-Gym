@@ -7,6 +7,14 @@
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
 </head>
+<style>
+       .main-wrapper {
+            width: 100%;
+            height: auto;
+            margin: 0%;
+            flex-direction: column;
+        }
+</style>
 
 <?php include 'layouts/body.php'; ?>
 

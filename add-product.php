@@ -7,7 +7,7 @@
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
     <style>
-        .main-wrapper{
+          .main-wrapper {
             width: 100%;
             height: auto;
             margin: 0%;

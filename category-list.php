@@ -50,7 +50,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
+                                <?php
                                     // Query to retrieve categories from the database
                                     $sql = "SELECT * FROM category";
                                     $result = $conn->query($sql);
@@ -64,9 +64,9 @@
                                             echo "<td>" . htmlspecialchars($row['category_description']) . "</td>";
                                             echo "<td>Admin</td>"; // Placeholder for 'Created By'
                                             echo '<td class="text-end">
-                                                        <a href="#" class="btn btn-sm btn-info edit-btn la la-edit" data-id="' . $row['category_id'] . '" data-bs-toggle="modal" data-bs-target="#edit_category"></a>
-                                                        <a href="#" class="btn btn-sm btn-danger delete-btn la la-trash" data-id="' . $row['category_id'] . '" data-bs-toggle="modal" data-bs-target="#delete_estimate"></a>
-                                                    </td>';
+                                                    <a href="javascript:void(0);" class="btn btn-sm btn-info edit-btn la la-edit" data-id="' . $row['category_id'] . '" onclick="openEditModal(' . $row['category_id'] . ')"></a>
+                                                    <a href="#" class="btn btn-sm btn-danger delete-btn la la-trash" data-id="' . $row['category_id'] . '" data-bs-toggle="modal" data-bs-target="#delete_estimate"></a>
+                                                </td>';
                                             echo "</tr>";
                                         }
                                     } else {
@@ -84,41 +84,44 @@
                 <!-- /Category List Table -->
 
                 <!-- Edit Category Modal -->
-                <div class="modal custom-modal fade" id="edit_category" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Edit Category</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="edit-category-form" enctype="multipart/form-data">
-                                    <input type="hidden" id="edit-category-id" name="category_id">
-                                    <div class="form-group">
-                                        <label for="edit-category-name">Category Name</label>
-                                        <input type="text" class="form-control" id="edit-category-name" name="category_name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="edit-category-code">Category Code</label>
-                                        <input type="text" class="form-control" id="edit-category-code" name="category_code" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="edit-category-description">Category Description</label>
-                                        <textarea class="form-control" id="edit-category-description" name="category_description" rows="4" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="edit-category-image">Category Image</label>
-                                        <input type="file" class="form-control" id="edit-category-image" name="category_image" accept="image/*">
-                                        <div class="mt-2">
-                                            <img id="edit-image-preview" src="#" alt="Current Image" style="max-width: 100%; height: auto; display: none;">
+                    <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editCategoryForm">
+                                        <input type="hidden" id="category_id" name="category_id">
+                                        <div class="form-group">
+                                            <label for="category_name">Category Name</label>
+                                            <input type="text" class="form-control" id="category_name" name="category_name" required>
                                         </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </form>
+                                        <div class="form-group">
+                                            <label for="category_code">Category Code</label>
+                                            <input type="text" class="form-control" id="category_code" name="category_code" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category_description">Description</label>
+                                            <textarea class="form-control" id="category_description" name="category_description" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category_image">Category Image</label>
+                                            <input type="file" class="form-control" id="category_image" name="category_image">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="saveCategoryButton">Save changes</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
                 <!-- /Edit Category Modal -->
 
                 <!-- Delete Category Modal -->
@@ -145,6 +148,25 @@
                     </div>
                 </div>
                 <!-- /Delete Category Modal -->
+                 <!-- Delete Success Modal -->
+                <div class="modal custom-modal fade" id="delete-success-modal" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Category Deleted</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Category has been deleted successfully.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- /Delete Success Modal -->
+
 
             </div>
             <!-- /Page Content -->
@@ -159,107 +181,66 @@
     <?php include 'layouts/vendor-scripts.php'; ?>
 
     <script>
-        // Edit modal
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle Edit button clicks
-            const editButtons = document.querySelectorAll('.edit-btn');
+       // Function to open the edit modal and populate the data
+function openEditModal(categoryId) {
+    fetch(`update-category.php?id=${categoryId}`) // Fetch category data using an AJAX call
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Populate the modal fields with fetched data
+                document.getElementById('category_id').value = data.category.category_id;
+                document.getElementById('category_name').value = data.category.category_name;
+                document.getElementById('category_code').value = data.category.category_code;
+                document.getElementById('category_description').value = data.category.category_description;
+                // Show the modal
+                $('#editCategoryModal').modal('show');
+            } else {
+                alert(data.message); // Handle error
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+       // Delete modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all delete buttons
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get the category ID from the button's data-id attribute
+            const categoryId = this.getAttribute('data-id');
             
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const categoryId = this.getAttribute('data-id');
-                    
-                    // Fetch category data from the server
-                    fetch('get-category.php?category_id=' + categoryId)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data) {
-                                // Populate the modal fields with fetched data
-                                document.getElementById('edit-category-id').value = data.category_id;
-                                document.getElementById('edit-category-name').value = data.category_name;
-                                document.getElementById('edit-category-code').value = data.category_code;
-                                document.getElementById('edit-category-description').value = data.category_description;
-
-                                // Set current image preview
-                                const imagePreview = document.getElementById('edit-image-preview');
-                                if (data.category_image) {
-                                    imagePreview.src = 'data:image/jpeg;base64,' + data.category_image;
-                                    imagePreview.style.display = 'block';
-                                } else {
-                                    imagePreview.style.display = 'none';
-                                }
-                            } else {
-                                console.error('No data found for the provided category ID.');
-                            }
-                        })
-                        .catch(error => console.error('Error fetching category data:', error));
-                });
-            });
-
-            // Handle form submission for editing
-            document.getElementById('edit-category-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                const formData = new FormData(this);
-                
-                fetch('update-category.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    alert(result);
-                    location.reload(); // Refresh the page to show updated data
-                })
-                .catch(error => console.error('Error updating category:', error));
-            });
-
-            // Handle image preview on file input change
-            document.getElementById('edit-category-image').addEventListener('change', function(event) {
-                const reader = new FileReader();
-                reader.onload = function() {
-                    const output = document.getElementById('edit-image-preview');
-                    output.src = reader.result;
-                    output.style.display = 'block';
-                };
-                reader.readAsDataURL(event.target.files[0]);
-            });
+            // Set the category ID in the modal
+            document.getElementById('confirm-delete-btn').setAttribute('data-id', categoryId);
         });
+    });
 
-        // Delete modal
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all delete buttons
-            const deleteButtons = document.querySelectorAll('.delete-btn');
+    document.getElementById('confirm-delete-btn').addEventListener('click', function() {
+        const categoryId = this.getAttribute('data-id');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get the category ID from the button's data-id attribute
-                    const categoryId = this.getAttribute('data-id');
-                    
-                    // Set the category ID in the modal
-                    document.getElementById('confirm-delete-btn').setAttribute('data-id', categoryId);
-                });
-            });
+        // Send AJAX request to delete the category
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'delete-category.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            const response = JSON.parse(xhr.responseText); // Parse the JSON response
+            if (response.status === 'success') {
+                // Show the delete success modal
+                $('#delete-success-modal').modal('show'); // Use Bootstrap's modal method
+                setTimeout(function() {
+                    location.reload(); // Refresh the page
+                }, 2000); // Delay for 2 seconds before reload
+            } else {
+                // Show an alert with the error message
+                alert(response.message); // Display error message from server
+            }
+        };
+        xhr.send('category_id=' + categoryId); // Send the category ID to the server
+    });
+});
 
-            // Handle the deletion when the confirm button is clicked
-            document.getElementById('confirm-delete-btn').addEventListener('click', function() {
-                const categoryId = this.getAttribute('data-id');
-
-                // Send AJAX request to delete the category
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'delete-category.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // If the deletion is successful, refresh the page or remove the category row
-                        alert('Category deleted successfully');
-                        location.reload(); // Refresh the page
-                    } else {
-                        alert('Error deleting category.');
-                    }
-                };
-                xhr.send('category_id=' + categoryId); // Send the category ID to the server
-            });
-        });
     </script>
 </body>
 </html>

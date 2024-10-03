@@ -62,9 +62,10 @@
                                 <tbody>
                                 <?php
 // Fetch products along with their category name
-$sql = "SELECT products.product_id, products.product_name, category.category_name, products.product_description, products.expire_date, products.product_price, products.product_quantity, products.created_at, products.product_image 
+$sql = "SELECT products.product_id, products.product_name, category.category_name, products.product_description, 
+        products.expire_date, products.product_price, products.product_quantity, products.created_at, products.product_image 
         FROM products 
-        INNER JOIN category ON products.product_category = category.category_id";
+        INNER JOIN category ON products.category_id = category.category_id";
 
 $result = $conn->query($sql);
 
@@ -174,7 +175,7 @@ $conn->close();
                 }
                 $('#productName').text(product.product_name);
                 $('#productDescription').text(product.product_description);
-                $('#productCategory').text(product.product_category);
+                $('#productCategory').text(product.category_name); // Make sure this matches the fetched data
                 $('#productPrice').text(product.product_price);
                 $('#productQuantity').text(product.product_quantity);
                 $('#productExpiry').text(product.expire_date);
