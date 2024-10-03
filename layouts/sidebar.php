@@ -75,6 +75,7 @@ $page = $components[2];
                     <a href="#"><i class="la la-rocket"></i> <span>Transaction</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'pos.php') ? 'active' : ''; ?>" href="pos.php">Point of Sale</a></li>
+                        <li><a class="<?php echo ($page == 'walk-in.php') ? 'active' : ''; ?>" href="walk-in.php">Walk In</a></li>
                     </ul>
                 </li>
                 <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
@@ -88,6 +89,7 @@ $page = $components[2];
                         <li><a class="<?php echo ($page == 'stock-in.php') ? 'active' : ''; ?>" href="stock-in.php">Stock In</a></li>
                         <li><a class="<?php echo ($page == 'stock-out.php') ? 'active' : ''; ?>" href="stock-out.php">Stock Out</a></li>
                         <li><a class="<?php echo ($page == 'archive.php') ? 'active' : ''; ?>" href="archive.php">Archive</a></li>
+                        <li><a class="<?php echo ($page == 'renewal-and-cancellation.php')?'active':'';?>" href="renewal-and-cancellation.php">Renewal & Cancellations</a></li>
                     </ul>
                 </li>
                 <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
