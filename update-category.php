@@ -2,7 +2,7 @@
 include 'layouts/db-connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve form data
+    // Retrieve form data for updating category
     $category_id = intval($_POST['category_id']);
     $category_name = $_POST['category_name'];
     $category_code = $_POST['category_code'];
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "No file uploaded or file upload error.<br>";
     }
 
-    // Prepare SQL statement
+    // Prepare SQL statement for updating the category
     $sql = "UPDATE category SET category_name = ?, category_code = ?, category_description = ?, category_image = ? WHERE category_id = ?";
     if ($stmt = $conn->prepare($sql)) {
         // Bind parameters
@@ -36,6 +36,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     } else {
         echo 'Failed to prepare SQL statement: ' . $conn->error;
+    }
+
+    $conn->close();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    // Fetch category data for GET request
+    $category_id = intval($_GET['id']);
+    
+    // Prepare SQL statement to fetch category data
+    $sql = "SELECT * FROM category WHERE category_id = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("i", $category_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $category = $result->fetch_assoc();
+            echo json_encode(["status" => "success", "category" => $category]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Category not found."]);
+        }
+        $stmt->close();
+    } else {
+        echo json_encode(["status" => "error", "message" => "Failed to prepare SQL statement."]);
     }
 
     $conn->close();
