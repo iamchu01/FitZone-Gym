@@ -30,27 +30,32 @@ if ($result->num_rows > 0) {
         $productQuantity = htmlspecialchars($row['product_quantity']);
         $productId = htmlspecialchars($row['product_id']);
         
-        // Check if product image exists
+       
         if ($productImage) {
-            // Output the image directly from BLOB
+           
             $imageSrc = 'data:image/jpeg;base64,' . base64_encode($productImage);
         } else {
-            // Use a placeholder image if no image is available
+       
             $imageSrc = 'assets/images/placeholder-image.png';
         }
         
-        echo "<div class='col'>";
-        echo "<div class='card product-card'>";
+        echo "<div class='row'>";  
+        echo "<div class='col'>"; 
+        echo "<div class='card'>";
         echo "<img src='" . $imageSrc . "' class='product-image' alt='" . $productName . "'>";
-        echo "<div class='card-body text-center'>";
-        echo "<h5 class='card-title'>" . $productName . "</h5>";
+        echo "<div class='card-body'>";
+        echo "<h5 class='card-title text-center'>" . $productName . "</h5>";
         echo "<p class='card-text'>" . $productDescription . "</p>";
         echo "<p class='card-text text-success'>₱" . $productPrice . "</p>";
-        echo "<p class='card-text'>Quantity: " . $productQuantity . "</p>"; // Display quantity
-        echo "<button class='btn btn-outline-success add-to-order-btn' data-product-id='" . htmlspecialchars($row['product_id']) . "' data-product-name='" . htmlspecialchars($row['product_name']) . "' data-product-price='" . htmlspecialchars($row['product_price']) . "'>Add to List</button>";
+        echo "<p class='card-text'>Quantity: " . $productQuantity . "</p>"; 
+        echo "<div class='d-grid gap-2'>";
+        echo "<button class='btn btn-outline-success add-to-order-btn ' data-product-id='" . htmlspecialchars($row['product_id']) . "' data-product-name='" . htmlspecialchars($row['product_name']) . "' data-product-price='" . htmlspecialchars($row['product_price']) . "'>Add to List</button>";
         echo "</div>";
         echo "</div>";
         echo "</div>";
+        echo "</div>";
+        echo "</div>";
+    
     }
 } else {
     echo "<div class='col-12'>No products found.</div>";

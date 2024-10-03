@@ -1,55 +1,59 @@
 <?php
-include 'layouts/db-connection.php'; // Database connection
+include 'layouts/db-connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Collect form data
-    $productName = htmlspecialchars($_POST['product_name']);
-    $categoryId = (int) $_POST['category_id']; // Use category_id instead of product_category
-    $productDescription = htmlspecialchars($_POST['product_description']);
-    $productQuantity = (int) $_POST['product_quantity'];
-    $productPrice = (float) $_POST['product_price'];
-    $expireDate = $_POST['expire_date'];
-    
-    // File upload handling
-    $imageFile = $_FILES["product_image"]["tmp_name"];
-    $imageFileType = strtolower(pathinfo($_FILES["product_image"]["name"], PATHINFO_EXTENSION));
-    $imageFileSize = $_FILES["product_image"]["size"];
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize and retrieve POST values
+    $product_name = trim($_POST['product_name']);
+    $product_category = trim($_POST['product_category']); // Assuming you have category ID here
+    $product_description = trim($_POST['product_description']);
+    $product_quantity = trim($_POST['product_quantity']);
+    $product_price = trim($_POST['product_price']);
+    $expire_date = trim($_POST['expire_date']);
 
-    // Check if the file is a valid image type
-    $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-    if (in_array($imageFileType, $validExtensions)) {
-        // Check the file size (optional, e.g., max 2MB)
-        if ($imageFileSize > 2097152) {
+    // Handle the image upload
+    if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == UPLOAD_ERR_OK) {
+        // Get the image content as a string
+        $imageData = file_get_contents($_FILES['product_image']['tmp_name']);
+        
+        // Check if the image size is valid (optional)
+        if ($_FILES['product_image']['size'] > 2097152) { // 2MB limit
             echo "Error: Image size should not exceed 2MB.";
             exit();
         }
 
-        // Read the file into a variable to store it as BLOB
-        $imageContent = file_get_contents($imageFile);
-
-        // Insert product into the database
-        $sql = "INSERT INTO products (product_name, category_id, product_description, product_quantity, product_price, expire_date, product_image)
+        // Prepare SQL statement to insert the product into the database
+        $sql = "INSERT INTO products (product_image, product_name, category_id, product_description, product_quantity, product_price, expire_date) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
-        $stmt = $conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("sisidss", $productName, $categoryId, $productDescription, $productQuantity, $productPrice, $expireDate, $imageContent);
 
-            if ($stmt->execute()) {
-                // Redirect with a success status
-                header("Location: add-product.php?status=success");
-                exit();
-            } else {
-                echo "Error executing statement: " . $stmt->error;
-            }
-            $stmt->close();
-        } else {
-            echo "Error preparing statement: " . $conn->error;
+        // Prepare and bind
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+            exit();
         }
+
+        // Bind parameters
+        // Use 'b' for the BLOB (binary string) type for image data
+        $stmt->bind_param("ssssids", $imageData, $product_name, $product_category, $product_description, $product_quantity, $product_price, $expire_date);
+
+        // Execute the statement
+        if ($stmt->execute()) {
+            header("Location: add-product.php?status=success");
+            exit();
+        } else {
+            echo "Error executing statement: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        // Close the statement
+        $stmt->close();
     } else {
-        echo "Invalid file type. Only JPG, JPEG, PNG & GIF files are allowed.";
+        // Print error message for file upload failure
+        echo "Error uploading image: " . $_FILES['product_image']['error'];
+        exit();
     }
 
+    // Close the connection
     $conn->close();
 }
 ?>

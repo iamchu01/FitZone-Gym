@@ -1,36 +1,34 @@
 <?php
 include 'layouts/db-connection.php';
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Product ID is missing.']);
-    exit;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $product_id = $_POST['product_id'];
+
+    // Prepare and execute the SQL statement to fetch product details
+    $sql = "SELECT products.product_name, products.product_description, category.category_name, 
+            products.product_price, products.product_quantity, products.expire_date, products.created_at, 
+            products.product_image 
+            FROM products 
+            INNER JOIN category ON products.category_id = category.category_id 
+            WHERE products.product_id = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $product = $result->fetch_assoc();
+        // Convert the image blob to a base64 string for displaying in an <img> tag
+        if ($product['product_image']) {
+            $product['product_image'] = 'data:image/jpeg;base64,' . base64_encode($product['product_image']);
+        }
+        echo json_encode($product);
+    } else {
+        echo json_encode(['error' => 'Product not found.']);
+    }
+
+    $stmt->close();
+    $conn->close();
 }
-
-$product_id = $_GET['id'];
-
-// Fetch the product details
-$sql = "SELECT product_id, product_name, product_category, product_description, expire_date, product_price, product_quantity, product_image FROM products WHERE product_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $product_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Product not found.']);
-    exit;
-}
-
-$product = $result->fetch_assoc();
-
-// Encode product image as base64 if it's a BLOB
-if ($product['product_image']) {
-    $product['product_image'] = base64_encode($product['product_image']);
-}
-
-header('Content-Type: application/json');
-echo json_encode($product);
-
-$conn->close();
 ?>

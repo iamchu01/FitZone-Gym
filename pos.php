@@ -14,6 +14,19 @@
             margin: 0%;
             flex-direction: column;
         }
+        .product-image {
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+        }
+        .order-image {
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 5px; 
+        }
+    
+
     </style>
 <?php include 'layouts/body.php'; ?>
 
@@ -79,21 +92,35 @@
                     </div>
                 </div>               
                 <div class="col-lg-4">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Current List</h4>
-            <div class="scrollmenu" id="order-list">
-                <!-- Order items will be inserted here -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Current List</h4>
+                        <div class="scrollmenu" id="order-list">
+                            <!-- Order items will be inserted here -->
+                        </div>
+                        <button class="btn btn-outline-danger btn-block" onclick="clearOrder()">Clear All</button>
+                        <div class="mt-4">
+                            <p>Subtotal <span id="subtotal" class="float-end">₱0.00</span></p>
+                            <div class="mt-4">
+                            <div class="mt-4">
+                    <h5>Select Discount</h5>
+                    <select id="discount-select" class="form-select" onchange="applyDiscount()">
+                        <option value="0">No Discount</option>
+                        <?php
+                            // Fetch discounts from the database
+                            $sql = "SELECT discount_id, discount_name, discount_percentage FROM discount";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // Output data for each discount
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . htmlspecialchars($row['discount_percentage']) . "'>" . htmlspecialchars($row['discount_name']) . " (" . htmlspecialchars($row['discount_percentage']) . "%)</option>";
+                                }
+                            }
+                        ?>
+                    </select>
+                </div>
             </div>
-            <button class="btn btn-outline-danger btn-block" onclick="clearOrder()">Clear All</button>
-            <div class="mt-4">
-                <p>Subtotal <span id="subtotal" class="float-end">₱0.00</span></p>
-                <div class="mt-4">
-    <h5>Select Discount</h5>
-    <select id="discount-select" class="form-select" onchange="applyDiscount()">
-        <option value="0">No Discount</option>
-    </select>
-</div>
 
                 <hr>
                 <h4>Total <span id="total" class="float-end">₱0.00</span></h4>
@@ -174,10 +201,10 @@ function updateOrderList(discount = 0) {
         let div = document.createElement('div');
         div.className = 'order-item';
         div.innerHTML = `
-            <img src="get-image.php?id=${item.id}" class="order-image">
+            <img src="get-order-image.php?id=${item.id}" class="order-image">
             <div class="order-details">
-                <p>${item.name}</p>
-                <p>₱${item.price.toFixed(2)}</p>
+                <h2>${item.name}</h2>
+                <p class="text-success">₱${item.price.toFixed(2)}</p>
                 <div class="order-quantity">
                     <button class="btn-danger" onclick="changeQuantity('${item.id}', -1)">-</button>
                     <span>${item.quantity}</span>
@@ -195,7 +222,6 @@ function updateOrderList(discount = 0) {
 
     // Update the displayed totals
     document.getElementById('subtotal').textContent = `₱${subtotal.toFixed(2)}`;
-    document.getElementById('discounts').textContent = `-₱${discountAmount.toFixed(2)}`;
     document.getElementById('total').textContent = `₱${total.toFixed(2)}`;
 }
 
@@ -278,6 +304,11 @@ document.addEventListener('click', function(e) {
         fetchProducts(categoryId);
     });
 });
+function applyDiscount() {
+    const discountSelect = document.getElementById('discount-select');
+    const discountPercentage = parseFloat(discountSelect.value);
+    updateOrderList(discountPercentage);
+}
 
 
 </script>

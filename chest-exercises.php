@@ -2,19 +2,10 @@
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/db-connection.php'; ?>
 
-<?php
- // Start the session
-$_SESSION['last_accessed'] = $_SERVER['PHP_SELF']; // Store the current page path
+<?php 
+$_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
 
-// Your existing deletion or other logic
-if (isset($_POST['exercise_id'])) {
-    // Handle the delete or other process
-
-    // If successful
-    header("Location: " . $_SESSION['last_accessed'] . "?delete_success=true");
-    exit();
-}
-?>
+ ?>
 
 
  
@@ -68,10 +59,11 @@ if (isset($_POST['exercise_id'])) {
                 <div class="page-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3 class="page-title"> Welcome Admin!</h3>
+                            <h3 class="page-title"> Chest Exercises</h3>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item fa fa-chevron-left"><a href="targeted-exercise.php"> Muscle groups</a></li>
-                                <li class="breadcrumb-item active"> Chest Exercises</li>
+                                 <li class="breadcrumb-item active"> Chest Exercises</li>
+                                <li class="breadcrumb-item "><a href="targeted-exercise.php"> Muscle groups</a></li>
+                                
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">                   
@@ -95,7 +87,7 @@ if (isset($_POST['exercise_id'])) {
                     </div>
                 </div>
                 <div class="col card" id="lower-chest" onclick="showExercises('lower chest', this)">             
-                    <img src="assets/img/c3.JPG" alt="lower-chest">
+                    <img src="assets/img/c3.JPG" alt="lower-chest"> 
                     <div class="card-body">
                         <h5 class="card-title">Lower chest</h5> 
                     </div>
@@ -116,7 +108,7 @@ if (isset($_POST['exercise_id'])) {
                         </div>
                         <div class="modal-body">
                             <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" id="exercise_id" name="exercise_id" value="">
+                                <input type="hidden" id="exercise_id" name="exercise_id" value="<?php echo htmlspecialchars($exercise_id); ?>">
                                 <div class="mb-3 text-center">
                                     <label for="exerciseImage" class="form-label">Exercise Image/GIF</label>
                                     <input type="file" class="form-control" id="exerciseImage" name="exerciseImage" accept="image/*,video/*" required onchange="previewImage(event)">
@@ -159,8 +151,8 @@ if (isset($_POST['exercise_id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="save-exercise.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="exercise_id" name="exercise_id" value="">
+                <form action="update-exercise.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="exercise_id" name="exercise_id" value="<?php echo $exercise_id; ?>">
 
                     <!-- Current Image Display -->
                     <div>
@@ -244,7 +236,7 @@ if (isset($_POST['exercise_id'])) {
                 </div>
                 <!-- Right side: Details -->
                 <div style="flex: 2; border-left: 1px solid #dee2e6; padding-left: 20px;">
-                    <h5 class="card-title" id="viewModalTitle">Exercise Name</h5>
+                    <h1 class="card-title" id="viewModalTitle">Exercise Name</h1>
                     <h6 class="card-subtitle mb-2 text-muted">Target Muscle: <span id="viewModalCategory"></span></h6>
                     <div style="max-height: 200px; overflow-y: auto;" id="viewModalDescriptionContainer">
                         <p class="card-text" id="viewModalDescription">
