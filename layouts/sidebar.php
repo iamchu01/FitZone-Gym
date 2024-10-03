@@ -86,8 +86,7 @@ $page = $components[2];
                     <a href="#"><i class="la la-tools"></i> <span>Utilities</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'discount.php') ? 'active' : ''; ?>" href="discount.php">Discounts</a></li>
-                        <li><a class="<?php echo ($page == 'stock-in.php') ? 'active' : ''; ?>" href="stock-in.php">Stock In</a></li>
-                        <li><a class="<?php echo ($page == 'stock-out.php') ? 'active' : ''; ?>" href="stock-out.php">Stock Out</a></li>
+                        <li><a class="<?php echo ($page == 'stock-in-out.php') ? 'active' : ''; ?>" href="stock-in-out.php">Stock In / Out</a></li>
                         <li><a class="<?php echo ($page == 'archive.php') ? 'active' : ''; ?>" href="archive.php">Archive</a></li>
                         <li><a class="<?php echo ($page == 'renewal-and-cancellation.php')?'active':'';?>" href="renewal-and-cancellation.php">Renewal & Cancellations</a></li>
                     </ul>
