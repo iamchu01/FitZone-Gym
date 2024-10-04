@@ -1,8 +1,8 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/db-connection.php'; ?>
-<?php
 
+<?php
 // Check if form is submitted (this will handle form submission through AJAX)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 <head>
     <title>Member List - Gym Management System</title>
@@ -133,7 +134,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         <a href='#' class='action-icon dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><i class='material-icons'>more_vert</i></a>
                                                         <div class='dropdown-menu dropdown-menu-right'>
                                                             <a class='dropdown-item edit-member' href='#' data-id='" . $row['id'] . "' data-bs-toggle='modal' data-bs-target='#edit_member'><i class='fa fa-pencil m-r-5'></i> Edit</a>
-                                                            <a class='dropdown-item' href='#' data-bs-toggle='modal' data-bs-target='#delete_member'><i class='fa fa-trash-o m-r-5'></i> Archive</a>
+                                                            <a class='dropdown-item' href='#' data-id='" . $row['id'] . "' data-bs-toggle='modal' data-bs-target='#archive_member' onclick='setArchiveId(" . $row['id'] . ")'>
+                                                            <i class='fa fa-trash-o m-r-5'></i>Archive</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -357,6 +359,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <!-- /Edit Member Modal -->
 
+            <!-- Archive Member Modal -->
+            <div id="archive_member" class="modal custom-modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Archive Member</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to archive this member?</p>
+                            <form id="archiveMemberForm" >
+                                <input type="hidden" name="archive_member_id" id="archive_member_id">
+                                <div class="submit-section">
+                                    <button class="btn btn-danger" type="submit">Archive</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Archive Member Modal -->
+
             <!-- Subscription Modal -->
             <div id="subscriptionModal" class="modal custom-modal fade" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -399,13 +426,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
 
                                 <div class="submit-section">
-                                    <button class="btn btn-primary submit-btn" type="submit" disabled>Submit</button> <!-- Disable for now -->
+                                    <button class="btn btn-primary submit-btn" type="submit">Submit</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- Subscription Modal -->
 
 
 
@@ -417,11 +445,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include 'layouts/customizer.php'; ?>
     <?php include 'layouts/vendor-scripts.php'; ?>
-
-    <!-- DataTables JS -->
-    <script src="assets/js/jquery.dataTables.min.js"></script>
-    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
-    <script src="ph-address-selector.js"></script>
 
     <script>
     $(document).ready(function() {
@@ -754,7 +777,6 @@ function enableSaveButton() {
         saveButton.disabled = true; // Disable the save button
     }
 }
-
 
     </script>
 </body>
