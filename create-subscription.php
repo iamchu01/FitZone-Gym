@@ -35,18 +35,63 @@
             flex: 1;
         }
 
-        .remove-feature-btn {
-            margin-left: 10px;
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
+.remove-feature-btn {
+    margin-left: 10px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 8px; /* Moderate rounded corners for a modern look */
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Quick but subtle transitions */
+    font-weight: 500;
+    font-size: 14px;
+}
 
-        .remove-feature-btn:hover {
-            background-color: #c82333;
-        }
+.remove-feature-btn:hover {
+    background-color: #b02a37; /* Slightly darker red, more polished feel */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Very subtle shadow to suggest elevation */
+    transform: translateY(-2px); /* Button moves up slightly to suggest clickability */
+}
+
+
+
+.btn-custom-green {
+    color: #fff;
+    background-color: #48c92f;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 8px; /* Moderate rounded corners */
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Quick, subtle transitions */
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.btn-custom-green:hover {
+    background-color: #3a9e24; /* Slightly darker green */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transform: translateY(-2px); /* Slight upward movement */
+}
+
+.btn-custom-subscription{
+    color: #fff;
+    background-color: #48c92f;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 8px; /* Moderate rounded corners */
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* Quick, subtle transitions */
+}
+
+.btn-custom-subscription:hover{
+    background-color: #3a9e24; /* Slightly darker green */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transform: translateY(-2px); /* Slight upward movement */
+}
+
+
+
     </style>
 
 </head>
@@ -109,11 +154,11 @@
                                     <label class="form-label">Included Features <span>*</span></label>
                                     <div id="featuresContainer">
                                         <div class="feature-input-group">
-                                            <input type="text" class="form-control" name="features[]" placeholder="Enter feature (e.g., Free riding)" required>
-                                            <button type="button" class="remove-feature-btn" onclick="removeFeature(this)">Remove</button>
+                                            <input type="text" class="form-control" name="features[]" placeholder="Enter feature (e.g., Free Gym Shirt)" required>
+                                            <button type="button" class=" remove-feature-btn" onclick="removeFeature(this)">Remove</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary" onclick="addFeature()">Add Feature</button>
+                                    <button type="button" class=" btn-custom-green" onclick="addFeature()">Add Feature</button>
                                 </div>
 
                                 <div class="mb-3">
@@ -122,7 +167,7 @@
                                 </div>
 
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Create Subscription</button>
+                                    <button type="submit" class="btn-custom-subscription">Create Subscription</button>
                                 </div>
                             </form>
                         </div>
@@ -154,7 +199,7 @@ function addFeature() {
     featureInput.type = 'text';
     featureInput.name = 'features[]';
     featureInput.classList.add('form-control');
-    featureInput.placeholder = 'Enter feature (e.g., Free riding)';
+    featureInput.placeholder = 'Enter feature (e.g., Free Gym Shirt)';
     featureInput.required = true;
 
     const removeBtn = document.createElement('button');
