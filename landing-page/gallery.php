@@ -32,100 +32,12 @@
 
     <!-- Offcanvas Menu Section Begin -->
     <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="canvas-close">
-            <i class="fa fa-close"></i>
-        </div>
-        <div class="canvas-search search-switch">
-            <i class="fa fa-search"></i>
-        </div>
-        <nav class="canvas-menu mobile-menu">
-            <ul>
-                <li><a href="./index.html">Home</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
-                <li><a href="./class-details.html">Classes</a></li>
-                <li><a href="./services.html">Services</a></li>
-                <li><a href="./team.html">Our Team</a></li>
-                <li><a href="#">Pages</a>
-                    <ul class="dropdown">
-                        <li><a href="./about-us.html">About us</a></li>
-                        <li><a href="./class-timetable.html">Classes timetable</a></li>
-                        <li><a href="./bmi-calculator.html">Bmi calculate</a></li>
-                        <li><a href="./team.html">Our team</a></li>
-                        <li><a href="./gallery.html">Gallery</a></li>
-                        <li><a href="./blog.html">Our blog</a></li>
-                        <li><a href="./404.html">404</a></li>
-                    </ul>
-                </li>
-                <li><a href="./contact.html">Contact</a></li>
-            </ul>
-        </nav>
-        <div id="mobile-menu-wrap"></div>
-        <div class="canvas-social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-youtube-play"></i></a>
-            <a href="#"><i class="fa fa-instagram"></i></a>
-        </div>
-    </div>
+    <?php include('offcanvas-menu.php');?>
     <!-- Offcanvas Menu Section End -->
 
     <!-- Header Section Begin -->
-    <header class="header-section">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="logo">
-                        <a href="./index.html">
-                            <img src="../assets/img/fzlogo.png" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <nav class="nav-menu">
-                        <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li><a href="./about-us.html">About Us</a></li>
-                            <li class="active"><a href="./contact.html">Contact</a></li>
-                            <li><a href="./services.html">Services</a></li>
-                            <li><a href="./team.html">Our Team</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./about-us.html">About us</a></li>
-                                   
-                                    <li><a href="./bmi-calculator.html">Bmi calculate</a></li>
-                                    <li><a href="./team.html">Our team</a></li>
-                                    <li><a href="./gallery.html">Gallery</a></li>
-                                    <li><a href="./blog.html">Our blog</a></li>
-                                    <li><a href="./404.html">404</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Log In</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="top-option">
-                        <div class="col-lg-6">
-                           
-                        </div>
-                        
-                        <div class="to-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="canvas-open">
-                <i class="fa fa-bars"></i>
-            </div>
-        </div>
-    </header>
+    <?php include('header.php');?>
     <!-- Header End -->
-
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb-bg.jpg">
@@ -133,11 +45,11 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb-text">
-                        <h2>Contact Us</h2>
+                        <h2>Gallery</h2>
                         <div class="bt-option">
                             <a href="./index.html">Home</a>
                             <a href="#">Pages</a>
-                            <span>Contact us</span>
+                            <span>Gallery</span>
                         </div>
                     </div>
                 </div>
@@ -146,53 +58,40 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Contact Section Begin -->
-    <section class="contact-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="section-title contact-title">
-                        <span>Contact Us</span>
-                        <h2>GET IN TOUCH</h2>
-                    </div>
-                    <div class="contact-widget">
-                        <div class="cw-text">
-                            <i class="fa fa-map-marker"></i>
-                            <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
-                        </div>
-                        <div class="cw-text">
-                            <i class="fa fa-mobile"></i>
-                            <ul>
-                                <li>125-711-811</li>
-                                <li>125-668-886</li>
-                            </ul>
-                        </div>
-                        <div class="cw-text email">
-                            <i class="fa fa-envelope"></i>
-                            <p>Support.gymcenter@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="leave-comment">
-                        <form action="#">
-                            <input type="text" placeholder="Name">
-                            <input type="text" placeholder="Email">
-                            <input type="text" placeholder="Website">
-                            <textarea placeholder="Comment"></textarea>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
-                </div>
+    <!-- Gallery Section Begin -->
+    <div class="gallery-section gallery-page">
+        <div class="gallery">
+            <div class="grid-sizer"></div>
+            <div class="gs-item grid-wide set-bg" data-setbg="img/gallery/gallery-1.jpg">
+                <a href="img/gallery/gallery-1.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
             </div>
-            <div class="map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12087.069761554938!2d-74.2175599360452!3d40.767139456514954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c254b5958982c3%3A0xb6ab3931055a2612!2sEast%20Orange%2C%20NJ%2C%20USA!5e0!3m2!1sen!2sbd!4v1581710470843!5m2!1sen!2sbd"
-                    height="550" style="border:0;" allowfullscreen=""></iframe>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-2.jpg">
+                <a href="img/gallery/gallery-2.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-3.jpg">
+                <a href="img/gallery/gallery-3.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-4.jpg">
+                <a href="img/gallery/gallery-4.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-5.jpg">
+                <a href="img/gallery/gallery-5.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item grid-wide set-bg" data-setbg="img/gallery/gallery-6.jpg">
+                <a href="img/gallery/gallery-6.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item grid-wide set-bg" data-setbg="img/gallery/gallery-7.jpg">
+                <a href="img/gallery/gallery-7.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-8.jpg">
+                <a href="img/gallery/gallery-8.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
+            </div>
+            <div class="gs-item set-bg" data-setbg="img/gallery/gallery-9.jpg">
+                <a href="img/gallery/gallery-9.jpg" class="thumb-icon image-popup"><i class="fa fa-picture-o"></i></a>
             </div>
         </div>
-    </section>
-    <!-- Contact Section End -->
+    </div>
+    <!-- Gallery Section End -->
 
     <!-- Get In Touch Section Begin -->
     <div class="gettouch-section">
@@ -319,7 +218,6 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-
 
 
 </body>

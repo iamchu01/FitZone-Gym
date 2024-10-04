@@ -78,31 +78,49 @@
                 <!-- /Discount List Table -->
 
                 <div class="modal custom-modal fade" id="add_discount_modal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Discount</h5>
-                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="add_discount.php">
-                    <div class="form-group">
-                        <label for="discount-name">Discount Name</label>
-                        <input type="text" class="form-control" id="discount-name" name="discount_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="discount-percentage">Percentage</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="discount-percentage" name="discount_percentage" required oninput="updatePercentage()">
-                            <span class="input-group-text" id="percentage-display">%</span>
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add Discount</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="add_discount.php">
+                                    <div class="form-group">
+                                        <label for="discount-name">Discount Name</label>
+                                        <input type="text" class="form-control" id="discount-name" name="discount_name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="discount-percentage">Percentage</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="discount-percentage" name="discount_percentage" required oninput="updatePercentage()">
+                                            <span class="input-group-text" id="percentage-display">%</span>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" name="add_discount">Add Discount</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" name="add_discount">Add Discount</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
+                        <!-- Success Modal -->
+                        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="successModalLabel">Success</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Discount has been updated successfully!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                 <!-- Edit Discount Modal -->
                 <div class="modal custom-modal fade" id="edit_discount_modal" role="dialog">
@@ -113,7 +131,7 @@
                                 <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="">
+                                <form method="POST" action="update_discount.php">
                                     <input type="hidden" id="edit-discount-id" name="discount_id">
                                     <div class="form-group">
                                         <label for="edit-discount-name">Discount Name</label>
@@ -143,7 +161,7 @@
                                 <div class="modal-btn delete-action">
                                     <div class="row">
                                         <div class="col-6">
-                                            <form method="POST" action="">
+                                            <form method="POST" action="delete_discount.php">
                                                 <input type="hidden" id="delete-discount-id" name="discount_id">
                                                 <button type="submit" class="btn btn-primary continue-btn" name="delete_discount">Delete</button>
                                             </form>
@@ -176,46 +194,50 @@
         const percentageInput = document.getElementById('discount-percentage').value;
         document.getElementById('percentage-display').textContent = percentageInput ? percentageInput + '%' : '%';
     }
-        // Edit Discount Button Handling
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const discountId = this.getAttribute('data-id');
-                document.getElementById('edit-discount-id').value = discountId;
-                // Fetch current discount info via AJAX and populate modal fields (if needed)
-            });
-        });
-        // Function to fetch discounts from discount.php and populate the dropdown
-function fetchDiscounts() {
+     
+// Edit Discount Button Handling
+document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const discountId = this.getAttribute('data-id');
+        document.getElementById('edit-discount-id').value = discountId;
+        fetchDiscountDetails(discountId);  // Fetch details to populate the modal
+    });
+});
+
+// Function to fetch discount details and populate the edit modal
+function fetchDiscountDetails(discountId) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'discount.php', true);
+    xhr.open('GET', 'fetch_discount.php?discount_id=' + discountId, true);
     xhr.onload = function() {
         if (xhr.status === 200) {
-            // Populate the discount dropdown with the response from discount.php
-            document.getElementById('discount-select').innerHTML += xhr.responseText;
+            var discount = JSON.parse(xhr.responseText);
+
+            // Populate the edit modal fields with the fetched discount data
+            document.getElementById('edit-discount-name').value = discount.discount_name;
+            document.getElementById('edit-discount-percentage').value = discount.discount_percentage;
         }
     };
     xhr.send();
 }
 
-// Function to apply the selected discount
-function applyDiscount() {
-    let discountPercentage = parseFloat(document.getElementById('discount-select').value);
-    updateOrderList(discountPercentage);
-}
-
-// Call fetchDiscounts when the page loads to populate the discount dropdown
-document.addEventListener('DOMContentLoaded', fetchDiscounts);
-
-
-        // Delete Discount Button Handling
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const discountId = this.getAttribute('data-id');
-                document.getElementById('delete-discount-id').value = discountId;
-            });
-        });
-    </script>
-
+// Function to trigger the success modal if the update was successful
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('delete') && urlParams.get('delete') === 'success') {
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'), {});
+        successModal.show(); 
+        urlParams.delete('delete');
+        window.history.replaceState({}, document.title, window.location.pathname + '?' + urlParams.toString());
+    }
+});
+// Delete Discount Button Handling
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const discountId = this.getAttribute('data-id');
+        document.getElementById('delete-discount-id').value = discountId;
+    });
+});
+</script>
     
 </body>
 </html>

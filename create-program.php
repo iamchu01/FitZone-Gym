@@ -26,12 +26,15 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Program Creation</h3>
+                        <h3 class="page-title">Free Program</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
                             <li class="breadcrumb-item active"><a href="offered-programs.php">Program list</a></li>
                         </ul>
                     </div>
+                    <div class="col-auto float-end ms-auto">
+                            <a href="special-program.php" class="btn add-btn"><i class="fa fa-plus"></i> Special program</a>
+                        </div>
                 </div>
             </div> 
             <!-- /Page Header -->
@@ -42,7 +45,7 @@
                         <div class="card-body">
                             <form action="#">
                             <div class="form-group row">
-                                    <label class="col-form-label col-md-2">program profile</label>
+                                    <label class="col-form-label col-md-2">Program profile</label>
                                     <div class="col-md-10">
                                         <input class="form-control" type="file">
                                     </div>
