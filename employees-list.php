@@ -166,36 +166,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <form id="addMemberForm" method="POST">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">First Name <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text" name="first_name" id="firstName" placeholder="Enter first name" required oninput="validateName('firstName')">
-                                        <small id="firstNameWarning" class="text-danger" style="display:none;">Please enter a valid first name (letters only).</small>
+                                        <div class="form-group">
+                                            <label class="col-form-label">First Name <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="text" name="first_name" id="firstName" placeholder="Enter first name" required oninput="validateName('firstName')">
+                                            <small id="firstNameWarning" class="text-danger" style="display:none;">Please enter a valid first name (letters only).</small>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Last Name <span class="text-danger">*</span> </label>
-                                        <input class="form-control" type="text" name="last_name" id="lastName" placeholder="Enter last name" oninput="validateName('lastName')">
-                                        <small id="lastNameWarning" class="text-danger" style="display:none;">Please enter a valid last name (letters only).</small>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Last Name <span class="text-danger">*</span> </label>
+                                            <input class="form-control" type="text" name="last_name" id="lastName" placeholder="Enter last name" oninput="validateName('lastName')">
+                                            <small id="lastNameWarning" class="text-danger" style="display:none;">Please enter a valid last name (letters only).</small>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Middle Name  </label>
-                                        <input class="form-control" type="text" name="middle_name" id="middleName" placeholder="Enter middle name" required oninput="validateName('middleName')">
-                                        <small id="middleNameWarning" class="text-danger" style="display:none;">Please enter a valid middle name (letters only).</small>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Middle Name</label>
+                                            <input class="form-control" type="text" name="middle_name" id="middleName" placeholder="Enter middle name" required oninput="validateName('middleName')">
+                                            <small id="middleNameWarning" class="text-danger" style="display:none;">Please enter a valid middle name (letters only).</small>
+                                        </div>
                                     </div>
-                                </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label">Email <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="email" name="email" id="emailInput" placeholder="Enter a valid email" required oninput="validateEmail()">
+                                            <input class="form-control" type="email" name="email" id="emailInput" placeholder="Enter a valid email" required oninput="validateEmail('emailInput')">
                                             <small id="emailWarning" class="text-danger" style="display:none;">Please enter a valid email address.</small>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label">Phone Number <span class="text-danger">*</span></label>
@@ -205,15 +206,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label">Age <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="number" name="age" id="ageInput" placeholder="Enter age" required oninput="validateAge()">
+                                            <input class="form-control" type="number" name="age" id="ageInput" placeholder="Enter age" required oninput="validateAge('ageInput')">
                                             <small id="ageWarning" class="text-danger" style="display:none;">You must be at least 15 years old.</small>
                                         </div>
                                     </div>
 
-                                    <!-- Address Fields (Original as per your request) -->
+                                    <!-- Address Fields -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Region <span class="text-danger">*</span> </label>
@@ -252,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-            <!-- /Add Member Modal -->
+            <!-- Add Member Modal -->
 
             <!-- Edit Member Modal -->
             <div id="edit_member" class="modal custom-modal fade" role="dialog">
@@ -271,67 +273,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label">First Name <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="text" name="first_name" id="edit_first_name" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Last Name</label>
-                                            <input class="form-control" type="text" name="last_name" id="edit_last_name">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Middle Name</label>
-                                            <input class="form-control" type="text" name="middle_name" id="edit_middle_name">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Email <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="email" name="email" id="edit_email" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">  
-                                        <div class="form-group">
-                                            <label class="col-form-label">Phone Number</label>
-                                            <input class="form-control" type="text" name="phone" id="edit_phone">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Age</label>
-                                            <input class="form-control" type="number" name="age" id="edit_age">
+                                            <input class="form-control" type="text" name="first_name" id="edit_first_name" required oninput="validateName('edit_first_name')">
+                                            <small id="edit_first_nameWarning" class="text-danger" style="display:none;">Please enter a valid first name (letters only).</small>
                                         </div>
                                     </div>
 
-                                    <!-- Region, Province, City, Barangay Fields -->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Last Name</label>
+                                            <input class="form-control" type="text" name="last_name" id="edit_last_name" oninput="validateName('edit_last_name')">
+                                            <small id="edit_last_nameWarning" class="text-danger" style="display:none;">Please enter a valid last name (letters only).</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Middle Name</label>
+                                            <input class="form-control" type="text" name="middle_name" id="edit_middle_name" oninput="validateName('edit_middle_name')">
+                                            <small id="edit_middle_nameWarning" class="text-danger" style="display:none;">Please enter a valid middle name (letters only).</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Email <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="email" name="email" id="edit_email" required oninput="validateEditEmail()">
+                                            <small id="edit_emailWarning" class="text-danger" style="display:none;">Please enter a valid email address.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">+63</span>
+                                                <input class="form-control" type="tel" name="phone" id="edit_phone" placeholder="" maxlength="10" oninput="validatePhoneNumber(this)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Age</label>
+                                            <input class="form-control" type="number" name="age" id="edit_age" placeholder="Enter age" oninput="validateEditAge()">
+                                            <small id="edit_ageWarning" class="text-danger" style="display:none;">You must be at least 15 years old.</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address Fields -->
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Region</label>
-                                            <input class="form-control" type="text" name="region" id="edit_region"> <!-- Ensure this is a simple text input -->
+                                            <input class="form-control" type="text" name="region" id="edit_region"> 
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Province</label>
-                                            <input class="form-control" type="text" name="province" id="edit_province"> <!-- Simple text input -->
+                                            <input class="form-control" type="text" name="province" id="edit_province"> 
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">City / Municipality</label>
-                                            <input class="form-control" type="text" name="city" id="edit_city"> <!-- Simple text input -->
+                                            <input class="form-control" type="text" name="city" id="edit_city"> 
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Barangay</label>
-                                            <input class="form-control" type="text" name="barangay" id="edit_barangay"> <!-- Simple text input -->
+                                            <input class="form-control" type="text" name="barangay" id="edit_barangay"> 
                                         </div>
                                     </div>
-                                    <!-- End Region, Province, City, Barangay Fields -->
-
+                                    <!-- End Address Fields -->
                                 </div>
                                 <div class="submit-section">
                                     <button class="btn btn-primary submit-btn mb-3" type="submit">Save</button>
@@ -550,101 +564,12 @@ $(document).ready(function() {
 });
 
 
-// Function to validate phone number input for the Philippines
-function validatePhoneNumber(input) {
-    const value = input.value;
-
-    // Remove any non-numeric characters
-    input.value = value.replace(/[^0-9]/g, '');
-
-    // Limit input to 10 digits
-    if (input.value.length > 10) {
-        input.value = input.value.slice(0, 10);
-    }
-}
-
-// Prevent invalid characters like 'e', 'E', '+', and '-' from being typed
-document.getElementById("phoneNumber").addEventListener("keydown", function(event) {
-    if (['e', 'E', '+', '-'].includes(event.key)) {
-        event.preventDefault(); // Block these invalid characters
-    }
-});
-
-
-  function validateAge() {
-        const ageInput = document.getElementById("ageInput");
-        const addButton = document.querySelector('.submit-btn');
-        const ageWarning = document.getElementById("ageWarning");
-
-        const min = 15;
-        const max = 100;
-        const value = ageInput.value;
-
-        if (value !== '') {
-            if (value < min) {
-                ageWarning.style.display = "block"; // Show warning
-                addButton.disabled = true; // Disable the add button
-            } else if (value >= min && value <= max) {
-                ageWarning.style.display = "none"; // Hide warning
-                addButton.disabled = false; // Enable the add button
-            } else if (value > max) {
-                ageInput.value = max; // Cap the age at max
-            }
-        } else {
-            ageWarning.style.display = "none"; // Hide warning if input is cleared
-            addButton.disabled = true; // Disable add button if input is empty
-        }
-    }
-
-
-    // Prevent invalid characters like 'e', 'E', '+', and '-' in the age input
-    document.getElementById("ageInput").addEventListener("keydown", function(event) {
-        if (['e', 'E', '+', '-'].includes(event.key)) {
-            event.preventDefault(); // Block these invalid characters
-        }
-    });
-
-
-
-    // Disable the Add button initially
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector('.submit-btn').disabled = true; // Disable the button on page load
-    });
-
-
-     function validateEmail() {
-        const emailInput = document.getElementById("emailInput");
-        const emailWarning = document.getElementById("emailWarning");
-        const addButton = document.querySelector('.submit-btn');
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Basic email regex pattern
-
-        const value = emailInput.value;
-
-        if (value !== '') {
-            if (!emailPattern.test(value)) {
-                emailWarning.style.display = "block"; // Show warning if the email is invalid
-                addButton.disabled = true; // Disable the add button
-            } else {
-                emailWarning.style.display = "none"; // Hide warning if the email is valid
-                addButton.disabled = false; // Enable the add button
-            }
-        } else {
-            emailWarning.style.display = "none"; // Hide warning if input is empty
-            addButton.disabled = true; // Disable add button if input is empty
-        }
-    }
-
-    // Disable the Add button initially
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector('.submit-btn').disabled = true; 
-    });
-
-
-    // Function to validate name fields (First Name, Last Name, Middle Name)
-function validateName(fieldId) {
+// * Add/Edit Modals
+// * Function to validate name fields (First Name, Last Name, Middle Name) for both Add and Edit forms
+function validateName(fieldId, isEdit = false) {
     const nameInput = document.getElementById(fieldId);
     const nameWarning = document.getElementById(`${fieldId}Warning`);
-    const addButton = document.querySelector('.submit-btn');
+    const button = isEdit ? document.querySelector('#editMemberForm .submit-btn') : document.querySelector('#addMemberForm .submit-btn');
     const namePattern = /^[a-zA-Z\s]+$/; // Allow only letters and spaces
 
     const value = nameInput.value;
@@ -652,37 +577,183 @@ function validateName(fieldId) {
     if (value !== '') {
         if (!namePattern.test(value)) {
             nameWarning.style.display = "block"; // Show warning if the name is invalid
-            addButton.disabled = true; // Disable the add button
+            button.disabled = true; // Disable the submit button
         } else {
             nameWarning.style.display = "none"; // Hide warning if the name is valid
-            validateForm(); // Check if all required fields are valid
+            validateForm(isEdit); // Check if all required fields are valid
         }
     } else {
         nameWarning.style.display = "none"; // Hide warning if input is cleared
-        addButton.disabled = true; // Disable the add button if input is empty
+        button.disabled = true; // Disable the submit button if input is empty
     }
 }
 
-// Function to check if the entire form is valid
-function validateForm() {
-    const firstName = document.getElementById('firstName').value;
-    const middleName = document.getElementById('middleName').value;
+// Function to validate phone number for both Add and Edit forms
+function validatePhoneNumber(input, isEdit = false) {
+    const value = input.value;
+    const button = isEdit ? document.querySelector('#editMemberForm .submit-btn') : document.querySelector('#addMemberForm .submit-btn');
+    
+    input.value = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+
+    // Limit input to 10 digits
+    if (input.value.length > 10) {
+        input.value = input.value.slice(0, 10);
+    }
+
+    // Disable button if phone number is not valid
+    if (input.value.length !== 10) {
+        button.disabled = true;
+    }
+}
+
+// Function to validate age for both Add and Edit forms
+function validateAge(inputId, isEdit = false) {
+    const ageInput = document.getElementById(inputId);
+    const ageWarning = document.getElementById(isEdit ? "editAgeWarning" : "ageWarning");
+    const button = isEdit ? document.querySelector('#editMemberForm .submit-btn') : document.querySelector('#addMemberForm .submit-btn');
+
+    const min = 15;
+    const max = 100;
+    const value = ageInput.value;
+
+    if (value !== '') {
+        if (value < min) {
+            ageWarning.style.display = "block"; // Show warning
+            button.disabled = true; // Disable the submit button
+        } else if (value >= min && value <= max) {
+            ageWarning.style.display = "none"; // Hide warning
+            button.disabled = false; // Enable the submit button
+        } else if (value > max) {
+            ageInput.value = max; // Cap the age at max
+        }
+    } else {
+        ageWarning.style.display = "none"; // Hide warning if input is cleared
+        button.disabled = true; // Disable the submit button if input is empty
+    }
+}
+
+// Function to validate email for both Add and Edit forms
+function validateEmail(inputId, isEdit = false) {
+    const emailInput = document.getElementById(inputId);
+    const emailWarning = document.getElementById(isEdit ? "editEmailWarning" : "emailWarning");
+    const button = isEdit ? document.querySelector('#editMemberForm .submit-btn') : document.querySelector('#addMemberForm .submit-btn');
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Basic email regex pattern
+
+    const value = emailInput.value;
+
+    if (value !== '') {
+        if (!emailPattern.test(value)) {
+            emailWarning.style.display = "block"; // Show warning if the email is invalid
+            button.disabled = true; // Disable the submit button
+        } else {
+            emailWarning.style.display = "none"; // Hide warning if the email is valid
+            button.disabled = false; // Enable the submit button
+        }
+    } else {
+        emailWarning.style.display = "none"; // Hide warning if input is empty
+        button.disabled = true; // Disable the submit button if input is empty
+    }
+}
+
+// Prevent invalid characters in phone number and age inputs
+document.querySelectorAll("input[type='tel'], input[type='number']").forEach(input => {
+    input.addEventListener("keydown", function(event) {
+        if (['e', 'E', '+', '-'].includes(event.key)) {
+            event.preventDefault(); // Block these invalid characters
+        }
+    });
+});
+
+// Function to check if the entire form is valid for both Add and Edit forms
+function validateForm(isEdit = false) {
+    const firstName = document.getElementById(isEdit ? 'edit_first_name' : 'firstName').value;
+    const middleName = document.getElementById(isEdit ? 'edit_middle_name' : 'middleName').value;
     const firstNameValid = /^[a-zA-Z\s]+$/.test(firstName);
     const middleNameValid = /^[a-zA-Z\s]+$/.test(middleName);
 
-    const addButton = document.querySelector('.submit-btn');
+    const button = isEdit ? document.querySelector('#editMemberForm .submit-btn') : document.querySelector('#addMemberForm .submit-btn');
 
     if (firstNameValid && middleNameValid) {
-        addButton.disabled = false; // Enable the add button when form is valid
+        button.disabled = false; // Enable the submit button when form is valid
     } else {
-        addButton.disabled = true; // Disable the add button if form is invalid
+        button.disabled = true; // Disable the submit button if form is invalid
     }
 }
 
-// Disable the Add button initially
+// Disable the buttons initially for both Add and Edit forms
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector('.submit-btn').disabled = true; // Disable the button on page load
+    document.querySelector('#addMemberForm .submit-btn').disabled = true; // Disable the Add button on page load
+    document.querySelector('#editMemberForm .submit-btn').disabled = true; // Disable the Edit button on page load
 });
+
+
+function validateEditEmail() {
+    const emailInput = document.getElementById("edit_email");
+    const emailWarning = document.getElementById("edit_emailWarning");
+    const saveButton = document.querySelector('#editMemberForm .submit-btn');
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    const value = emailInput.value;
+
+    if (value !== '') {
+        if (!emailPattern.test(value)) {
+            emailWarning.style.display = "block"; // Show warning if the email is invalid
+            saveButton.disabled = true; // Disable the save button
+        } else {
+            emailWarning.style.display = "none"; // Hide warning if the email is valid
+            enableSaveButton(); // Recheck form validity
+        }
+    } else {
+        emailWarning.style.display = "none"; // Hide warning if input is cleared
+        saveButton.disabled = true; // Disable save button if input is empty
+    }
+}
+
+function validateEditAge() {
+    const ageInput = document.getElementById("edit_age");
+    const ageWarning = document.getElementById("edit_ageWarning");
+    const saveButton = document.querySelector('#editMemberForm .submit-btn');
+
+    const minAge = 15;
+    const maxAge = 100;
+    const value = ageInput.value;
+
+    if (value !== '') {
+        if (value < minAge) {
+            ageWarning.style.display = "block"; // Show warning
+            saveButton.disabled = true; // Disable the save button
+        } else if (value >= minAge && value <= maxAge) {
+            ageWarning.style.display = "none"; // Hide warning
+            enableSaveButton(); // Recheck form validity
+        } else if (value > maxAge) {
+            ageInput.value = maxAge; // Cap the age at max
+        }
+    } else {
+        ageWarning.style.display = "none"; // Hide warning if input is cleared
+        saveButton.disabled = true; // Disable save button if input is empty
+    }
+}
+
+function enableSaveButton() {
+    const firstNameWarning = document.getElementById('edit_first_nameWarning').style.display;
+    const lastNameWarning = document.getElementById('edit_last_nameWarning').style.display;
+    const middleNameWarning = document.getElementById('edit_middle_nameWarning').style.display;
+    const emailWarning = document.getElementById('edit_emailWarning').style.display;
+    const ageWarning = document.getElementById('edit_ageWarning').style.display;
+
+    const saveButton = document.querySelector('#editMemberForm .submit-btn');
+
+    // Enable the save button only if all warnings are hidden
+    if (firstNameWarning === "none" &&
+        lastNameWarning === "none" &&
+        middleNameWarning === "none" &&
+        emailWarning === "none" &&
+        ageWarning === "none") {
+        saveButton.disabled = false; // Enable the save button
+    } else {
+        saveButton.disabled = true; // Disable the save button
+    }
+}
 
 
     </script>
