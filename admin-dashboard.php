@@ -11,9 +11,10 @@
     </head> 
 
     <?php include 'layouts/body.php'; ?>
+    
         <!-- Main Wrapper -->
-        <div class="main-wrapper">
-            <?php include 'layouts/menu.php'; ?>
+        <div class="main-wrapper"> 
+            <?php include 'layouts/menu.php'; ?> 
             <!-- Page Wrapper -->
             <div class="page-wrapper">
             
