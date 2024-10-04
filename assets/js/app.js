@@ -3,6 +3,24 @@ Author       : Dreamguys
 Template Name: SmartHR - php Admin Template
 Version      : 3.6
 */
+// Show the loader
+function showLoader() {
+    document.getElementById('loading').style.display = 'flex';
+}
+
+// Hide the loader
+function hideLoader() {
+    document.getElementById('loading').style.display = 'none';
+}
+
+// Example: Simulate a process (like fetching data) with a 2 second delay
+window.onload = function() {
+    showLoader();
+    
+    setTimeout(function() {
+        hideLoader();
+    }, 2000); // Hide the loader after 2 seconds
+};
 
 $(document).ready(function() {
 	

@@ -11,7 +11,7 @@
     </head> 
 
     <?php include 'layouts/body.php'; ?>
-    
+
         <!-- Main Wrapper -->
         <div class="main-wrapper"> 
             <?php include 'layouts/menu.php'; ?> 
@@ -749,7 +749,7 @@
             <!-- /Page Wrapper -->
         </div>
         <!-- /Main Wrapper -->
-
+    
         <?php include 'layouts/customizer.php'; ?>
 
         <?php include 'layouts/vendor-scripts.php'; ?>
