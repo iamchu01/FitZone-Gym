@@ -11,7 +11,7 @@
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
 }
-.description-cell{
+.description-cell {
   overflow: hidden;
 }
 
@@ -390,6 +390,7 @@ video {
 
 /* HTML5 display-role reset for older browsers */
 * {
+  user-select: none;
   box-sizing: border-box;
 }
 
@@ -578,6 +579,7 @@ h6 {
 }
 
 body {
+  user-select: none;
   font-family: "CircularStd", sans-serif;
   font-size: 15px;
   color: #1f1f1f;
