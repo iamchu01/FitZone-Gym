@@ -45,14 +45,14 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         }
         .dropdown-item:hover{
             transition: transform 0.3s ease;
-            transform: scale(1.05);
+            transform: scale(1.05); 
             background-color: #48c92f;
         }
         
         .table {
     table-layout: fixed;
     width: 100%;
-    overflow: hidden; /* or a specific width */
+    
 }
 
 
@@ -101,13 +101,11 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row table-responsive" id="exercise-list">
+           
+                    <div class="row mb-3" id="exercise-list">
                         <!-- Exercise items will be inserted here dynamically -->
+                 
                     </div>
-                </div>
-            </div>
             
 
             <!-- Add Exercise Modal -->
@@ -401,13 +399,6 @@ function handleFormSubmit(event) {
     });
 });
 
-$(document).ready(function() {
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  });
 
     </script>
     <script src="assets/js/success.js"></script>

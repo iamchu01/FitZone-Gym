@@ -1,7 +1,8 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-
+<?php include 'layouts/db-connection.php'; ?>
 <head>
+    
 
     <title>Form Basic Input - HRMS admin template</title>
 

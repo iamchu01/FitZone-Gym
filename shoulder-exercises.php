@@ -13,10 +13,10 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
     <?php include 'layouts/head-css.php'; ?>
     <style>
         .sort-indicator {
-    font-size: 0.8em;
-    margin-left: 5px;
-    color: #888;
-}
+            font-size: 0.8em;
+            margin-left: 5px;
+            color: #888;
+        }
         .card:hover {
             transition: transform 0.3s ease;
             transform: scale(1.05);
@@ -42,9 +42,16 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
         }
         .dropdown-item:hover{
             transition: transform 0.3s ease;
-            transform: scale(1.05);
+            transform: scale(1.05); 
             background-color: #48c92f;
         }
+        
+        .table {
+    table-layout: fixed;
+    width: 100%;
+    
+}
+
     </style>
 </head>
 
@@ -91,7 +98,7 @@ $_SESSION['last_accessed'] = $_SERVER['PHP_SELF'];
                 </div>
             </div>
 
-            <div class="row " id="exercise-list">
+            <div class="row mb-3" id="exercise-list">
                 <!-- Exercise items will be inserted here dynamically -->
             </div>
 

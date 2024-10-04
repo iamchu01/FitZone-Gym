@@ -22,11 +22,11 @@ if (isset($_GET['category'])) {
                 echo '<td class="description-cell" data-bs-toggle="tooltip" title="' . htmlspecialchars($row['me_description']) . '">' . 
                 nl2br(htmlspecialchars($row['me_description'])) . '</td>';
                            echo '<td class="text-end">
-                        <div class="dropdown dropdown-action">
+                        <div class="dropdown dropdown-action" dropdown-toggle">
                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-menu" >
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"  onclick="openViewModal(' . $row['me_id'] . ', \'' . addslashes($row['me_name']) . '\', \'' . addslashes($row['me_description']) . '\', \'' . addslashes($row['muscle_category']) . '\', \'' . base64_encode($row['me_image']) . '\')">
                                     <i class="fa fa-eye m-r-5"></i> View
                                 </a>
@@ -55,12 +55,3 @@ if (isset($_GET['category'])) {
     $stmt->close();
 }
 ?>
-<script>
-$(document).ready(function() {
-    $('#myTable').DataTable({
-        "ordering": true,
-        "paging": true,
-        "searching": true
-    });
-});
-</script>
