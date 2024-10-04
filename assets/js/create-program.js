@@ -115,14 +115,13 @@ function populateExerciseList(exercises) {
     });
 }
 
-// Function to add a new exercise row
 async function addExerciseRow() {
     const muscleGroups = await fetchMuscleGroups(); // Fetch muscle groups
 
     const row = document.createElement('tr');
     row.innerHTML = `
         <td>
-            <input type="text" class="form-control exercise-input" placeholder="Exercise" readonly>
+            <input type="text" class="form-control exercise-input" placeholder="Exercise">
         </td>
         <td><input type="number" class="form-control"></td>
         <td><input type="number" class="form-control"></td>
@@ -142,21 +141,28 @@ async function addExerciseRow() {
     const muscleGroupCell = row.querySelector('div.muscle-group-dropdown');
     muscleGroupCell.appendChild(createMuscleGroupDropdown(muscleGroups));
 
-    // Add event listener to show/hide the dropdown based on checkbox state
+    // Select checkbox and exercise input
     const checkbox = row.querySelector('.include-muscle-group');
+    const exerciseCell = row.querySelector('.exercise-input');
+
+    // Set initial state of the exercise input to editable
+    exerciseCell.readOnly = false; // <--- Changed: Input is editable by default
+
+    // Add event listener to show/hide the dropdown based on checkbox state
     checkbox.addEventListener('change', function() {
         if (this.checked) {
             muscleGroupCell.style.display = 'block'; // Show the muscle group dropdown
+            exerciseCell.readOnly = true; // <--- Changed: Disable exercise input when muscle group is selected
+            exerciseCell.value = ''; // Clear the exercise input
         } else {
             muscleGroupCell.style.display = 'none'; // Hide the dropdown
-            row.querySelector('.exercise-input').value = ''; // Clear exercise input
+            exerciseCell.readOnly = false; // <--- Changed: Allow typing in the exercise input
         }
     });
 
     // Add event listener for the exercise cell click
-    const exerciseCell = row.querySelector('.exercise-input');
     exerciseCell.addEventListener('click', function() {
-        // Fetch exercises based on the selected muscle group when the cell is clicked
+        // Fetch exercises based on the selected muscle group when the cell is clicked, only if checkbox is checked
         if (checkbox.checked) {
             const selectedMuscleGroup = muscleGroupCell.querySelector('select').value;
             fetchExercisesByMuscleGroup(selectedMuscleGroup); // Fetch exercises based on selected muscle group
@@ -184,7 +190,6 @@ async function addExerciseRow() {
         tbody.removeChild(row); // Remove the specific row
     });
 }
-
 
 // Add event listener for the Add Exercise button
 document.getElementById('addExercise').addEventListener('click', function() {
@@ -250,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cell.appendChild(weekTitle);
 
                 // Days of the week as buttons with unique IDs
-                const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
                 daysOfWeek.forEach(day => {
                     const dayButton = document.createElement('button');
                     dayButton.className = 'btn btn-outline-primary mr-2 mb-2'; // Outline button with margin
