@@ -52,6 +52,10 @@ $page = $components[2];
                  <li class="<?php echo ($page == 'create-program.php')?'active':'';?>" href="create-program.php"> 
                     <a href="create-program.php"><i class="la la-edit"></i> <span>Custimize program</span></a>
                 </li>
+                <li class="<?php echo ($page == 'estore')?'active':'';?>" href="estore.php"> 
+                    <a href="estore.php"><i class="la la-store"></i> <span>Storefront</span></a>
+                </li>
+                
                 
 
            
