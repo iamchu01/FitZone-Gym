@@ -5,161 +5,95 @@
     <title>Dashboard - GYYMS admin</title>
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
+    <style>
+        .main-wrapper {
+            width: 100%;
+            height: auto;
+            margin: 0%;
+            flex-direction: column;
+        }
+        .card {
+    transition: transform 0.3s ease; /* Smooth transition */
+    
+}
+
+.card:hover {
+    transform: scale(1.05); /* Zoom effect */
+    background-color: #48c92f;
+    color: #fff;
+}
+.description {
+        white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    }
+    </style>
 </head>
 
-<?php include 'layouts/body.php'; ?>
+<body>
+    <?php include 'layouts/body.php'; ?>
+    <div class="main-wrapper">
+        <?php include 'layouts/menu.php'; ?>
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3 class="page-title">Welcome Admin!</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item active">Targeted exercise</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-<!-- Main Wrapper -->
-<div class="main-wrapper">
-    <?php include 'layouts/menu.php'; ?>
-    <!-- Page Wrapper -->
-    <div class="page-wrapper">
-    
-        <!-- Page Content -->
-        <div class="content container-fluid">
-        
-            <!-- Page Header -->
-            <div class="page-header">
+                <!-- Muscle Groups Section -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Welcome Admin!</h3>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item active">Point Of Sale</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                        <h4>Muscle Groups</h4>
+                        <div class="row">
+                            <!-- Muscle Groups Array -->
+                            <?php 
+                           $muscle_groups = [
+                            "Chest" => ["img" => "assets/img/chest.svg", "file" => "chest-exercises.php"],
+                            "Shoulders" => ["img" => "assets/img/shoulder.svg", "file" => "shoulder-exercises.php"],
+                            "Triceps" => ["img" => "assets/img/triceps.svg", "file" => "triceps-exercises.php"],
+                            "Biceps" => ["img" => "assets/img/biceps.svg", "file" => "biceps-exercises.php"],
+                            "Back" => ["img" => "assets/img/back.svg", "file" => "back-exercises.php"],
+                            "Quads" => ["img" => "assets/img/quads.svg", "file" => "quads-exercises.php"],
+                            "Calves" => ["img" => "assets/img/calves.svg", "file" => "calves-exercises.php"],
+                            "Abs" => ["img" => "assets/img/abs.svg", "file" => "abs-exercises.php"],
+                            "Hamstrings" => ["img" => "assets/img/hamstrings.svg", "file" => "hamstrings-exercises.php"],
+                            "Forearms" => ["img" => "assets/img/forearms.svg", "file" => "forearm-exercises.php"],
+                            "Glutes" => ["img" => "assets/img/glutes.svg", "file" => "glutes-exercises.php"],
+                            "Abductor" => ["img" => "assets/img/abductor.svg", "file" => "abductor-exercises.php"],
+                        ];
 
-            <!-- POS Section -->
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col text-center">
-                                    <button class="btn btn-outline-primary active">Protien Powder <br> 8 protien powder</button>
-                                </div>
-                                <div class="col text-center">
-                                    <button class="btn btn-outline-primary">Supliments <br> 14 supliments</button>
-                                </div>
-                                <div class="col text-center">
-                                    <button class="btn btn-outline-primary">Drinks <br> 5 drinks</button>
-                                </div>
-                              
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <img src="path/to/t-bone-steak.jpg" class="card-img-top" alt="T-Bone Steak">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title">Protien poweder</h5>
-                                            <p class="card-text">4 punds</p>
-                                            <p class="card-text text-success">$16.50</p>
-                                        </div>
+                        foreach ($muscle_groups as $muscle => $data) {
+                            $image = $data['img'];
+                            $file = $data['file'];
+                            echo '
+                            <div class="col-md-3 col-sm-6">
+                                <div class="card text-center">
+                                    <a href="' . $file . '">
+                                        <img src="' . $image . '" class="card-img-top" alt="' . $muscle . '">
+                                    </a>
+                                    <div class="card-body">
+                                        <h5 class="card-title"> ' . $muscle . '</h5>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <img src="path/to/chefs-salmon.jpg" class="card-img-top" alt="Chef's Salmon">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title">Chef's Salmon</h5>
-                                            <p class="card-text">16 mins to cook</p>
-                                            <p class="card-text text-success">$12.40</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <img src="path/to/ramen.jpg" class="card-img-top" alt="Ramen">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title">Ramen</h5>
-                                            <p class="card-text">16 mins to cook</p>
-                                            <p class="card-text text-success">$14.90</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Add more food items here -->
-                            </div>
+                            </div>';
+                        }
+                            ?>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Current Order</h4>
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    T-Bone Stake 
-                                    <div  class="d-flex align-items-center"> 
-                                        <button class="btn btn-sm btn-outline-secondary">-</button>
-                                        <span class="badge badge-primary badge-pill">2</span>
-                                        <button class="btn btn-sm btn-outline-secondary">+</button>
-                                    </div>
-                                    <span>$66.00</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Soup of the Day 
-                                    <div  class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-secondary">-</button>
-                                        <span class="badge badge-primary badge-pill">1</span>
-                                        <button class="btn btn-sm btn-outline-secondary">+</button>
-                                    </div>
-                                    <span>$7.50</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Pancakes 
-                                    <div  class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-secondary">-</button>
-                                        <span class="badge badge-primary badge-pill">2</span>
-                                        <button class="btn btn-sm btn-outline-secondary">+</button>
-                                    </div>
-                                    <span>$27.00</span>
-                                </li>
-                                <!-- Add more orders here -->
-                            </ul>
-                            <button class="btn btn-outline-danger btn-block mt-3">Clear All</button>
-
-                            <div class="mt-4">
-                                <p>Subtotal <span class="float-right">$100.50</span></p>
-                                <p>Discounts <span class="float-right text-danger">-$8.00</span></p>
-                                <p>Tax (12%) <span class="float-right">$11.20</span></p>
-                                <hr>
-                                <h4>Total <span class="float-right">$93.46</span></h4>
-                            </div>
-
-                            <div class="mt-4">
-                                <h5>Payment Method</h5>
-                                <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                                    <label class="btn btn-outline-primary flex-fill">
-                                        <input type="radio" name="payment" id="cash" autocomplete="off"> Cash
-                                    </label>
-                                    <label class="btn btn-outline-primary flex-fill">
-                                        <input type="radio" name="payment" id="card" autocomplete="off"> Card
-                                    </label>
-                                    <label class="btn btn-outline-primary flex-fill">
-                                        <input type="radio" name="payment" id="ewallet" autocomplete="off"> E-Wallet
-                                    </label>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-primary btn-block mt-4">Print Bills</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- /Muscle Groups Section -->
             </div>
-
+            <!-- /Page Content -->
         </div>
-        <!-- /Page Content -->
-
+        <!-- /Page Wrapper -->
     </div>
-    <!-- /Page Wrapper -->
-</div>
-<!-- /Main Wrapper -->
-
-<?php include 'layouts/customizer.php'; ?>
-<?php include 'layouts/vendor-scripts.php'; ?>
-
+    <?php include 'layouts/customizer.php'; ?>
+    <?php include 'layouts/vendor-scripts.php'; ?>
 </body>
 
 </html>
