@@ -37,11 +37,12 @@
 
     <!-- Offcanvas Menu Section Begin -->
     <div class="offcanvas-menu-overlay"></div>
-    <?php include('offcanvas-menu.php');?>
+    
+    <?php include 'layouts/offcanvas-menu.php'; ?>
     <!-- Offcanvas Menu Section End -->
 
     <!-- Header Section Begin -->
-    <?php include('header.php');?>
+    <?php include 'layouts/header.php';?>
     <!-- Header End -->
 
     <!-- Hero Section Begin -->
