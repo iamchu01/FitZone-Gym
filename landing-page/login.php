@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <style>
+        
       body {
         background-color: rgba(0, 0, 0, 0.8);
         font-family: 'Oswald', sans-serif;
@@ -28,6 +29,8 @@
         border-radius: 10px;
         width: 400px;
         color: white;
+        position: relative;
+        z-index: 1000; 
       }
       .login-card h2 {
         text-align: center;
@@ -56,16 +59,13 @@
     </style>
   </head>
   <body>
- 
 
-    <!-- Offcanvas Menu Section Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    
     <?php include 'layouts/offcanvas-menu.php'; ?>
     <!-- Offcanvas Menu Section End -->
 
     <!-- Header Section Begin -->
     <?php include 'layouts/header.php';?>
+ 
     <!-- Header End -->
     <div class="login-container">
       <div class="login-card">
