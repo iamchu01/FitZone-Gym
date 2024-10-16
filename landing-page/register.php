@@ -26,8 +26,10 @@
         background-color: rgba(0, 0, 0, 0.8);
         padding: 30px;
         border-radius: 10px;
-        width: 450px;
+        width: 400px;
         color: white;
+        position: relative;
+        z-index: 1000; 
       }
       .register-card h2 {
         text-align: center;
@@ -53,6 +55,10 @@
       .register-link a {
         color: #44d62c;
       }
+      .register-container {
+        z-index: 10;
+  padding-top: 250px; /* Adjust padding to prevent overlap with fixed header */
+}
     </style>
   </head>
   <body>
