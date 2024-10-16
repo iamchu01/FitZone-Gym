@@ -49,7 +49,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="#">Log In</a></li>
+                        <li class="<?= basename($_SERVER['PHP_SELF']) == 'login.php' ? 'active' : '' ?>">
+                        <a href="./login.php">Login</a>
+                    </li>
                     </ul>
                 </nav>
             </div>
