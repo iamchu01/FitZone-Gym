@@ -32,12 +32,12 @@
 
     <!-- Offcanvas Menu Section Begin -->
     <div class="offcanvas-menu-overlay"></div>
-    <?php include('offcanvas-menu.php');?>
+    <?php include 'layouts/offcanvas-menu.php'; ?>
     <!-- Offcanvas Menu Section End -->
 
     <!-- Header Section Begin -->
-    <?php include('header.php');?>
-    <!-- Header End -->
+    <?php include 'layouts/header.php';?>
+    <!-- Header End --> <!-- Header End -->
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb-bg.jpg">
