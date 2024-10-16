@@ -48,6 +48,11 @@
                     </li>
                 </ul>
             </li>
+            
+                <li class="<?= basename($_SERVER['PHP_SELF']) == 'login.php' ? 'active' : '' ?>">
+                        <a href="./login.php">Login</a>
+                    </li>
+            
             <li class="<?= basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : '' ?>">
                 <a href="./contact.php">Contact</a>
             </li>
