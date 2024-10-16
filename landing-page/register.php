@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <style>
       body {
-        background: url('image.png') no-repeat center center/cover;
+        background: rgba(0, 0, 0, 0.8);
         font-family: 'Oswald', sans-serif;
       }
       .register-container {
@@ -56,6 +56,17 @@
     </style>
   </head>
   <body>
+  
+
+    <!-- Offcanvas Menu Section Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    
+    <?php include 'layouts/offcanvas-menu.php'; ?>
+    <!-- Offcanvas Menu Section End -->
+
+    <!-- Header Section Begin -->
+    <?php include 'layouts/header.php';?>
+    <!-- Header End -->
     <div class="register-container">
       <div class="register-card">
         <h2>Register for Fit Zone</h2>
