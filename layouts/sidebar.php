@@ -28,23 +28,23 @@ $page = $components[2];
                 </li>
 
                 
-                <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
+                <!-- <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;"> -->
 
                 <!-- //* ATTENDANCE -->
-                <li class="<?php echo ($page == 'admin-dashboard.php') ?: ''; ?>">
+                <!-- <li class="<?php echo ($page == 'admin-dashboard.php') ?: ''; ?>">
                     <a href="attendance-tracking.php"> <i class="la la-calendar-check"></i> <span>Attendance</span></a>
-                </li>
+                </li> -->
                 
                   <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
 
                  
                   <!-- //* file maintinance -->
                 <li class=" submenu"> 
-                <a href="#" ><i class="la la-box"></i> <span> File maintinance</span> <span class="menu-arrow"></span></a>
+                <a href="#" ><i class="la la-box"></i> <span> File Maintenance</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'add-instructor.php')?'active':'';?>" href="add-instructor.php">Instructors</a></li>
-                        <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Members</a></li>
-                        <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Create Subscription</a></li>
+                        <li><a class="<?php echo ($page == 'add-member.php')?'active':'';?>" href="add-member.php">Members</a></li>
+                        <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Subscription</a></li>
                         <li><a class="<?php echo ($page == 'inventory.php')?'active':'';?>" href="inventory.php">Product List</a></li>
                         <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                 
                         <li><a class="<?php echo ($page == 'offered-programs.php')?'active':'';?>" href="offered-programs.php">Offered Programs</a></li>  
@@ -76,6 +76,7 @@ $page = $components[2];
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'pos.php') ? 'active' : ''; ?>" href="pos.php">Point of Sale</a></li>
                         <li><a class="<?php echo ($page == 'walk-in.php') ? 'active' : ''; ?>" href="walk-in.php">Walk In</a></li>
+                        <li><a class="<?php echo ($page == 'attendance-tracking.php') ? 'active' : ''; ?>" href="attendance-tracking.php">Attendance</a></li>
                     </ul>
                 </li>
                 <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
