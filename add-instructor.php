@@ -2,10 +2,6 @@
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/db-connection.php'; ?>
 
-<?php include 'layouts/session.php'; ?>
-<?php include 'layouts/head-main.php'; ?>
-<?php include 'layouts/db-connection.php'; ?>
-
 <?php
 // Check if form is submitted (this will handle form submission through AJAX)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
