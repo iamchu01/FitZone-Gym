@@ -289,10 +289,8 @@ $(document).ready(function() {
 
 
 //*DOB 
-   function calculateAge() {
+     function calculateAge() {
         const dobInput = document.getElementById('dobInput').value;
-        const dobError = document.getElementById('dobError');
-        
         if (dobInput) {
             const birthdate = new Date(dobInput);
             const today = new Date();
@@ -304,14 +302,12 @@ $(document).ready(function() {
 
             // Validate age between 15 and 100
             if (age < 15 || age > 100) {
-                dobError.innerText = 'Age must be between 15 and 100 years. Please select a valid date of birth.';
+                alert('Age must be between 15 and 100 years. Please select a valid date of birth.');
                 document.getElementById('ageInput').value = '';
             } else {
-                dobError.innerText = ''; // Clear the error message
                 document.getElementById('ageInput').value = age;
             }
         } else {
-            dobError.innerText = ''; // Clear the error message if no date is selected
             document.getElementById('ageInput').value = '';
         }
     }
