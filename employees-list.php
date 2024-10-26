@@ -13,10 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
     $address = $_POST['address'];
+    $password = $_POST['password']; // Collect the password value
 
     // Insert data into database
-    $sql = "INSERT INTO tbl_members (FName, LName, Email, Phone_Number, DOB, Gender, Address) 
-            VALUES ('$firstname', '$lastname', '$email', '$phonenumber', '$dob', '$gender', '$address')";
+    $sql = "INSERT INTO tbl_members (FName, LName, Email, Phone_Number, DOB, Gender, Address, Password) 
+            VALUES ('$firstname', '$lastname', '$email', '$phonenumber', '$dob', '$gender', '$address', '$password')";
 
     if ($conn->query($sql) === TRUE) {
         $last_id = $conn->insert_id;
@@ -36,12 +37,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Member List - Gym Management System</title>
     <?php include 'layouts/title-meta.php'; ?>
     <?php include 'layouts/head-css.php'; ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
 </head>
 <body>
     <div class="main-wrapper">
@@ -173,17 +180,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label class="col-form-label">Password</label>
+                                            <div class="input-group">
+                                                <input id="password1" class="form-control" type="password" name="password" placeholder="Enter Password" value="12345">
+                                                <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem;">
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </button>
+                                            </div>
+                                            <!-- <div class="invalid-feedback">Please enter a password.</div> -->
+                                        </div>
+                                    </div>
+                 
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
                                             <label class="col-form-label">Phone Number <span class="text-danger">*</span></label>
                                             <input class="form-control" type="tel" name="phone" required>
                                         </div>
                                     </div>
+                                    
 
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Date of Birth</label>
-                                            <input class="form-control" type="date" name="dob">
-                                        </div>
-                                    </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Date of Birth <span class="text-danger">*</span></label>
+                                <input class="form-control" type="date" id="dobInput" required onchange="calculateAge()">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Age</label>
+                                <input id="ageInput" class="form-control" type="text" readonly>
+                            </div>
+                        </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -221,43 +249,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include 'layouts/vendor-scripts.php'; ?>
 
     <script>
-        $(document).ready(function() {
+$(document).ready(function() {
             var table = $('.datatable').DataTable();
-
             $('#addMemberForm').on('submit', function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
+    e.preventDefault();
+    var formData = $(this).serialize();
 
-                $.ajax({
-                    url: '', // Current PHP page handles the form submission
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        $('#add_member').modal('hide');
-                        var member = JSON.parse(response);
+    $.ajax({
+        url: '', // Current PHP page handles the form submission
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+            $('#add_member').modal('hide');
+            var member = JSON.parse(response);
 
-                        table.row.add([
-                            '<h2 class="table-avatar"><a href="profile.php" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a><a href="profile.php">' + member.firstname + ' ' + member.lastname + '</a></h2>',
-                            'MEM-' + member.id,
-                            member.email,
-                            member.phonenumber,
-                            new Date().toLocaleDateString(),
-                            '<a class="btn bg-info btn-sm text-dark">No Membership</a>',
-                            '<div class="dropdown dropdown-action">' +
-                                '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="material-icons">more_vert</i></a>' +
-                                '<div class="dropdown-menu dropdown-menu-right">' +
-                                    '<a class="dropdown-item edit-member" href="#" data-id="' + member.id + '" data-bs-toggle="modal" data-bs-target="#edit_member"><i class="fa fa-pencil m-r-5"></i> Edit</a>' +
-                                    '<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#archive_member"><i class="fa fa-trash-o m-r-5"></i> Archive</a>' +
-                                '</div>' +
-                            '</div>'
-                        ]).draw(false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error: " + error);
-                    }
-                });
-            });
-        });
+            table.row.add([
+                '<h2 class="table-avatar"><a href="profile.php" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a><a href="profile.php">' + member.firstname + ' ' + member.lastname + '</a></h2>',
+                'MEM-' + member.id,
+                member.email,
+                member.phonenumber,
+                new Date().toLocaleDateString(),
+                '<a class="btn bg-info btn-sm text-dark">No Membership</a>',
+                '<div class="dropdown dropdown-action">' +
+                    '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="material-icons">more_vert</i></a>' +
+                    '<div class="dropdown-menu dropdown-menu-right">' +
+                        '<a class="dropdown-item edit-member" href="#" data-id="' + member.id + '" data-bs-toggle="modal" data-bs-target="#edit_member"><i class="fa fa-pencil m-r-5"></i> Edit</a>' +
+                        '<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#archive_member"><i class="fa fa-trash-o m-r-5"></i> Archive</a>' +
+                    '</div>' +
+                '</div>'
+            ]).draw(false);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error: " + error);
+        }
+    });
+});
+
+});
+
+
+//*DOB 
+     function calculateAge() {
+        const dobInput = document.getElementById('dobInput').value;
+        if (dobInput) {
+            const birthdate = new Date(dobInput);
+            const today = new Date();
+            let age = today.getFullYear() - birthdate.getFullYear();
+            const monthDifference = today.getMonth() - birthdate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+
+            // Validate age between 15 and 100
+            if (age < 15 || age > 100) {
+                alert('Age must be between 15 and 100 years. Please select a valid date of birth.');
+                document.getElementById('ageInput').value = '';
+            } else {
+                document.getElementById('ageInput').value = age;
+            }
+        } else {
+            document.getElementById('ageInput').value = '';
+        }
+    }
+
+
+//*Password Toggle
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordField = document.getElementById('password1');
+    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordField.setAttribute('type', type);
+    this.innerHTML = type === 'password' ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
+});
+
+
+
     </script>
 </body>
 </html>
