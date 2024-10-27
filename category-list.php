@@ -43,7 +43,6 @@
                                 <thead>
                                     <tr>
                                         <th>Category Name</th>
-                                        <th>Category Code</th>
                                         <th>Description</th>
                                         <th>Created By</th>
                                         <th class="text-end">Action</th>
@@ -60,7 +59,6 @@
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>";
                                             echo "<td>" . htmlspecialchars($row['category_name']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($row['category_code']) . "</td>";
                                             echo "<td>" . htmlspecialchars($row['category_description']) . "</td>";
                                             echo "<td>Admin</td>"; // Placeholder for 'Created By'
                                             echo '<td class="text-end">
