@@ -43,7 +43,8 @@ $page = $components[2];
                 <a href="#" ><i class="la la-box"></i> <span> File Maintenance</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'add-instructor.php')?'active':'';?>" href="add-instructor.php">Instructors</a></li>
-                        <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Members</a></li>
+                        <!-- <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Members</a></li> -->
+                        <li><a class="<?php echo ($page == 'add-member.php')?'active':'';?>" href="add-member.php">Members</a></li>
                         <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Subscription</a></li>
                         <li><a class="<?php echo ($page == 'inventory.php')?'active':'';?>" href="inventory.php">Product List</a></li>
                         <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                 
