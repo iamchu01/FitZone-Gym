@@ -1,25 +1,6 @@
-<?php 
-    include 'layouts/session.php';
-    include 'layouts/head-main.php';
-    include 'layouts/db-connection.php';
-    require 'vendor/autoload.php'; 
-    use Coreproc\MsisdnPh\Msisdn;
-
-    $mobileError = '';
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $mobileNumber = $_POST['mobile'] ?? '';
-
-    // Validate the phone number
-    if (Msisdn::validate($mobileNumber)) {
-        // Format the number in the standardized form
-        $msisdn = new Msisdn($mobileNumber);
-        $formattedNumber = $msisdn->get(true); // returns +639 format
-    } else {
-        $mobileError = 'Invalid mobile number. Please enter a valid Philippine phone number.';
-    }
-}
-?>
+<?php include 'layouts/session.php'; ?>
+<?php include 'layouts/head-main.php'; ?>
+<?php include 'layouts/db-connection.php'; ?>
 
 <head>
 
@@ -43,14 +24,14 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Instructor</h3>
+                        <h3 class="page-title">Members</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Instructor</li>
+                            <li class="breadcrumb-item active">Members</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_instructor"><i class="fa fa-plus"></i>Add Instructor</a>
+                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_member"><i class="fa fa-plus"></i>Add Members</a>
                     </div>
                 </div>
             </div>
@@ -152,19 +133,19 @@
         </div>
         <!-- /Page Content -->
     
-        <!-- //* Add Instructor Modal -->
-<div id="add_instructor" class="modal custom-modal fade" role="dialog">
+        <!-- //* Add Member Modal -->
+<div id="add_member" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
                <div class="modal-header">
-                    <h5 class="modal-title">Add Instructor</h5>
+                    <h5 class="modal-title">Add Member</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                     </button>
                </div>
             <div class="modal-body">
                 
-                <!-- //* Add Instructor Form -->
+                <!-- //* Add Member Form -->
                <form id="addUserForm" class="needs-validation" novalidate method="POST" action="">
                <div class="row">
 
@@ -196,18 +177,16 @@
                     </div>
 
                     <!-- //* phone number -->
-                                        <div class="col-sm-6">
-                                            <label>Phone Number <span class="text-danger">*</span></label>
-                                            <div class="form-group">
-                                                <div class="input-group has-validation">
-                                                    <!-- <span class="input-group-text" id="inputGroupPrepend">+63</span> -->
-                                                    <input type="text" class="form-control <?php echo $mobileError ? 'is-invalid' : ''; ?>" id="mobile" name="mobile" placeholder="ex. 09123456789 or +639123456789" required>
-                                                    <div class="invalid-feedback">
-                                                        <?php echo $mobileError ?: 'Please enter a valid Philippine phone number.'; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                    <div class="col-sm-6">
+                         <label>Phone Number <span class="text-danger">*</span></label>
+                         <div class="form-group">
+                              <div class="input-group has-validation">
+                                   <span class="input-group-text" id="inputGroupPrepend">+63</span>
+                                   <input type="text" class="form-control" id="mobile" name="mobile" placeholder="ex. 9123456789" required minlength="10" maxlength="10" pattern="9[0-9]{9}">
+                                   <div class="invalid-feedback">Please enter a valid phone number.</div>
+                              </div>
+                         </div>
+                    </div>
 
                         <!-- //* Gender -->
                         <div class="col-sm-6">
@@ -249,6 +228,8 @@
                          </div>
                     </div>
 
+
+
                         <!-- //* Specialization-->
                     <div class="form-group mt-3">
                         <!-- <div class="form-group mb-2"> -->
@@ -274,6 +255,11 @@
 
                                         <!-- Specializations list with checkboxes -->
                                         <ul id="specialization-list" class="list-unstyled mt-2">
+                                            <li><label class="dropdown-item" onclick="itemClicked(event)"><input type="checkbox" value="Trainer" onclick="updateSelection()"> Trainer</label></li>
+                                            <li><label class="dropdown-item" onclick="itemClicked(event)"><input type="checkbox" value="Group Fitness" onclick="updateSelection()"> Group Fitness</label></li>
+                                            <li><label class="dropdown-item" onclick="itemClicked(event)"><input type="checkbox" value="Strength and Conditioning" onclick="updateSelection()"> Strength and Conditioning</label></li>
+                                            <li><label class="dropdown-item" onclick="itemClicked(event)"><input type="checkbox" value="Yoga Instructor" onclick="updateSelection()"> Yoga Instructor</label></li>
+                                            <li><label class="dropdown-item" onclick="itemClicked(event)"><input type="checkbox" value="Combat Sports Training" onclick="updateSelection()"> Combat Sports Training</label></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -300,6 +286,252 @@
 </div>
         <!-- /Add Client Modal -->
         
+        <!-- Edit Client Modal -->
+        <div id="edit_client" class="modal custom-modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Client</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">First Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" value="Barry" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Last Name</label>
+                                        <input class="form-control" value="Cuda" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Username <span class="text-danger">*</span></label>
+                                        <input class="form-control" value="barrycuda" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Email <span class="text-danger">*</span></label>
+                                        <input class="form-control floating" value="barrycuda@example.com" type="email">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Password</label>
+                                        <input class="form-control" value="barrycuda" type="password">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Confirm Password</label>
+                                        <input class="form-control" value="barrycuda" type="password">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">  
+                                    <div class="form-group">
+                                        <label class="col-form-label">Client ID <span class="text-danger">*</span></label>
+                                        <input class="form-control floating" value="CLT-0001" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Phone </label>
+                                        <input class="form-control" value="9876543210" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Company Name</label>
+                                        <input class="form-control" type="text" value="Global Technologies">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive m-t-15">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Module Permission</th>
+                                            <th class="text-center">Read</th>
+                                            <th class="text-center">Write</th>
+                                            <th class="text-center">Create</th>
+                                            <th class="text-center">Delete</th>
+                                            <th class="text-center">Import</th>
+                                            <th class="text-center">Export</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Projects</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tasks</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chat</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Estimates</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Invoices</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Timing Sheets</td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                            <td class="text-center">
+                                                <input checked="" type="checkbox">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="submit-section">
+                                <button class="btn btn-primary submit-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Edit Client Modal -->
+        
+        <!-- Delete Client Modal -->
+        <div class="modal custom-modal fade" id="delete_client" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>Delete Client</h3>
+                            <p>Are you sure want to delete?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="javascript:void(0);" class="btn btn-primary continue-btn">Delete</a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Client Modal -->
+        
     </div>
     <!-- /Page Wrapper -->
 
@@ -312,7 +544,6 @@
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 
-//* Specialization
 <script>
     // Prevent dropdown from closing when clicking "+ Create New"
     document.getElementById('add-new-specialization').addEventListener('click', function (e) {
@@ -395,7 +626,6 @@
     }
 </script>
 
-//* Calculate age based on date of birth
 <script>
     function calculateAge() {
         const dobInput = document.getElementById('dateOfBirth').value;
@@ -414,51 +644,6 @@
         document.getElementById('age').value = age >= 0 ? age : '';
     }
 </script>
-
-
-//* Reset all fields when add modal is closed.
-<script>
-        // Reset form fields when modal is closed
-    document.getElementById('add_instructor').addEventListener('hidden.bs.modal', function () {
-        // Reset the form fields
-        document.getElementById('addUserForm').reset();
-
-        // Clear the age field
-        document.getElementById('age').value = '';
-
-        // Reset specialization dropdown button text
-        document.getElementById('specializationDropdownButton').textContent = 'Select Specialization';
-
-        // Uncheck all checkboxes in the specialization list
-        document.querySelectorAll('#specialization-list input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = false;
-        });
-
-        // Hide the "Create New" input container if it was open
-        document.getElementById('addNewInputContainer').style.display = 'none';
-        document.getElementById('add-new-specialization').style.display = 'block';
-    });
-</script>
-
-//* Phone Number validation
-<script>
-        // Restrict the input field to numbers only
-        document.getElementById('mobile').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9+]/g, ''); // Allows only numbers and '+'
-        });
-
-        // Show error if the mobile field is invalid on blur
-        document.getElementById('mobile').addEventListener('blur', function(e) {
-            const mobileNumber = this.value;
-            if (mobileNumber && !/^(\+639|09)\d{9}$/.test(mobileNumber)) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
-</script>
-
-
 </body>
 
 </html>
