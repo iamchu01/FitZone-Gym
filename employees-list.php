@@ -37,10 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -224,12 +220,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12">
+                                    <!-- //* Remove Address -->
+                                    <!-- <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label">Address</label>
                                             <input class="form-control" type="text" name="address">
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="submit-section">
                                     <button class="btn btn-primary submit-btn mb-3" type="submit">Add</button>
