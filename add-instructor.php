@@ -2,43 +2,28 @@
     include 'layouts/session.php';
     include 'layouts/head-main.php';
     include 'layouts/db-connection.php';
-    require 'vendor/autoload.php'; 
-    use Coreproc\MsisdnPh\Msisdn;
-
-    $mobileError = '';
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $mobileNumber = $_POST['mobile'] ?? '';
-
-    // Validate the phone number
-    if (Msisdn::validate($mobileNumber)) {
-        // Format the number in the standardized form
-        $msisdn = new Msisdn($mobileNumber);
-        $formattedNumber = $msisdn->get(true); // returns +639 format
-    } else {
-        $mobileError = 'Invalid mobile number. Please enter a valid Philippine phone number.';
-    }
-}
 ?>
 
 <head>
 
-    <title>Clients - HRMS admin template</title>
+    <title>Blank Page - HRMS admin template</title>
+
     <?php include 'layouts/title-meta.php'; ?>
+
     <?php include 'layouts/head-css.php'; ?>
 
 </head>
 
 <body>
-    <div class="main-wrapper">
+<div class="main-wrapper">
     <?php include 'layouts/menu.php'; ?>
 
-   <!-- Page Wrapper -->
+    <!-- Page Wrapper -->
     <div class="page-wrapper">
     
         <!-- Page Content -->
         <div class="content container-fluid">
-        
+            
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row align-items-center">
@@ -55,8 +40,8 @@
                 </div>
             </div>
             <!-- /Page Header -->
-            
-            <!-- Search Filter -->
+
+            <!-- //* search bar -->
             <div class="row filter-row">
                 <div class="col-md-6 col-md-3">  
                     <div class="form-group form-focus">
@@ -65,8 +50,9 @@
                     </div>
                 </div>    
             </div>
-            <!-- Search Filter -->
-
+            <!-- //* search bar -->
+            
+            <!-- //* data table -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -149,171 +135,330 @@
                     </div>
                 </div>
             </div>
+            <!-- //* data table-->
+            
         </div>
         <!-- /Page Content -->
-    
-        <!-- //* Add Instructor Modal -->
-<div id="add_instructor" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-               <div class="modal-header">
-                    <h5 class="modal-title">Add Instructor</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                    </button>
-               </div>
-            <div class="modal-body">
-                
-                <!-- //* Add Instructor Form -->
-               <form id="addUserForm" class="needs-validation" novalidate method="POST" action="">
-               <div class="row">
-
-                    <!-- //* firstname -->
-                    <div class="col-sm-6">
-                         <div class="form-group">
-                              <label>First Name <span class="text-danger">*</span></label>
-                              <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required pattern="[A-Za-z\s]+">
-                              <div class="invalid-feedback">Please enter a valid first name.</div>
-                         </div>
-                    </div>
-
-                    <!-- //* middlename -->
-                    <div class="col-sm-6">
-                         <div class="form-group">
-                              <label>Middle Name <span class="text-danger">*</span></label>
-                              <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name" pattern="[A-Za-z\s]+">
-                              <div class="invalid-feedback">Please enter a valid middle name.</div>
-                         </div>
-                    </div>
-
-                    <!-- //* lastname -->
-                    <div class="col-sm-6">
-                         <div class="form-group">
-                              <label>Last Name <span class="text-danger">*</span></label>
-                              <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required pattern="[A-Za-z\s]+">
-                              <div class="invalid-feedback">Please enter a valid last name.</div>
-                         </div>
-                    </div>
-
-                    <!-- //* phone number -->
-                                        <div class="col-sm-6">
-                                            <label>Phone Number <span class="text-danger">*</span></label>
-                                            <div class="form-group">
-                                                <div class="input-group has-validation">
-                                                    <!-- <span class="input-group-text" id="inputGroupPrepend">+63</span> -->
-                                                    <input type="text" class="form-control <?php echo $mobileError ? 'is-invalid' : ''; ?>" id="mobile" name="mobile" placeholder="ex. 09123456789 or +639123456789" required>
-                                                    <div class="invalid-feedback">
-                                                        <?php echo $mobileError ?: 'Please enter a valid Philippine phone number.'; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                        <!-- //* Gender -->
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <label>Gender <span style="color:red;">*</span></label>
-                                <div class="position-relative">
-                                    <select class="form-select py-2" name="Gender" required>
-                                    <option value="" disabled selected>Select Gender</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Others</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- //* date of birth -->
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <label>Date of Birth <span class="text-danger">*</span></label>
-                                <input type="date" id="dateOfBirth" class="form-control" placeholder="Select Date of Birth" onchange="calculateAge()">
-                            </div>
-                        </div>
-
-                        <!-- //* age -->
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <label>Age</label>
-                                <input type="text" id="age" class="form-control" placeholder="Age" readonly>
-                            </div>
-                        </div>
-
-                         <!-- //* address -->
-                    <div class="col-sm-6">
-                        <div class="form-group mb-2">
-                         <label>Address <span class="text-danger">*</span></label>
-                         <input id="autocomplete" class="form-control" type="text" name="address" required autocomplete="off">
-                         <div class="invalid-feedback">Please enter a valid address.</div>
-                         </div>
-                    </div>
-
-                        <!-- //* Specialization-->
-                    <div class="form-group mt-3">
-                        <!-- <div class="form-group mb-2"> -->
-                            <label>Specialization <span class="text-danger">*</span></label>
-                            <div class="position-relative">
-                                <div class="dropdown">
-                                    <button class="form-select py-3" type="button" id="specializationDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Select Specialization
-                                    </button>
-                                    <div class="dropdown-menu p-2" id="specializationDropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto;">
-                                        <!-- Search bar inside the dropdown -->
-                                        <input type="text" id="specialization-search" class="form-control mb-2" placeholder="Search Specialization">
-
-                                        <!-- Option to trigger add new specialization under the search bar -->
-                                        <a href="#" id="add-new-specialization" class="dropdown-item text-primary">+ Create New</a>
-
-                                        <!-- Add New Specialization Input Container, initially hidden -->
-                                        <div id="addNewInputContainer" class="mt-2" style="display: none;">
-                                            <input type="text" id="newSpecializationInput" class="form-control mb-1" placeholder="Enter new specialization"> 
-                                            <button type="button" class="btn btn-primary btn-sm" id="addSpecializationButton">Add</button>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelAdd(event)">Cancel</button>
-                                        </div>
-
-                                        <!-- Specializations list with checkboxes -->
-                                        <ul id="specialization-list" class="list-unstyled mt-2">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        <!-- </div> -->
-                    </div>   
-               </div>
-
-                <div class="submit-section" style="margin-top: 10px;">
-                        <button class="btn btn-primary submit-btn" type="submit">Submit</button>
-                    </div>
-               </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Add User Modal -->
-
-    </div>
-</form>
-            </div>
-        </div>
-    </div>
-</div>
-        <!-- /Add Client Modal -->
         
     </div>
     <!-- /Page Wrapper -->
+
+    <!-- //* add instructor modal -->
+    <div id="add_instructor" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title">Add Instructor</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- //* Add Instructor Form -->
+                    <form id="addUserForm" class="needs-validation instructor-info" novalidate method="POST" action="">
+                    <div class="row">
+
+                        <!-- //* firstname -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>First Name <span class="text-danger">*</span></label>
+                                <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required pattern="[A-Za-z\s]+">
+                                <div class="invalid-feedback">Please enter a valid first name.</div>
+                            </div>
+                        </div>
+
+                        <!-- //* middlename -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Middle Name <span class="text-danger">*</span></label>
+                                <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name" pattern="[A-Za-z\s]+">
+                                <div class="invalid-feedback">Please enter a valid middle name.</div>
+                            </div>
+                        </div>
+
+                        <!-- //* lastname -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Last Name <span class="text-danger">*</span></label>
+                                <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required pattern="[A-Za-z\s]+">
+                                <div class="invalid-feedback">Please enter a valid last name.</div>
+                            </div>
+                        </div>
+
+                        <!-- //* phone number -->
+                        <div class="col-sm-6">
+                                    <label>Mobile Number <span style="color:red;">*</span></label>
+                                    <div class="form-group">
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text" id="inputGroupPrepend">+63</span>
+                                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="ex. 9123456789" required minlength="10" maxlength="10" pattern="9[0-9]{9}">
+                                            <div class="invalid-feedback">Please enter a valid mobile number.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <!-- //* Gender -->
+                            <div class="col-sm-6">
+                                <div class="form-group mb-2">
+                                    <label>Gender <span style="color:red;">*</span></label>
+                                    <div class="position-relative">
+                                        <select class="form-select py-2" name="Gender" required>
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Others</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- //* date of birth -->
+                            <div class="col-sm-6">
+                                <div class="form-group mb-2">
+                                    <label>Date of Birth <span class="text-danger">*</span></label>
+                                    <div class="cal-icon">
+                                        <input type="text" id="dateOfBirth" class="form-control datetimepicker" placeholder="Select Date of Birth" required>
+                                        <small id="dateWarning" class="text-danger" style="display: none;">Please select a valid date of birth.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- //* age -->
+                            <div class="col-sm-6">
+                                <div class="form-group mb-2">
+                                    <label>Age</label>
+                                    <input type="text" id="age" name="instructor_age" class="form-control" placeholder="Age" readonly>
+                                </div>
+                            </div>
+
+                            <!-- //* address -->
+                        <!-- <div class="col-sm-6">
+                            <div class="form-group mb-2">
+                            <label>Address <span class="text-danger">*</span></label>
+                            <input id="autocomplete" class="form-control" type="text" name="address" required autocomplete="off">
+                            <div class="invalid-feedback">Please enter a valid address.</div>
+                            </div>
+                        </div> -->
+
+                            <div class="col-sm-6 mb-3">
+                                <label>Location <span style="color:red;">*</span></label>
+                                <select name="location" class="form-control form-control-md" id="location-selector" required>
+                                    <option selected="true" disabled>Choose Region</option>
+                                </select>
+                                <input type="hidden" id="location-text" name="location_text">
+                                <div class="invalid-feedback">Please select a valid location.</div>
+                            </div>
+
+                            <!-- Back Button -->
+                            <div class="col-sm-6 mb-3">
+                                <button type="button" id="back-button" class="btn btn-secondary" style="display: none;">Back</button>
+                            </div>
+
+
+                            <!-- //* Specialization
+                        <div class="form-group mt-3">
+                            <!-- <div class="form-group mb-2"> 
+                                <label>Specialization <span class="text-danger">*</span></label>
+                                <div class="position-relative">
+                                    <div class="dropdown">
+                                        <button class="form-select py-3" type="button" id="specializationDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Select Specialization
+                                        </button>
+                                        <div class="dropdown-menu p-2" id="specializationDropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto;">
+                                            <!-- Search bar inside the dropdown 
+                                            <input type="text" id="specialization-search" class="form-control mb-2" placeholder="Search Specialization">
+
+                                            <!-- Option to trigger add new specialization under the search bar 
+                                            <a href="#" id="add-new-specialization" class="dropdown-item text-primary">+ Create New</a>
+
+                                            <!-- Add New Specialization Input Container, initially hidden 
+                                            <div id="addNewInputContainer" class="mt-2" style="display: none;">
+                                                <input type="text" id="newSpecializationInput" class="form-control mb-1" placeholder="Enter new specialization"> 
+                                                <button type="button" class="btn btn-primary btn-sm" id="addSpecializationButton">Add</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="cancelAdd(event)">Cancel</button>
+                                            </div>
+
+                                            <!-- Specializations list with checkboxes 
+                                            <ul id="specialization-list" class="list-unstyled mt-2">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- </div> 
+                        </div>   
+                        -->
+
+                        <!-- //* new specialized field -->
+                        <div class="form-group mt-3">
+                            <label>Specialization <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <!-- Textarea for entering multiple specializations -->
+                                <textarea class="form-control" id="specializationTextarea" name="specialization" rows="4" placeholder="Enter specializations, separated by commas or new lines"></textarea>
+                            </div>
+                        </div>
+                        <!-- //* new specialized field -->
+
+                    </div>
+
+                        <div class="submit-section" style="margin-top: 10px;">
+                            <button class="btn btn-primary submit-btn" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //* add instructor modal -->
 
 
 </div>
 <!-- end main wrapper-->
 
+
 <?php include 'layouts/customizer.php'; ?>
 <!-- JAVASCRIPT -->
 <?php include 'layouts/vendor-scripts.php'; ?>
 
+<script src="ph-address-selector.js"></script>
+
+//* address drop down
+<script>
+    $(document).ready(function () {
+        let level = "region";
+        let locationText = "";
+        let provinces = [], cities = [], barangays = [];
+
+        function updateDropdown(data, placeholder, addBackOption = false) {
+            const dropdown = $("#location-selector");
+            dropdown.empty();
+
+            // Add "Back" option if needed
+            if (addBackOption) {
+                dropdown.append(`<option value="back">⟵ Back</option>`);
+            }
+
+            dropdown.append(`<option selected="true" disabled>${placeholder}</option>`);
+            $.each(data, function (index, item) {
+                dropdown.append($("<option></option>").attr("value", item.code).text(item.name));
+            });
+            console.log(`Dropdown updated with ${data.length} items for ${placeholder}`);
+        }
+
+        function loadRegions() {
+            // Load regions initially
+            $.getJSON("ph-json/region.json", function (data) {
+                const regions = data.map(region => ({
+                    code: region.region_code,
+                    name: region.region_name
+                }));
+                updateDropdown(regions, "Choose Region"); // No "Back" option at the region level
+                level = "region"; // Set level to region
+                console.log("Regions loaded:", regions);
+            }).fail(function () {
+                console.error("Failed to load regions from ph-json/region.json");
+            });
+        }
+
+        // Initial load of regions on page load
+        loadRegions();
+
+        $("#location-selector").on("change", function () {
+            const selectedCode = $(this).val();
+
+            // If "Back" is selected, go to the previous level
+            if (selectedCode === "back") {
+                if (level === "province") {
+                    loadRegions(); // Back to region level
+                } else if (level === "city") {
+                    updateDropdown(provinces, "Choose Province", true); // Back to province level
+                    level = "province";
+                } else if (level === "barangay") {
+                    updateDropdown(cities, "Choose City/Municipality", true); // Back to city level
+                    level = "city";
+                }
+                // Remove the last part of the locationText
+                const textParts = locationText.split(" - ");
+                textParts.pop();
+                locationText = textParts.join(" - ");
+                $("#location-text").val(locationText); // Update hidden input
+                return; // Stop further execution
+            }
+
+            const selectedText = $(this).find("option:selected").text();
+            console.log(`Selected ${level}: ${selectedText} (code: ${selectedCode})`);
+
+            if (level === "region") {
+                locationText = selectedText;
+
+                // Load provinces for the selected region
+                $.getJSON("ph-json/province.json", function (data) {
+                    provinces = data
+                        .filter(province => province.region_code === selectedCode)
+                        .map(province => ({
+                            code: province.province_code,
+                            name: province.province_name
+                        }));
+                    updateDropdown(provinces, "Choose Province", true); // Add "Back" option
+                    level = "province";
+                    console.log("Provinces loaded:", provinces);
+                }).fail(function () {
+                    console.error("Failed to load provinces from ph-json/province.json");
+                });
+
+            } else if (level === "province") {
+                locationText += ` - ${selectedText}`;
+
+                // Load cities for the selected province
+                $.getJSON("ph-json/city.json", function (data) {
+                    cities = data
+                        .filter(city => city.province_code === selectedCode)
+                        .map(city => ({
+                            code: city.city_code,
+                            name: city.city_name
+                        }));
+                    updateDropdown(cities, "Choose City/Municipality", true); // Add "Back" option
+                    level = "city";
+                    console.log("Cities loaded:", cities);
+                }).fail(function () {
+                    console.error("Failed to load cities from ph-json/city.json");
+                });
+
+            } else if (level === "city") {
+                locationText += ` - ${selectedText}`;
+
+                // Load barangays for the selected city
+                $.getJSON("ph-json/barangay.json", function (data) {
+                    barangays = data
+                        .filter(barangay => barangay.city_code === selectedCode)
+                        .map(barangay => ({
+                            code: barangay.brgy_code,
+                            name: barangay.brgy_name
+                        }));
+                    updateDropdown(barangays, "Choose Barangay", true); // Add "Back" option
+                    level = "barangay";
+                    console.log("Barangays loaded:", barangays);
+                }).fail(function () {
+                    console.error("Failed to load barangays from ph-json/barangay.json");
+                });
+
+            } else if (level === "barangay") {
+                locationText += ` - ${selectedText}`;
+                $("#location-text").val(locationText); // Save the full address path
+
+                // Display the final selection with the "Back" option in case users want to go back
+                updateDropdown([], locationText, true); // Show final address as placeholder with "Back" option
+                console.log("Full location text saved:", locationText);
+
+                // Keep the level as barangay so users can go back from the final selection
+                level = "barangay";
+            }
+        });
+    });
+</script>
 
 //* Specialization
-<script>
+<!-- <script>
     // Prevent dropdown from closing when clicking "+ Create New"
     document.getElementById('add-new-specialization').addEventListener('click', function (e) {
         e.preventDefault();
@@ -393,27 +538,68 @@
         const dropdownButton = document.getElementById('specializationDropdownButton');
         dropdownButton.textContent = selected.length > 0 ? selected.join(', ') : 'Select Specialization';
     }
-</script>
+</script> -->
 
 //* Calculate age based on date of birth
 <script>
-    function calculateAge() {
-        const dobInput = document.getElementById('dateOfBirth').value;
-        const dob = new Date(dobInput);
-        const today = new Date();
+    $(document).ready(function () {
+        // Initialize datepicker with minDate and maxDate
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            maxDate: new Date(), // Restrict future dates
+            minDate: '1924-01-01' // Restrict dates before 1924
+        });
 
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
+        // Simplified function to calculate age in years only
+        function calculateAge(birthdate) {
+            const birthDate = new Date(birthdate);
+            const today = new Date();
 
-        // Adjust age if the birth month and day haven't occurred yet this year
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-            age--;
+            let age = today.getFullYear() - birthDate.getFullYear();
+            
+            // Adjust if birthdate hasn't occurred this year yet
+            if (today.getMonth() < birthDate.getMonth() || 
+                (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            return `${age} year${age > 1 ? 's' : ''} old`;
         }
 
-        // Display the calculated age in the age field
-        document.getElementById('age').value = age >= 0 ? age : '';
-    }
+        // Handle date change and validate date range
+        $('.datetimepicker').on('dp.change', function (e) {
+            if (e.date) {
+                const selectedDate = e.date.toDate(); // Convert to JavaScript Date object
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+
+                const minDate = new Date('1924-01-01');
+
+                // Check if the selected date is within the current year
+                if (selectedDate.getFullYear() === today.getFullYear()) {
+                    $('#dateWarning').text("Please select a valid date of birth.").show();
+                    $(this).data("DateTimePicker").clear(); // Clear the selected date
+                    $('#age').val(''); // Clear the age field
+                    return;
+                } else if (selectedDate > today || selectedDate < minDate) {
+                    $('#dateWarning').text("Please select a valid date of birth.").show();
+                    $(this).data("DateTimePicker").clear(); // Clear the selected date
+                    $('#age').val(''); // Clear the age field
+                    return;
+                } else {
+                    $('#dateWarning').hide(); // Hide the warning message
+                }
+
+                const age = calculateAge(e.date.format('YYYY-MM-DD'));
+                $('#age').val(age);
+            } else {
+                // Clear the age field if no date is selected
+                $('#age').val('');
+            }
+        });
+    });
 </script>
+
 
 
 //* Reset all fields when add modal is closed.
@@ -442,22 +628,24 @@
 
 //* Phone Number validation
 <script>
-        // Restrict the input field to numbers only
-        document.getElementById('mobile').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9+]/g, ''); // Allows only numbers and '+'
-        });
+    // Get the mobile input field and warning element
+    const mobileInput = document.getElementById("mobile");
+    const mobileWarning = document.getElementById("mobileWarning");
 
-        // Show error if the mobile field is invalid on blur
-        document.getElementById('mobile').addEventListener('blur', function(e) {
-            const mobileNumber = this.value;
-            if (mobileNumber && !/^(\+639|09)\d{9}$/.test(mobileNumber)) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
+    // Add an event listener to check the input pattern on change or keyup
+    mobileInput.addEventListener("input", () => {
+        const philippineNumberPattern = /^9\d{9}$/;
+
+        // Check if the value matches the Philippine number pattern
+        if (!philippineNumberPattern.test(mobileInput.value)) {
+            mobileInput.classList.add("is-invalid");
+            mobileWarning.style.display = "block"; // Show warning
+        } else {
+            mobileInput.classList.remove("is-invalid");
+            mobileWarning.style.display = "none"; // Hide warning
+        }
+    });
 </script>
-
 
 </body>
 
