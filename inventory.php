@@ -127,35 +127,33 @@ $conn->close();
                 <form action="product-handler.php" method="POST" enctype="multipart/form-data">
       
                 <div class="form-group">
-    <label for="product-image">Product Image</label>
-    <input type="file" class="form-control" id="product-image" name="product_image" accept="image/*" required onchange="previewImage(event)">
-</div>
-<div class="form-group">
-    <label>Image Preview</label>
-    <br>
-    <img id="image-preview" src="#" alt="Image Preview" style="max-width: 100%; height: auto; display: none;">
-</div>
-
-
+                        <label for="product-image">Product Image</label>
+                        <input type="file" class="form-control" id="product-image" name="product_image" accept="image/*" required onchange="previewImage(event)">
+                    </div>
+                    <div class="form-group">
+                        <label>Image Preview</label>
+                        <br>
+                        <img id="image-preview" src="#" alt="Image Preview" style="max-width: 100%; height: auto; display: none;">
+                    </div>
                     <div class="form-group">
                         <label for="product-name">Product Name</label>
                         <input type="text" class="form-control" id="product-name" name="product_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="product-category">Product Category</label>
-                        <select class="form-control" id="product-category" name="product_category" required>
-                            <option value="" disabled selected>Select a category</option>
-                            <?php
-                            include 'layouts/db-connection.php'; // Include the database connection
-                            $sql = "SELECT category_id, category_name FROM category";
-                            $result = $conn->query($sql);
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='" . htmlspecialchars($row['category_id']) . "'>" . htmlspecialchars($row['category_name']) . "</option>";
-                            }
-                            $conn->close();
-                            ?>
-                        </select>
-                    </div>
+    <label for="product-category">Product Category</label>
+    <select class="form-control" id="product-category" name="product_category" required>
+        <option value="" disabled selected>Select a category</option>
+        <?php
+        include 'layouts/db-connection.php'; 
+        $sql = "SELECT category_id, category_name, is_perishable FROM category"; // Update query to include is_perishable
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            echo "<option value='" . htmlspecialchars($row['category_id']) . "' data-perishable='" . htmlspecialchars($row['is_perishable']) . "'>" . htmlspecialchars($row['category_name']) . "</option>";
+        }
+        ?>
+    </select>
+</div>
+
                     <div class="form-group">
                         <label for="product-description">Product Description</label>
                         <textarea class="form-control" id="product-description" name="product_description" rows="4" required></textarea>
@@ -210,6 +208,45 @@ $conn->close();
         </div>
     </div>
     
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="update-product.php" method="POST" enctype="multipart/form-data" id="editProductForm">
+                    <input type="hidden" name="product_id" id="edit-product-id">
+
+                    <!-- Form fields for editing product -->
+                    <div class="form-group">
+                        <label for="edit-product-name">Product Name</label>
+                        <input type="text" class="form-control" id="edit-product-name" name="product_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-category">Product Category</label>
+                        <select class="form-control" id="edit-product-category" name="product_category" required>
+                            <option value="" disabled>Select a category</option>
+                            <?php
+                            // Fetch categories again to populate dropdown
+                            $sql = "SELECT category_id, category_name FROM category";
+                            $categoriesResult = $conn->query($sql);
+                            while ($category = $categoriesResult->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($category['category_id']) . "'>" . htmlspecialchars($category['category_name']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <!-- Add other fields as necessary, e.g., description, quantity, price, expiration date -->
+
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Delete Product Modal -->
     <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
@@ -308,6 +345,21 @@ function previewImage(event) {
         };
         reader.readAsDataURL(event.target.files[0]);
     }
+    $(document).ready(function() {
+    // Function to handle category change
+    $('#product-category').on('change', function() {
+        var selectedOption = $(this).find('option:selected');
+        var isPerishable = selectedOption.data('perishable'); // Get the data-perishable attribute
+
+        if (isPerishable) {
+            $('#expire-date').prop('disabled', false); // Enable the expiration date input
+        } else {
+            $('#expire-date').val(''); // Clear the expiration date input
+            $('#expire-date').prop('disabled', true); // Disable the expiration date input
+        }
+    });
+});
+
     </script>
 
     <?php include 'layouts/customizer.php'; ?>

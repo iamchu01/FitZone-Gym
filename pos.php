@@ -85,8 +85,15 @@
                             </div>
                             <h4>Select a Product</h4>
                                 <div class="row" >
-                                        <!-- Product Cards will be inserted here -->
-                                         <div class="product-card" id="product-cards"></div>
+                                    <div class="col-sm-12">
+                                        <div class="row align-items-start">
+                                            <!-- Product Cards will be inserted here -->
+                                         <div class="col-md-3 col-sm-6" id="product-cards"></div>
+
+                                        </div>
+                                         
+                                    </div>
+                                        
                                 </div>
                         </div>
                     </div>

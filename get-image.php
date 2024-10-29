@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     $stmt->fetch();
 
     if ($stmt->num_rows > 0) {
-        header("Content-Type: image/*"); // Adjust content type based on your image format (e.g., image/png for PNG images)
+        header("Content-Type: image/jpeg");
         echo $image_data;
     } else {
         echo "Image not found.";
