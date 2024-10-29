@@ -1,12 +1,78 @@
-<?php 
-    include 'layouts/session.php';
-    include 'layouts/head-main.php';
-    include 'layouts/db-connection.php';
+<?php
+include 'layouts/session.php';
+include 'layouts/head-main.php';
+include 'layouts/db-connection.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get form data
+    $first_name = $_POST['firstname'];
+    $middle_name = $_POST['middlename'];
+    $last_name = $_POST['lastname'];
+    $phone_number = $_POST['mobile'];
+    $gender = $_POST['Gender'];
+    $date_of_birth = DateTime::createFromFormat('m/d/Y', $_POST['dateOfBirth'])->format('Y-m-d');
+    $age = $_POST['instructor_age'];
+    $location = $_POST['location_text'];
+    $specialization = $_POST['specialization'];
+    $status = 'Active';
+
+    // Insert into database
+    $sql = "INSERT INTO tbl_instructors (first_name, middle_name, last_name, phone_number, gender, date_of_birth, age, location, specialization, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssisss", $first_name, $middle_name, $last_name, $phone_number, $gender, $date_of_birth, $age, $location, $specialization, $status);
+
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Instructor added successfully";
+    } else {
+        $_SESSION['message'] = "Failed to add instructor";
+    }
+    $stmt->close();
+
+    header("Location: add-instructor.php"); // Redirect to the same page to prevent resubmission
+    exit();
+}
 ?>
+
+<style>
+    /* Additional Styles for Success Modal */
+#messageModal .modal-content {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#messageModal .modal-header {
+    background-color: #4CAF50; /* Success color */
+    color: white;
+    padding: 15px;
+}
+
+#messageModal .modal-header .btn-close {
+    background: black;
+    opacity: 0.8;
+}
+
+#messageModal .modal-body {
+    padding: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+#messageModal .modal-footer {
+    border-top: none;
+    padding: 15px;
+}
+
+#messageModal .btn-primary {
+    background-color: #4CAF50;
+    border: none;
+    padding: 8px 20px;
+    font-size: 1rem;
+}
+
+</style>
 
 <head>
 
-    <title>Blank Page - HRMS admin template</title>
+    <title>Instructors - HRMS admin template</title>
 
     <?php include 'layouts/title-meta.php'; ?>
 
@@ -19,7 +85,7 @@
     <?php include 'layouts/menu.php'; ?>
 
     <!-- Page Wrapper -->
-    <div class="page-wrapper">
+    <div class="page-wrapper ">
     
         <!-- Page Content -->
         <div class="content container-fluid">
@@ -28,7 +94,7 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Instructor</h3>
+                        <h3 class="page-title">Instructors</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Instructor</li>
@@ -59,78 +125,47 @@
                         <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Client ID</th>
-                                    <th>Contact Person</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Status</th>
+                                    <th>Full Name</th>
+                                    <th>Specialization</th>
+                                    <th>Phone Number</th>
+                                  
+                                    
+                                    <!-- <th>Status</th> -->
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h2 class="table-avatar">
-                                            <a href="client-profile.php" class="avatar"><img src="assets/img/profiles/avatar-19.jpg" alt=""></a>
-                                            <a href="client-profile.php">Global Technologies</a>
-                                        </h2>
-                                    </td>
-                                    <td>CLT-0001</td>
-                                    <td>Barry Cuda</td>
-                                    <td>barrycuda@example.com</td>
-                                    <td>9876543210</td>
-                                    <td>
-                                        <div class="dropdown action-label">
-                                            <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-dot-circle-o text-success"></i> Active </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Active</a>
-                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="dropdown dropdown-action">
-                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_client"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>
-                                        <h2 class="table-avatar">
-                                            <a href="client-profile.php" class="avatar"><img src="assets/img/profiles/avatar-19.jpg" alt=""></a>
-                                            <a href="client-profile.php">Global Technologies</a>
-                                        </h2>
-                                    </td>
-                                    <td>CLT-0001</td>
-                                    <td>Barry Cuda</td>
-                                    <td>barrycuda@example.com</td>
-                                    <td>9876543210</td>
-                                    <td>
-                                        <div class="dropdown action-label">
-                                            <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-dot-circle-o text-success"></i> Active </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Active</a>
-                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="dropdown dropdown-action">
-                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_client"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                           <tbody>
+                            <?php
+                            $query = "SELECT * FROM tbl_instructors";
+                            $result = $conn->query($query);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td><h2 class='table-avatar'><a href='instructor-profile.php' class='avatar'><img src='assets/img/profiles/avatar-19.jpg' alt=''></a>
+                                        <a href='instructor-profile.php'>{$row['first_name']} {$row['middle_name']} {$row['last_name']}</a></h2></td>";
+                                    echo "<td>{$row['specialization']}</td>";
+                                    echo "<td>{$row['phone_number']}</td>";
+                                    // echo "<td><div class='dropdown action-label'><a href='#' class='btn btn-white btn-sm btn-rounded dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>
+                                    //     <i class='fa fa-dot-circle-o text-success'></i> {$row['status']} </a>
+                                    //     <div class='dropdown-menu'>
+                                    //         <a class='dropdown-item' href='#'><i class='fa fa-dot-circle-o text-success'></i> Active</a>
+                                    //         <a class='dropdown-item' href='#'><i class='fa fa-dot-circle-o text-danger'></i> Inactive</a>
+                                    //     </div></div></td>";
+                                    echo "<td class='text-end'><div class='dropdown dropdown-action'>
+                                        <a href='#' class='action-icon dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><i class='material-icons'>more_vert</i></a>
+                                        <div class='dropdown-menu dropdown-menu-right'>
+                                            <a class='dropdown-item' href='#' data-bs-toggle='modal' data-bs-target='#edit_instructor'><i class='fa fa-pencil m-r-5'></i> Edit</a>
+                                            <a class='dropdown-item' href='#' data-bs-toggle='modal' data-bs-target='#archive_instructor'><i class='fa fa-trash-o m-r-5'></i> Archive</a>
+                                        </div></div></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5'>No instructors found.</td></tr>";
+                            }
+                            ?>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -143,173 +178,192 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- //* add instructor modal -->
-    <div id="add_instructor" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                        <h5 class="modal-title">Add Instructor</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-                <div class="modal-body">
-                    
-                    <!-- //* Add Instructor Form -->
-                    <form id="addUserForm" class="needs-validation instructor-info" novalidate method="POST" action="">
-                    <div class="row">
-
-                        <!-- //* firstname -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>First Name <span class="text-danger">*</span></label>
-                                <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required pattern="[A-Za-z\s]+">
-                                <div class="invalid-feedback">Please enter a valid first name.</div>
-                            </div>
-                        </div>
-
-                        <!-- //* middlename -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Middle Name <span class="text-danger">*</span></label>
-                                <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name" pattern="[A-Za-z\s]+">
-                                <div class="invalid-feedback">Please enter a valid middle name.</div>
-                            </div>
-                        </div>
-
-                        <!-- //* lastname -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Last Name <span class="text-danger">*</span></label>
-                                <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required pattern="[A-Za-z\s]+">
-                                <div class="invalid-feedback">Please enter a valid last name.</div>
-                            </div>
-                        </div>
-
-                        <!-- //* phone number -->
-                        <div class="col-sm-6">
-                                    <label>Mobile Number <span style="color:red;">*</span></label>
-                                    <div class="form-group">
-                                        <div class="input-group has-validation">
-                                            <span class="input-group-text" id="inputGroupPrepend">+63</span>
-                                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="ex. 9123456789" required minlength="10" maxlength="10" pattern="9[0-9]{9}">
-                                            <div class="invalid-feedback">Please enter a valid mobile number.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <!-- //* Gender -->
-                            <div class="col-sm-6">
-                                <div class="form-group mb-2">
-                                    <label>Gender <span style="color:red;">*</span></label>
-                                    <div class="position-relative">
-                                        <select class="form-select py-2" name="Gender" required>
-                                        <option value="" disabled selected>Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>Others</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- //* date of birth -->
-                            <div class="col-sm-6">
-                                <div class="form-group mb-2">
-                                    <label>Date of Birth <span class="text-danger">*</span></label>
-                                    <div class="cal-icon">
-                                        <input type="text" id="dateOfBirth" class="form-control datetimepicker" placeholder="Select Date of Birth" required>
-                                        <small id="dateWarning" class="text-danger" style="display: none;">Please select a valid date of birth.</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- //* age -->
-                            <div class="col-sm-6">
-                                <div class="form-group mb-2">
-                                    <label>Age</label>
-                                    <input type="text" id="age" name="instructor_age" class="form-control" placeholder="Age" readonly>
-                                </div>
-                            </div>
-
-                            <!-- //* address -->
-                        <!-- <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                            <label>Address <span class="text-danger">*</span></label>
-                            <input id="autocomplete" class="form-control" type="text" name="address" required autocomplete="off">
-                            <div class="invalid-feedback">Please enter a valid address.</div>
-                            </div>
-                        </div> -->
-
-                            <div class="col-sm-6 mb-3">
-                                <label>Location <span style="color:red;">*</span></label>
-                                <select name="location" class="form-control form-control-md" id="location-selector" required>
-                                    <option selected="true" disabled>Choose Region</option>
-                                </select>
-                                <input type="hidden" id="location-text" name="location_text">
-                                <div class="invalid-feedback">Please select a valid location.</div>
-                            </div>
-
-                            <!-- Back Button -->
-                            <div class="col-sm-6 mb-3">
-                                <button type="button" id="back-button" class="btn btn-secondary" style="display: none;">Back</button>
-                            </div>
-
-
-                            <!-- //* Specialization
-                        <div class="form-group mt-3">
-                            <!-- <div class="form-group mb-2"> 
-                                <label>Specialization <span class="text-danger">*</span></label>
-                                <div class="position-relative">
-                                    <div class="dropdown">
-                                        <button class="form-select py-3" type="button" id="specializationDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Select Specialization
+                    <!-- //* add instructor modal -->
+                    <div id="add_instructor" class="modal custom-modal fade" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Add Instructor</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <div class="dropdown-menu p-2" id="specializationDropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto;">
-                                            <!-- Search bar inside the dropdown 
-                                            <input type="text" id="specialization-search" class="form-control mb-2" placeholder="Search Specialization">
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    <!-- //* Add Instructor Form -->
+                                   <form id="addUserForm" class="needs-validation instructor-info" novalidate method="POST" action="">
+                                    <div class="row">
 
-                                            <!-- Option to trigger add new specialization under the search bar 
-                                            <a href="#" id="add-new-specialization" class="dropdown-item text-primary">+ Create New</a>
+                                        <!-- //* firstname -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>First Name <span class="text-danger">*</span></label>
+                                                <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required pattern="[A-Za-z\s]+">
+                                                <div class="invalid-feedback">Please enter a valid first name.</div>
+                                            </div>
+                                        </div>
 
-                                            <!-- Add New Specialization Input Container, initially hidden 
-                                            <div id="addNewInputContainer" class="mt-2" style="display: none;">
-                                                <input type="text" id="newSpecializationInput" class="form-control mb-1" placeholder="Enter new specialization"> 
-                                                <button type="button" class="btn btn-primary btn-sm" id="addSpecializationButton">Add</button>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="cancelAdd(event)">Cancel</button>
+                                        <!-- //* middlename -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Middle Name <span class="text-danger">*</span> </label>
+                                                <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name" pattern="[A-Za-z\s]+">
+                                                <div class="invalid-feedback">Please enter a valid middle name.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- //* lastname -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Last Name <span class="text-danger">*</span></label>
+                                                <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required pattern="[A-Za-z\s]+">
+                                                <div class="invalid-feedback">Please enter a valid last name.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- //* phone number -->
+                                        <div class="col-sm-6">
+                                                    <label>Mobile Number <span style="color:red;">*</span></label>
+                                                    <div class="form-group">
+                                                        <div class="input-group has-validation">
+                                                            <span class="input-group-text" id="inputGroupPrepend">+63</span>
+                                                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="ex. 9123456789" required minlength="10" maxlength="10" pattern="9[0-9]{9}">
+                                                            <div class="invalid-feedback">Please enter a valid mobile number.</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            <!-- //* Gender -->
+                                            <div class="col-sm-6">
+                                                <div class="form-group mb-2">
+                                                    <label>Gender <span style="color:red;">*</span></label>
+                                                    <div class="position-relative">
+                                                        <select class="form-select py-2" name="Gender" required>
+                                                        <option value="" disabled selected>Select Gender</option>
+                                                        <option>Male</option>
+                                                        <option>Female</option>
+                                                        <option>Others</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <!-- Specializations list with checkboxes 
-                                            <ul id="specialization-list" class="list-unstyled mt-2">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            <!-- </div> 
-                        </div>   
-                        -->
+                                            <!-- //* date of birth -->
+                                            <div class="col-sm-6">
+                                                <div class="form-group mb-2">
+                                                    <label>Date of Birth <span class="text-danger">*</span></label>
+                                                    <div class="cal-icon">
+                                                        <input type="text" id="dateOfBirth" class="form-control datetimepicker" name="dateOfBirth" placeholder="Select Date of Birth" required>
+                                                        <small id="dateWarning" class="text-danger" style="display: none;">Please select a valid date of birth.</small>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                        <!-- //* new specialized field -->
-                        <div class="form-group mt-3">
-                            <label>Specialization <span class="text-danger">*</span></label>
-                            <div class="position-relative">
-                                <!-- Textarea for entering multiple specializations -->
-                                <textarea class="form-control" id="specializationTextarea" name="specialization" rows="4" placeholder="Enter specializations, separated by commas or new lines"></textarea>
+                                            <!-- //* age -->
+                                            <div class="col-sm-6">
+                                                <div class="form-group mb-2">
+                                                    <label>Age</label>
+                                                    <input type="text" id="age" name="instructor_age" class="form-control" placeholder="Age" readonly>
+                                                </div>
+                                            </div>
+
+                                            <!-- //* address -->
+                                        <!-- <div class="col-sm-6">
+                                            <div class="form-group mb-2">
+                                            <label>Address <span class="text-danger">*</span></label>
+                                            <input id="autocomplete" class="form-control" type="text" name="address" required autocomplete="off">
+                                            <div class="invalid-feedback">Please enter a valid address.</div>
+                                            </div>
+                                        </div> -->
+
+                                            <div class="col-sm-6 mb-3">
+                                                <label>Location <span style="color:red;">*</span></label>
+                                                <select name="location" class="form-control form-control-md" id="location-selector" required>
+                                                    <option selected="true" disabled>Choose Region</option>
+                                                </select>
+                                                <input type="hidden" id="location-text" name="location_text">
+                                                <div class="invalid-feedback">Please select a valid location.</div>
+                                            </div>
+
+                                            <!-- Back Button -->
+                                            <div class="col-sm-6 mb-3">
+                                                <button type="button" id="back-button" class="btn btn-secondary" style="display: none;">Back</button>
+                                            </div>
+
+
+                                            <!-- //* Specialization
+                                        <div class="form-group mt-3">
+                                            <!-- <div class="form-group mb-2"> 
+                                                <label>Specialization <span class="text-danger">*</span></label>
+                                                <div class="position-relative">
+                                                    <div class="dropdown">
+                                                        <button class="form-select py-3" type="button" id="specializationDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            Select Specialization
+                                                        </button>
+                                                        <div class="dropdown-menu p-2" id="specializationDropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto;">
+                                                            <!-- Search bar inside the dropdown 
+                                                            <input type="text" id="specialization-search" class="form-control mb-2" placeholder="Search Specialization">
+
+                                                            <!-- Option to trigger add new specialization under the search bar 
+                                                            <a href="#" id="add-new-specialization" class="dropdown-item text-primary">+ Create New</a>
+
+                                                            <!-- Add New Specialization Input Container, initially hidden 
+                                                            <div id="addNewInputContainer" class="mt-2" style="display: none;">
+                                                                <input type="text" id="newSpecializationInput" class="form-control mb-1" placeholder="Enter new specialization"> 
+                                                                <button type="button" class="btn btn-primary btn-sm" id="addSpecializationButton">Add</button>
+                                                                <button type="button" class="btn btn-secondary btn-sm" onclick="cancelAdd(event)">Cancel</button>
+                                                            </div>
+
+                                                            <!-- Specializations list with checkboxes 
+                                                            <ul id="specialization-list" class="list-unstyled mt-2">
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- </div> 
+                                        </div>   
+                                        -->
+
+                                        <!-- //* new specialized field -->
+                                        <div class="form-group mt-3">
+                                            <label>Specialization <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <!-- Textarea for entering multiple specializations -->
+                                                <textarea class="form-control" id="specializationTextarea" name="specialization" rows="4" placeholder="Enter specializations, separated by commas or new lines"></textarea>
+                                            </div>
+                                        </div>
+                                        <!-- //* new specialized field -->
+
+                                    </div>
+
+                                        <div class="submit-section" style="margin-top: 10px;">
+                                            <button class="btn btn-primary submit-btn" type="submit">Add Instructor</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <!-- //* new specialized field -->
-
                     </div>
+                    <!-- //* add instructor modal -->
 
-                        <div class="submit-section" style="margin-top: 10px;">
-                            <button class="btn btn-primary submit-btn" type="submit">Submit</button>
-                        </div>
-                    </form>
-                </div>
+<!-- Success Message Modal -->
+<div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 8px; overflow: hidden;">
+            <div class="modal-header" style="background-color: #4CAF50; color: white; padding: 15px;">
+                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 0.8;"></button>
+            </div>
+            <div class="modal-body" style="padding: 20px; font-size: 1rem; color: #333;">
+                <p id="modalMessage" style="margin: 0;"></p>
+            </div>
+            <div class="modal-footer" style="border-top: none; padding: 15px;">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background-color: #4CAF50; border: none;">Close</button>
             </div>
         </div>
     </div>
-    <!-- //* add instructor modal -->
+</div>
+
 
 
 </div>
@@ -322,7 +376,26 @@
 
 <script src="ph-address-selector.js"></script>
 
-//* address drop down
+
+
+<?php if (isset($_SESSION['message'])): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the message and modal elements
+            const message = "<?php echo $_SESSION['message']; ?>";
+            document.getElementById("modalMessage").textContent = message;
+
+            // Show the modal
+            const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            messageModal.show();
+        });
+    </script>
+    <?php unset($_SESSION['message']); // Clear message after displaying ?>
+<?php endif; ?>
+
+
+
+<!-- //* address drop down -->
 <script>
     $(document).ready(function () {
         let level = "region";
@@ -457,7 +530,7 @@
     });
 </script>
 
-//* Specialization
+<!-- //* Specialization -->
 <!-- <script>
     // Prevent dropdown from closing when clicking "+ Create New"
     document.getElementById('add-new-specialization').addEventListener('click', function (e) {
@@ -540,7 +613,7 @@
     }
 </script> -->
 
-//* Calculate age based on date of birth
+<!-- //* Calculate age based on date of birth -->
 <script>
     $(document).ready(function () {
         // Initialize datepicker with minDate and maxDate
@@ -602,7 +675,7 @@
 
 
 
-//* Reset all fields when add modal is closed.
+<!-- //* Reset all fields when add modal is closed. -->
 <script>
         // Reset form fields when modal is closed
     document.getElementById('add_instructor').addEventListener('hidden.bs.modal', function () {
@@ -626,7 +699,7 @@
     });
 </script>
 
-//* Phone Number validation
+<!-- //* Phone Number validation -->
 <script>
     // Get the mobile input field and warning element
     const mobileInput = document.getElementById("mobile");
