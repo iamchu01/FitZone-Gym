@@ -29,12 +29,50 @@
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">
-                            <a href="add-category.php" class="btn add-btn"><i class="fa fa-plus"></i> Add Category</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+    Add Category
+</button>
                         </div>
                     </div>
                 </div>
                 <!-- /Page Header -->
-
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="addCategoryForm" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Category Form Fields -->
+                    <div class="form-group">
+                        <label>Image Preview</label>
+                        <img id="image-preview" src="#" alt="Image Preview" class="img-fluid d-none">
+                    </div>
+                    <div class="form-group">
+                        <label for="category_image">Category Image</label>
+                        <input type="file" id="category_image" name="category_image" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                    </div>
+                    <div class="form-group">
+                        <label for="category_name">Category Name</label>
+                        <input type="text" id="category_name" name="category_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_description">Category Description</label>
+                        <textarea id="category_description" name="category_description" class="form-control" required></textarea>
+                    </div>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
                 <!-- Category List Table -->
                 <div class="row">
                     <div class="col-md-12">
@@ -238,6 +276,45 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send('category_id=' + categoryId); // Send the category ID to the server
     });
 });
+
+// Image preview function
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('image-preview');
+        output.src = reader.result;
+        output.classList.remove('d-none'); // Show the image
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+// AJAX form submission
+$(document).ready(function() {
+    $('#addCategoryForm').submit(function(e) {
+        e.preventDefault();
+        
+        // Prepare form data
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: 'add-category.php', // PHP script for handling insertion
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Show success message or handle response
+                alert("Category added successfully!");
+                $('#addCategoryModal').modal('hide'); // Hide the modal on success
+                location.reload(); // Reload to see the new category in the list
+            },
+            error: function(xhr, status, error) {
+                alert("Error: " + error);
+            }
+        });
+    });
+});
+
 
     </script>
 </body>
