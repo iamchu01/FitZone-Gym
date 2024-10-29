@@ -25,7 +25,7 @@
                     
                     <div class="account-box">
                         <div class="account-wrapper">
-                            <h3 class="account-title">FitZone Gym</h3>
+                            <h3 class="account-title">FitZone Gym NI ROCKY</h3>
                             <p class="account-subtitle">ADMIN</p>
                             
                             <!-- Account Form -->

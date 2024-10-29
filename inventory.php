@@ -14,7 +14,7 @@
     <!-- Ensure Bootstrap CSS and jQuery are included -->
     <link rel="stylesheet" href="path/to/bootstrap.min.css">
  
-<!-- checking 123 -->
+
     
 </head>
 <body>
@@ -289,8 +289,6 @@ $conn->close();
         });
     });
 
-
-    // Success Modal
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'success') {
         var myModal = new bootstrap.Modal(document.getElementById('successModal'));
