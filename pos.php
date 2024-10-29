@@ -25,7 +25,24 @@
             object-fit: cover; 
             border-radius: 5px; 
         }
-    
+    .category-list {
+    display: flex;               /* Use flexbox for horizontal layout */
+    overflow-x: auto;           /* Enable horizontal scrolling */
+    white-space: nowrap;        /* Prevent wrapping of items */
+    padding: 10px 0;           /* Add some padding for aesthetics */
+}
+
+.category-item {
+    flex: 0 0 auto;             /* Prevent flex items from shrinking */
+    margin-right: 10px;         /* Space between category buttons */
+}
+
+.category-image {
+    width: 50px;                /* Set width for images */
+    height: 50px;               /* Set height for images */
+    object-fit: cover;          /* Ensure images cover the area without distortion */
+}
+
 
     </style>
 <?php include 'layouts/body.php'; ?>
@@ -84,16 +101,9 @@
                                
                             </div>
                             <h4>Select a Product</h4>
-                                <div class="row" >
-                                    <div class="col-sm-12">
-                                        <div class="row align-items-start">
-                                            <!-- Product Cards will be inserted here -->
-                                         <div class="col-md-3 col-sm-6" id="product-cards"></div>
-
-                                        </div>
-                                         
-                                    </div>
-                                        
+                            <div class="row" >
+                                        <!-- Product Cards will be inserted here -->
+                                         <div class="product-card" id="product-cards"></div>
                                 </div>
                         </div>
                     </div>
