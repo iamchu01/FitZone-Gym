@@ -9,11 +9,12 @@
     <?php include 'layouts/head-css.php'; ?>
     <?php include 'layouts/db-connection.php'; ?>
     <?php include 'layouts/session.php'; ?>
+    
 
     <!-- Ensure Bootstrap CSS and jQuery are included -->
     <link rel="stylesheet" href="path/to/bootstrap.min.css">
  
-<!-- checking main -->
+
     
 </head>
 <body>
@@ -37,7 +38,9 @@
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">
-                            <a href="add-product.php" class="btn add-btn"><i class="fa fa-plus"></i> Add Product</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                            Add Product
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -67,7 +70,7 @@ $sql = "SELECT products.product_id, products.product_name, category.category_nam
         FROM products 
         INNER JOIN category ON products.category_id = category.category_id";
 
-
+ 
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
@@ -112,6 +115,69 @@ $conn->close();
         </div>
         <!-- /Page Wrapper -->
     </div>
+      <!-- /add product -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="product-handler.php" method="POST" enctype="multipart/form-data">
+      
+                <div class="form-group">
+    <label for="product-image">Product Image</label>
+    <input type="file" class="form-control" id="product-image" name="product_image" accept="image/*" required onchange="previewImage(event)">
+</div>
+<div class="form-group">
+    <label>Image Preview</label>
+    <br>
+    <img id="image-preview" src="#" alt="Image Preview" style="max-width: 100%; height: auto; display: none;">
+</div>
+
+
+                    <div class="form-group">
+                        <label for="product-name">Product Name</label>
+                        <input type="text" class="form-control" id="product-name" name="product_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Product Category</label>
+                        <select class="form-control" id="product-category" name="product_category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <?php
+                            include 'layouts/db-connection.php'; // Include the database connection
+                            $sql = "SELECT category_id, category_name FROM category";
+                            $result = $conn->query($sql);
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($row['category_id']) . "'>" . htmlspecialchars($row['category_name']) . "</option>";
+                            }
+                            $conn->close();
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Product Description</label>
+                        <textarea class="form-control" id="product-description" name="product_description" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-quantity">Product Quantity</label>
+                        <input type="number" class="form-control" id="product-quantity" name="product_quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Product Price</label>
+                        <input type="number" class="form-control" id="product-price" name="product_price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expire-date">Expire Date</label>
+                        <input type="date" class="form-control" id="expire-date" name="expire_date" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- View Product Modal -->
     <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
@@ -164,7 +230,7 @@ $conn->close();
             </div>
         </div>
     </div>
-
+<!-- check -->
     <script>
    $(document).ready(function() {
     // View Product Modal
@@ -223,7 +289,6 @@ $conn->close();
         });
     });
 
-    // Success Modal check
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'success') {
         var myModal = new bootstrap.Modal(document.getElementById('successModal'));
@@ -234,7 +299,15 @@ $conn->close();
         window.location.href = 'inventory.php';
     });
 });
-
+function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
     </script>
 
     <?php include 'layouts/customizer.php'; ?>

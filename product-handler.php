@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the statement
         if ($stmt->execute()) {
-            header("Location: add-product.php?status=success");
+            header("Location: inventory.php?status=success");
             exit();
         } else {
             echo "Error executing statement: (" . $stmt->errno . ") " . $stmt->error;

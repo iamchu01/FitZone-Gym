@@ -8,7 +8,6 @@ $message = ""; // Initialize message variable
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $category_name = mysqli_real_escape_string($conn, $_POST['category_name']);
-    $category_code = mysqli_real_escape_string($conn, $_POST['category_code']);
     $category_description = mysqli_real_escape_string($conn, $_POST['category_description']);
 
     // Handle file upload
@@ -26,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $image_data = mysqli_real_escape_string($conn, $image_data); // Sanitize binary data for SQL insertion
 
             // SQL Query to insert data into the category table
-            $sql = "INSERT INTO category (category_image, category_name, category_code, category_description)
-                    VALUES ('$image_data', '$category_name', '$category_code', '$category_description')";
+            $sql = "INSERT INTO category (category_image, category_name, category_description)
+                    VALUES ('$image_data', '$category_name', '$category_description')";
 
             if ($conn->query($sql) === TRUE) {
                 $message = "New category added successfully!";
@@ -95,11 +94,6 @@ $conn->close();
                     <div class="form-group-custom">
                         <label for="category-name">Category Name</label>
                         <input type="text" class="form-control" id="category-name" name="category_name" required>
-                    </div>
-
-                    <div class="form-group-custom">
-                        <label for="category-code">Category Code</label>
-                        <input type="text" class="form-control" id="category-code" name="category_code" required>
                     </div>
 
                     <div class="form-group-custom">

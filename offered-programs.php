@@ -28,13 +28,99 @@
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">
-                            <a href="create-program.php" class="btn add-btn"><i class="fa fa-plus"></i> Create program</a>
+                            <button class="btn add-btn" data-bs-toggle="modal" data-bs-target="#createProgramModal">
+                                <i class="fa fa-plus"></i> Create Program
+                            </button>
                         </div>
                     </div>
                 </div>
                 <!-- /Page Header -->
 
-              
+                <!-- Create Program Modal -->
+                <div class="modal fade" id="createProgramModal" tabindex="-1" aria-labelledby="createProgramModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createProgramModalLabel">Create Program</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Program Profile</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Program Title</label>
+                                        <div class="col-md-10">
+                                            <input type="text" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Select Trainer</label>
+                                        <div class="col-md-10">
+                                            <select class="form-control" required>
+                                                <option value="">Select a trainer</option>
+                                                <option value="trainer1">Trainer 1</option>
+                                                <option value="trainer2">Trainer 2</option>
+                                                <option value="trainer3">Trainer 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Slots</label>
+                                        <div class="col-md-10">
+                                            <input type="number" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Program Duration (days)</label>
+                                        <div class="col-md-10">
+                                            <input type="number" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Is the Program Free?</label>
+                                        <div class="col-md-10">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="isFree" onclick="toggleFeeInput()">
+                                                <label class="form-check-label" for="isFree">Check if the program is free</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Membership Fee</label>
+                                        <div class="col-md-10">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">₱</span>
+                                                </div>
+                                                <input type="number" class="form-control" id="membershipFee" placeholder="Enter amount" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-2">Program Description</label>
+                                        <div class="col-md-10">
+                                            <textarea rows="5" cols="5" class="form-control" placeholder="Enter text here"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-0 row">
+                                        <div class="col-md-10">
+                                            <div class="input-group">
+                                                <button class="btn btn-primary" type="submit">Create Program</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Create Program Modal -->
+
             </div>
             <!-- /Page Content -->
 
@@ -47,6 +133,16 @@
     <?php include 'layouts/customizer.php'; ?>
     <?php include 'layouts/vendor-scripts.php'; ?>
 
-  
+    <script>
+        function toggleFeeInput() {
+            const isFreeCheckbox = document.getElementById('isFree');
+            const feeInput = document.getElementById('membershipFee');
+            feeInput.disabled = isFreeCheckbox.checked;
+            if (isFreeCheckbox.checked) {
+                feeInput.value = ''; // Clear the input if the program is free
+            }
+        }
+    </script>
+
 </body>
 </html>
