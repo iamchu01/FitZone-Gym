@@ -36,43 +36,47 @@
                     </div>
                 </div>
                 <!-- /Page Header -->
-<!-- Add Category Modal -->
-<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="addCategoryForm" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- Add Category Modal -->
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="addCategoryForm" enctype="multipart/form-data">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Category Form Fields -->
+                                    <div class="form-group">
+                                        <label for="category_image">Category Image</label>
+                                        <input type="file" id="category_image" name="category_image" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category_name">Category Name</label>
+                                        <input type="text" id="category_name" name="category_name" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category_description">Category Description</label>
+                                        <textarea id="category_description" name="category_description" class="form-control" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" id="is_perishable" name="is_perishable" class="form-check-input">
+                                        <label class="form-check-label" for="is_perishable">Check if this category is perishable(Ex. Food, drinks, etc.)</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Image Preview</label>
+                                        <img id="image-preview" src="#" alt="Image Preview" class="img-fluid d-none">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Category</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <!-- Category Form Fields -->
-                    <div class="form-group">
-                        <label>Image Preview</label>
-                        <img id="image-preview" src="#" alt="Image Preview" class="img-fluid d-none">
-                    </div>
-                    <div class="form-group">
-                        <label for="category_image">Category Image</label>
-                        <input type="file" id="category_image" name="category_image" class="form-control" accept="image/*" required onchange="previewImage(event)">
-                    </div>
-                    <div class="form-group">
-                        <label for="category_name">Category Name</label>
-                        <input type="text" id="category_name" name="category_name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="category_description">Category Description</label>
-                        <textarea id="category_description" name="category_description" class="form-control" required></textarea>
-                    </div>
-                   
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Category</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
                 <!-- Category List Table -->
                 <div class="row">
                     <div class="col-md-12">
@@ -82,37 +86,40 @@
                                     <tr>
                                         <th>Category Name</th>
                                         <th>Description</th>
+                                        <th>Perishable</th>
                                         <th>Created By</th>
                                         <th class="text-end">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                    // Query to retrieve categories from the database
-                                    $sql = "SELECT * FROM category";
-                                    $result = $conn->query($sql);
+                                    <?php
+                                        // Query to retrieve categories from the database
+                                        $sql = "SELECT * FROM category";
+                                        $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
-                                        // Loop through each category and display it
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>";
-                                            echo "<td>" . htmlspecialchars($row['category_name']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($row['category_description']) . "</td>";
-                                            echo "<td>Admin</td>"; // Placeholder for 'Created By'
-                                            echo '<td class="text-end">
-                                                    <a href="javascript:void(0);" class="btn btn-sm btn-info edit-btn la la-edit" data-id="' . $row['category_id'] . '" onclick="openEditModal(' . $row['category_id'] . ')"></a>
-                                                    <a href="#" class="btn btn-sm btn-danger delete-btn la la-trash" data-id="' . $row['category_id'] . '" data-bs-toggle="modal" data-bs-target="#delete_estimate"></a>
-                                                </td>';
-                                            echo "</tr>";
+                                        if ($result->num_rows > 0) {
+                                            // Loop through each category and display it
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . htmlspecialchars($row['category_name']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['category_description']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['is_perishable'] ? 'Yes' : 'No') . "</td>"; // Display perishable status
+                                                echo "<td>Admin</td>"; // Placeholder for 'Created By'
+                                                echo '<td class="text-end">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-info edit-btn la la-edit" data-id="' . $row['category_id'] . '" onclick="openEditModal(' . $row['category_id'] . ')"></a>
+                                                        <a href="#" class="btn btn-sm btn-danger delete-btn la la-trash" data-id="' . $row['category_id'] . '" data-bs-toggle="modal" data-bs-target="#delete_estimate"></a>
+                                                    </td>';
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='5'>No categories found.</td></tr>";
                                         }
-                                    } else {
-                                        echo "<tr><td colspan='5'>No categories found.</td></tr>";
-                                    }
 
-                                    // Close the database connection
-                                    $conn->close();
+                                        // Close the database connection
+                                        $conn->close();
                                     ?>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -318,4 +325,5 @@ $(document).ready(function() {
 
     </script>
 </body>
-</html>
+</html> 
+
