@@ -223,7 +223,7 @@ $conn->close();
         });
     });
 
-    // Success Modal
+    // Success Modal check
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'success') {
         var myModal = new bootstrap.Modal(document.getElementById('successModal'));
