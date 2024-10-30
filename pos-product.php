@@ -22,7 +22,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     // Start a new row for the cards
-    echo "<div class='row g-2'>"; // g-2 for gap of 0.5rem (approximately 2% spacing)
+    echo "<div class='row g-2 '>"; // g-2 for gap of 0.5rem (approximately 2% spacing)
 
     // Output data for each product
     while ($row = $result->fetch_assoc()) {
@@ -40,7 +40,7 @@ if ($result->num_rows > 0) {
         }
         
         // Adjust column size and card height
-        echo "<div class='col-6 col-md-4 col-lg-3'>"; // Adjust the number of columns per row
+        echo "<div class='col-6 col-md-4 col-lg-3 '>"; // Adjust the number of columns per row
         echo "<div class='card' style='width: 170px; height: 270px;'>"; // Fixed card width and height
         echo "<img src='" . $imageSrc . "' class='card-img-top' alt='" . $productName . "' style='height: 120px; width: 100%; object-fit: cover;'>"; // Adjusted image height
         echo "<div class='card-body' style='display: flex; flex-direction: column; justify-content: flex-start; height: 130px; padding: 5px;'>"; // Adjusted padding and flex direction

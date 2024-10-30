@@ -42,7 +42,14 @@
     height: 50px;               /* Set height for images */
     object-fit: cover;          /* Ensure images cover the area without distortion */
 }
-
+.category-btn {
+    width: 150px;
+    overflow: hidden;
+    white-space: nowrap;        /* Prevent text from wrapping */
+    text-overflow: ellipsis;    /* Display ellipsis if text is too long */
+    font-size: 12px;            /* Smaller font to fit longer names */
+    padding: 5px 0;             /* Padding to maintain button height */
+}
 
     </style>
 <?php include 'layouts/body.php'; ?>
@@ -137,10 +144,19 @@
                         ?>
                     </select>
                 </div>
+                <div class="mt-4">
+                <h5>Amount Received</h5>
+                <input type="number" id="amount-received" class="form-control" placeholder="Enter amount" oninput="calculateChange()">
+            </div>
+            
+
             </div>
 
                 <hr>
                 <h4>Total <span id="total" class="float-end">₱0.00</span></h4>
+                <div class="mt-4">
+                <h5>Change <span id="change" class="float-end">₱0.00</span>    </h5>       
+            </div>
             </div>
             <div class="mt-4">
                 <h5>Payment Method</h5>
@@ -149,10 +165,7 @@
                         <input type="radio" name="payment" id="cash" autocomplete="off"> Cash
                     </label>
                     <label class="btn btn-outline-primary flex-fill">
-                        <input type="radio" name="payment" id="card" autocomplete="off"> Card
-                    </label>
-                    <label class="btn btn-outline-primary flex-fill">
-                        <input type="radio" name="payment" id="ewallet" autocomplete="off"> E-Wallet
+                        <input type="radio" name="payment" id="card" autocomplete="off">GCash
                     </label>
                 </div>
             </div>
@@ -326,8 +339,19 @@ function applyDiscount() {
     const discountPercentage = parseFloat(discountSelect.value);
     updateOrderList(discountPercentage);
 }
+function calculateChange() {
+            const amountReceived = parseFloat(document.getElementById('amount-received').value) || 0;
+            const total = parseFloat(document.getElementById('total').textContent.replace('₱', '').replace(',', '')) || 0;
+            const change = amountReceived - total;
 
-
+            document.getElementById('change').textContent = `₱${change.toFixed(2)}`;
+        }
+ document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-category-id');
+                fetchProducts(categoryId);
+            });
+        });
 </script>
 </body>
 </html>
