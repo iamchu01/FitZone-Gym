@@ -191,32 +191,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <!-- //* Add Member Form -->
                                    <form id="addMemberForm" class="needs-validation member-info" novalidate method="POST" action="">
                                     <div class="row">
-<!-- //* Firstname -->
-<div class="col-sm-6">
-    <div class="form-group">
-        <label>First Name <span class="text-danger">*</span></label>
-        <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required>
-        <div class="invalid-feedback">Please enter a valid first name without numbers or symbols.</div>
-    </div>
-</div>
+                                        <!-- //* Firstname -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>First Name <span class="text-danger">*</span></label>
+                                                <input id="firstname" class="form-control" type="text" name="firstname" placeholder="Enter First Name" required>
+                                                <div class="invalid-feedback">Please enter a valid first name without numbers or symbols.</div>
+                                            </div>
+                                        </div>
 
-<!-- //* Middlename -->
-<div class="col-sm-6">
-    <div class="form-group">
-        <label>Middle Name <span style="color: gray">(Optional)</span> </label>
-        <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name">
-        <div class="invalid-feedback">Please enter a valid middle name without numbers or symbols.</div>
-    </div>
-</div>
+                                        <!-- //* Middlename -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Middle Name <span style="color: gray">(Optional)</span> </label>
+                                                <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name">
+                                                <div class="invalid-feedback">Please enter a valid middle name without numbers or symbols.</div>
+                                            </div>
+                                        </div>
 
-<!-- //* Lastname -->
-<div class="col-sm-6">
-    <div class="form-group">
-        <label>Last Name <span class="text-danger">*</span></label>
-        <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required>
-        <div class="invalid-feedback">Please enter a valid last name without numbers or symbols.</div>
-    </div>
-</div>
+                                        <!-- //* Lastname -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Last Name <span class="text-danger">*</span></label>
+                                                <input id="lastname" class="form-control" type="text" name="lastname" placeholder="Enter Last Name" required>
+                                                <div class="invalid-feedback">Please enter a valid last name without numbers or symbols.</div>
+                                            </div>
+                                        </div>
                                         <!-- //* phone number -->
                                         <div class="col-sm-6">
                                                     <label>Mobile Number <span style="color:red;">*</span></label>
@@ -304,23 +304,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <!-- //* add member modal -->
 
-<!-- Success Message Modal -->
-<div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 8px; overflow: hidden;">
-            <div class="modal-header" style="background-color: #4CAF50; color: white; padding: 15px;">
-                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 0.8;"></button>
-            </div>
-            <div class="modal-body" style="padding: 20px; font-size: 1rem; color: #333;">
-                <p id="modalMessage" style="margin: 0;"></p>
-            </div>
-            <div class="modal-footer" style="border-top: none; padding: 15px;">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background-color: #4CAF50; border: none;">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- Success Message Modal -->
+                <div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius: 8px; overflow: hidden;">
+                            <div class="modal-header" style="background-color: #4CAF50; color: white; padding: 15px;">
+                                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 0.8;"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 20px; font-size: 1rem; color: #333;">
+                                <p id="modalMessage" style="margin: 0;"></p>
+                            </div>
+                            <div class="modal-footer" style="border-top: none; padding: 15px;">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background-color: #4CAF50; border: none;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 </div>
 <!-- end main wrapper-->
@@ -601,5 +601,132 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
 </script>
 
+<style>
+/* Warning color for empty fields */
+.warning {
+    border: 2px solid #ffcc00; /* Warning color */
+}
+</style>
+
+
+<!-- //* prevent adding with empty fields-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addMemberForm = document.getElementById('addMemberForm');
+
+        addMemberForm.addEventListener('submit', function (event) {
+            // Check if the form is valid
+            if (!addMemberForm.checkValidity()) {
+                event.preventDefault(); // Prevent form submission
+                event.stopPropagation();
+
+                // Add the warning class to each empty required field
+                Array.from(addMemberForm.elements).forEach(element => {
+                    if (element.hasAttribute('required') && !element.value.trim()) {
+                        element.classList.add('warning');
+                    } else {
+                        element.classList.remove('warning');
+                    }
+                });
+            } else {
+                // If form is valid, remove warning class from all fields
+                Array.from(addMemberForm.elements).forEach(element => element.classList.remove('warning'));
+            }
+        });
+    });
+</script>
+
+<!-- //* add warning if try to add without filling the fields -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const addMemberForm = document.getElementById('addMemberForm');
+    const locationSelector = document.getElementById('location-selector');
+    const genderSelector = document.getElementById('gender-selector');
+
+    addMemberForm.addEventListener('submit', function (event) {
+        let valid = true;
+
+        // Check if location is selected
+        if (locationSelector.value === "Choose Region" || locationSelector.value === "") {
+            valid = false;
+            locationSelector.classList.add('warning');
+        } else {
+            locationSelector.classList.remove('warning');
+        }
+
+        // Check if gender is selected
+        if (genderSelector.value === "" || genderSelector.value === "Select Gender") {
+            valid = false;
+            genderSelector.classList.add('warning');
+        } else {
+            genderSelector.classList.remove('warning');
+        }
+
+        // If any field is invalid, prevent form submission
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+    });
+</script>
+
+<!-- //* remove warning when typing the fields. -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const addMemberForm = document.getElementById('addMemberForm');
+    const locationSelector = document.getElementById('location-selector');
+    const genderSelector = document.getElementById('gender-selector');
+
+    // Function to validate required fields on submit
+    function validateForm(event) {
+        let valid = true;
+
+        // Check if location is selected
+        if (locationSelector.value === "Choose Region" || locationSelector.value === "") {
+            valid = false;
+            locationSelector.classList.add('warning');
+        } else {
+            locationSelector.classList.remove('warning');
+        }
+
+        // Check if gender is selected
+        if (genderSelector.value === "" || genderSelector.value === "Select Gender") {
+            valid = false;
+            genderSelector.classList.add('warning');
+        } else {
+            genderSelector.classList.remove('warning');
+        }
+
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
+    // Real-time validation to remove warning class on input
+    Array.from(addMemberForm.elements).forEach(element => {
+        // For text inputs, use the 'input' event
+        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+            element.addEventListener('input', function () {
+                if (element.value.trim() !== "") {
+                    element.classList.remove('warning');
+                }
+            });
+        }
+        // For select elements, use the 'change' event
+        else if (element.tagName === 'SELECT') {
+            element.addEventListener('change', function () {
+                if (element.value !== "" && element.value !== "Select Gender" && element.value !== "Choose Region") {
+                    element.classList.remove('warning');
+                }
+            });
+        }
+    });
+
+    // Attach form submit event
+    addMemberForm.addEventListener('submit', validateForm);
+ });
+</script>
 </body>
 </html>

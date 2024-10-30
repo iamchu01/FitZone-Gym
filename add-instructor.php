@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <!-- //* middlename -->
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label>Middle Name <span class="text-danger">*</span> </label>
+                                                <label>Middle Name <span style="color: gray;">(Optional)</span> </label>
                                                 <input id="middlename" class="form-control" type="text" name="middlename" placeholder="Enter Middle Name" pattern="[A-Za-z\s]+">
                                                 <div class="invalid-feedback">Please enter a valid middle name.</div>
                                             </div>
@@ -234,12 +234,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </div>
 
                                             <!-- //* Gender -->
-                                            <div class="col-sm-6">
-                                                <div class="form-group mb-2">
+                                            <div class="col-sm-6" >
+                                                <div class="form-group mb-2" >
                                                     <label>Gender <span style="color:red;">*</span></label>
-                                                    <div class="position-relative">
-                                                        <select class="form-select py-2" name="Gender" required>
-                                                        <option value="" disabled selected>Select Gender</option>
+                                                    <div class="position-relative" >
+                                                        <select class="form-select py-2" name="Gender" id="gender-selector" required>
+                                                        <option value="" disabled selected >Select Gender</option>
                                                         <option>Male</option>
                                                         <option>Female</option>
                                                         <option>Others</option>
@@ -277,11 +277,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div> -->
 
                                             <div class="col-sm-6 mb-3">
-                                                <label>Location <span style="color:red;">*</span></label>
+                                                <label>Address <span style="color:red;">*</span></label>
                                                 <select name="location" class="form-control form-control-md" id="location-selector" required>
                                                     <option selected="true" disabled>Choose Region</option>
                                                 </select>
-                                                <input type="hidden" id="location-text" name="location_text">
+                                                <input type="hidden" id="location-text" name="location_text" required>
                                                 <div class="invalid-feedback">Please select a valid location.</div>
                                             </div>
 
@@ -327,9 +327,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <!-- //* new specialized field -->
                                         <div class="form-group mt-3">
                                             <label>Specialization <span class="text-danger">*</span></label>
-                                            <div class="position-relative">
+                                            <div class="position-relative" >
                                                 <!-- Textarea for entering multiple specializations -->
-                                                <textarea class="form-control" id="specializationTextarea" name="specialization" rows="4" placeholder="Enter specializations, separated by commas or new lines"></textarea>
+                                                <textarea class="form-control" id="specializationTextarea" name="specialization" rows="4" placeholder="Enter specializations, separated by commas or new lines" required></textarea>
                                             </div>
                                         </div>
                                         <!-- //* new specialized field -->
@@ -346,23 +346,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <!-- //* add instructor modal -->
 
-<!-- Success Message Modal -->
-<div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 8px; overflow: hidden;">
-            <div class="modal-header" style="background-color: #4CAF50; color: white; padding: 15px;">
-                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 0.8;"></button>
-            </div>
-            <div class="modal-body" style="padding: 20px; font-size: 1rem; color: #333;">
-                <p id="modalMessage" style="margin: 0;"></p>
-            </div>
-            <div class="modal-footer" style="border-top: none; padding: 15px;">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background-color: #4CAF50; border: none;">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- Success Message Modal -->
+                <div id="messageModal" class="modal fade" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius: 8px; overflow: hidden;">
+                            <div class="modal-header" style="background-color: #4CAF50; color: white; padding: 15px;">
+                                <h5 class="modal-title" id="messageModalLabel">Notification</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 0.8;"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 20px; font-size: 1rem; color: #333;">
+                                <p id="modalMessage" style="margin: 0;"></p>
+                            </div>
+                            <div class="modal-footer" style="border-top: none; padding: 15px;">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background-color: #4CAF50; border: none;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -718,6 +718,173 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mobileWarning.style.display = "none"; // Hide warning
         }
     });
+</script>
+
+<!-- //* restrict input -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Function to restrict input to letters and spaces only
+        function restrictInput(event) {
+            const charCode = event.which || event.keyCode;
+            // Allow letters (A-Z, a-z), space (32), and backspace (8)
+            if ((charCode >= 65 && charCode <= 90) || // A-Z
+                (charCode >= 97 && charCode <= 122) || // a-z
+                charCode === 32 || // space
+                charCode === 8) { // backspace
+                return true;
+            } else {
+                event.preventDefault(); // Block other characters
+                return false;
+            }
+        }
+
+        // Function to validate name field and show/hide invalid feedback
+        function validateNameField(input) {
+            const namePattern = /^[A-Za-z\s]+$/;
+            if (!namePattern.test(input.value)) {
+                input.classList.add("is-invalid");
+            } else {
+                input.classList.remove("is-invalid");
+            }
+        }
+
+        // Attach event listeners for real-time restriction and validation
+        const nameFields = ["firstname", "middlename", "lastname"];
+        nameFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            field.addEventListener("keypress", restrictInput);  // Restrict input
+            field.addEventListener("input", function() { validateNameField(field); });  // Validate on input
+            field.addEventListener("blur", function() { field.classList.remove("is-invalid"); });  // Hide warning on blur
+        });
+    });
+</script>
+
+<style>
+/* Warning color for empty fields */
+.warning {
+    border: 2px solid #ffcc00; /* Warning color */
+}
+</style>
+
+
+<!-- //* prevent adding with empty fields-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addUserForm = document.getElementById('addUserForm');
+
+        addUserForm.addEventListener('submit', function (event) {
+            // Check if the form is valid
+            if (!addUserForm.checkValidity()) {
+                event.preventDefault(); // Prevent form submission
+                event.stopPropagation();
+
+                // Add the warning class to each empty required field
+                Array.from(addUserForm.elements).forEach(element => {
+                    if (element.hasAttribute('required') && !element.value.trim()) {
+                        element.classList.add('warning');
+                    } else {
+                        element.classList.remove('warning');
+                    }
+                });
+            } else {
+                // If form is valid, remove warning class from all fields
+                Array.from(addUserForm.elements).forEach(element => element.classList.remove('warning'));
+            }
+        });
+    });
+</script>
+
+<!-- //* add warning if try to add without filling the fields -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const addUserForm = document.getElementById('addUserForm');
+    const locationSelector = document.getElementById('location-selector');
+    const genderSelector = document.getElementById('gender-selector');
+
+    addUserForm.addEventListener('submit', function (event) {
+        let valid = true;
+
+        // Check if location is selected
+        if (locationSelector.value === "Choose Region" || locationSelector.value === "") {
+            valid = false;
+            locationSelector.classList.add('warning');
+        } else {
+            locationSelector.classList.remove('warning');
+        }
+
+        // Check if gender is selected
+        if (genderSelector.value === "" || genderSelector.value === "Select Gender") {
+            valid = false;
+            genderSelector.classList.add('warning');
+        } else {
+            genderSelector.classList.remove('warning');
+        }
+
+        // If any field is invalid, prevent form submission
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+    });
+</script>
+
+<!-- //* remove warning when typing the fields. -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const addUserForm = document.getElementById('addUserForm');
+    const locationSelector = document.getElementById('location-selector');
+    const genderSelector = document.getElementById('gender-selector');
+
+    // Function to validate required fields on submit
+    function validateForm(event) {
+        let valid = true;
+
+        // Check if location is selected
+        if (locationSelector.value === "Choose Region" || locationSelector.value === "") {
+            valid = false;
+            locationSelector.classList.add('warning');
+        } else {
+            locationSelector.classList.remove('warning');
+        }
+
+        // Check if gender is selected
+        if (genderSelector.value === "" || genderSelector.value === "Select Gender") {
+            valid = false;
+            genderSelector.classList.add('warning');
+        } else {
+            genderSelector.classList.remove('warning');
+        }
+
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
+    // Real-time validation to remove warning class on input
+    Array.from(addUserForm.elements).forEach(element => {
+        // For text inputs, use the 'input' event
+        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+            element.addEventListener('input', function () {
+                if (element.value.trim() !== "") {
+                    element.classList.remove('warning');
+                }
+            });
+        }
+        // For select elements, use the 'change' event
+        else if (element.tagName === 'SELECT') {
+            element.addEventListener('change', function () {
+                if (element.value !== "" && element.value !== "Select Gender" && element.value !== "Choose Region") {
+                    element.classList.remove('warning');
+                }
+            });
+        }
+    });
+
+    // Attach form submit event
+    addUserForm.addEventListener('submit', validateForm);
+ });
 </script>
 
 </body>
