@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="category_description">Category Description</label>
-                                        <textarea id="category_description" name="category_description" class="form-control" required></textarea>
+                                        <textarea id="category_description" name="category_description" class="form-control" ></textarea>
                                     </div>
                                     <div class="form-group">
                                         <input type="checkbox" id="is_perishable" name="is_perishable" class="form-check-input">
