@@ -46,8 +46,11 @@ $page = $components[2];
                         <!-- <li><a class="<?php echo ($page == 'employees-list.php')?'active':'';?>" href="employees-list.php">Members</a></li> -->
                         <li><a class="<?php echo ($page == 'add-member.php')?'active':'';?>" href="add-member.php">Members</a></li>
                         <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Subscription</a></li>
-                        <li><a class="<?php echo ($page == 'inventory.php')?'active':'';?>" href="inventory.php">Product List</a></li>
-                        <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                 
+                        <li>
+                            <a class="<?php echo ($page == 'admin.php' || $page == 'add_product.php' || $page == 'product.php' ||  $page == 'categorie.php') ? 'active' : ''; ?>" href="admin.php">Inventory Management</a>
+                        </li>
+
+                        <!-- <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                  -->
                         <li><a class="<?php echo ($page == 'offered-programs.php')?'active':'';?>" href="offered-programs.php">Offered Programs</a></li>  
                         <li><a class="<?php echo ($page == 'targeted-exercise.php')?'active':'';?>" href="targeted-exercise.php">Targeted Exercise</a></li>
                     </ul>
