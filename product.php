@@ -23,6 +23,12 @@
         }
     });
 
+    $('#category-search').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('tbody tr').filter(function() {
+            $(this).toggle($(this).find('td:nth-child(3)').text().toLowerCase().indexOf(value) > -1);
+        });
+    });
     // Optional: Initialize visibility when the modal is shown
     $('#addProductModal').on('show.bs.modal', function() {
         $('#perishable-select').trigger('change'); // Trigger change to set initial visibility
@@ -97,7 +103,7 @@
   <div class="row">
 
      <div class="row">
-      <div class="col"> <h3 class="page-title">Items Stock List </h3>
+      <div class="col"> <h3 class="page-title">Product Stock List </h3>
     </div>
       <div class="col">
       <a href="admin.php?" class="btn btn-danger position-absolute top-0 end-0" title="Inventory management page" data-toggle="tooltip">
@@ -109,29 +115,41 @@
      </div>
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-         <div class="pull-right">
-         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
-         </div>
+        
+        <div class="panel-heading clearfix">  
+            <div class="col">Search Product</div>     
+            <div class="col-md-4">
+                <div class="input-group">                                             
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" id="category-search" class="form-control" placeholder="Type Product name...">
+                </div>
+            </div>
+            <div class="pull-right">
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
+            </div>
         </div>
         <div class="panel-body">
-          <table class="table table-bordered">
-            <thead>
+        <div class="table-responsive">
+            <table class="table custom-table datatable">
+            <thead >
               <tr>
-                <th class="text-center" style="width: 50px;">#</th>
-                <th class="text-center" style="width: 10%;"> Photo</th>
-                <th class="text-center" style="width: 50%;"> Name </th>
-                <th class="text-center" style="width: 10%;"> In-Stock </th>
-                <th class="text-center" style="width: 10%;"> Buying Price </th>
-                <th class="text-center" style="width: 10%;"> Selling Price </th>
-                <th class="text-center" style="width: 10%;"> Expire Date </th>
-                <th class="text-center" style="width: 10%;"> Product Batch </th>
-                <th class="text-center" style="width: 100px;"> Actions </th>
+                <th class="text-canter" style="width: 50px;">#</th>
+                <th class="text-canter" style="width: 10%;"> Photo</th>
+                <th class="text-canter" style="width: 50%;"> Name </th>
+                <th class="text-canter" style="width: 10%;"> In-Stock </th>
+                <th class="text-canter" style="width: 10%;"> Buying Price </th>
+                <th class="text-canter" style="width: 10%;"> Selling Price </th>
+                <th class="text-canter" style="width: 10%;"> Expire Date </th>
+                <th class="text-canter" style="width: 10%;"> Product Batch </th>
+                <th class="text-canter" style="width: 100px;"> Actions </th>
               </tr>
             </thead>
             <tbody>
     <?php foreach ($products as $product): ?>
-        <tr class="<?php echo ($product['quantity'] < 5) ? 'bg-red' : ''; ?>">
+        <tr class="<?php 
+    echo ($product['quantity'] == 0) ? 'bg-danger' : 
+         (($product['quantity'] < 5) ? 'bg-red' : ''); 
+                                                        ?>">
             <td class="text-center"><?php echo count_id(); ?></td>
             <td>
                 <?php if ($product['media_id'] === '0'): ?>
@@ -163,6 +181,8 @@
 </tbody>
 
           </tabel>
+            </div>
+          
         </div>
       </div>
     </div>
@@ -359,10 +379,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 <?php include_once('vlayouts/footer.php'); ?>
 <?php include 'layouts/customizer.php'; ?>
 <?php include 'layouts/vendor-scripts.php'; ?>

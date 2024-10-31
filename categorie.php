@@ -6,6 +6,17 @@
     <?php require_once('vincludes/load.php'); ?>
     <?php include 'layouts/head-css.php'; ?>
 </head> 
+<script type="text/javascript">
+function setEditCategory(id, name) {
+    document.getElementById('edit_cat_id').value = id;
+    document.getElementById('edit_cat_name').value = name;
+}
+function confirmEdit() {
+    return confirm("changing affects all product list Are you sure you want to save these changes?");
+  }
+  
+</script>
+
 <?php
   $all_categories = find_all('categories');
 // Handle category deletion via POST request
@@ -43,6 +54,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_cat'])) {
   }
 }
 
+// Update Category if 'edit_cat' is posted
+if (isset($_POST['edit_cat'])) {
+    $cat_id = (int)$_POST['edit_cat_id'];
+    $cat_name = remove_junk($db->escape($_POST['categorie-name']));
+
+    if (!empty($cat_name)) {
+        $sql = "UPDATE categories SET name='{$cat_name}' WHERE id='{$cat_id}'";
+        if ($db->query($sql) && $db->affected_rows() === 1) {
+            $session->msg("s", "Successfully updated product");
+        } else {
+            $session->msg("d", "Failed to update product.");
+        }
+    } else {
+        $session->msg("d", "Product name cannot be empty.");
+    }
+    redirect('categorie.php', false);
+}
 
 ?>
 <?php
@@ -87,7 +115,7 @@ if (isset($_POST['add_cat'])) {
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>
@@ -105,53 +133,86 @@ if (isset($_POST['add_cat'])) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="panel panel-default">
-                <a href="product.php">
-                      <div class="panel-heading">
-                        <strong>
-                            <span class="fa fa-eye"></span>
-                            <span>view all items</span>
-                        </strong>
-                    </div>
-                      </a>
-                    <div class="panel-body">
-                      
-                        <table class="table table-bordered table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 50px;">#</th>
-                                    <th>Products List</th>
-                                    <th class="text-center" style="width: 100px;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($all_categories as $cat): ?>
-                                    <tr>
-                                        <td class="text-center"><?php echo count_id(); ?></td>
-                                        <td><?php echo remove_junk(ucfirst($cat['name'])); ?></td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <a href="edit_categorie.php?id=<?php echo (int)$cat['id']; ?>" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Edit">
-                                                    <span class="fa fa-edit"></span>
-                                                </a>
-                                                <form action="categorie.php" method="post" style="display:inline;">
-                                                    <input type="hidden" name="id" value="<?php echo (int)$cat['id']; ?>">
-                                                    <button type="submit" name="delete_cat" class="btn btn-xs btn-danger" data-toggle="tooltip" title="Remove" onclick="return confirm('Are you sure you want to delete this category?');">
-                                                        <span class="fa fa-trash"></span>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+           
+            <div class="col-md-12">
+            <div class="panel-body">
+                <div class="table-responsive">
+                <table class="table custom-table table-dataTable">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 50px;">#</th>
+                <th>Products List</th>
+                <th class="text-center" style="width: 100px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($all_categories as $cat): ?>
+                <tr>
+                    <!-- Product ID -->
+                    <td class="text-center"><?php echo count_id(); ?></td>
+                    
+                    <!-- Product Name -->
+                    <td><?php echo remove_junk(ucfirst($cat['name'])); ?></td>
+
+                    <!-- Actions Dropdown -->
+                    <td class="text-center">
+                        <div class="dropdown action-label">
+                            <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-dot-circle-o text-primary"></i> Actions
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <!-- Edit Button -->
+                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editCategoryModal" 
+                                    onclick="setEditCategory(<?php echo $cat['id']; ?>, '<?php echo remove_junk(ucfirst($cat['name'])); ?>')">
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+                                <!-- Delete Button -->
+                                <form action="categorie.php" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?php echo (int)$cat['id']; ?>">
+                                    <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this category?');">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
                 </div>
+    
+</div>
             </div>
+  
+
+            
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="editCategoryForm" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <input type="hidden" name="edit_cat_id" id="edit_cat_id">
+          <div class="form-group">
+            <label for="edit_cat_name">Category Name</label>
+            <input type="text" class="form-control" name="categorie-name" id="edit_cat_name" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" name="edit_cat" class="btn btn-primary" onclick="return confirmEdit()">Save changes</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <?php include_once('vlayouts/footer.php'); ?>
