@@ -11,6 +11,8 @@ class  Media {
   public $productPath = SITE_ROOT.DS.'..'.DS.'uploads/products';
 
 
+
+
   public $errors = array();
   public $upload_errors = array(
     0 => 'There is no error, the file uploaded with success',
@@ -75,41 +77,56 @@ class  Media {
  }
  /*--------------------------------------------------------------*/
  /* Function for Process media file
- /*--------------------------------------------------------------*/
-  public function process_media(){
-    if(!empty($this->errors)){
-        return false;
-      }
-    if(empty($this->fileName) || empty($this->fileTempPath)){
-        $this->errors[] = "The file location was not available.";
-        return false;
-      }
+ /*--------------------------------------------------------------*/public function process_media() {
+    // Check for existing errors
+    if (!empty($this->errors)) {
+      return false;
+  }
 
-    if(!is_writable($this->productPath)){
-        $this->errors[] = $this->productPath." Must be writable!!!.";
-        return false;
-      }
+  // Validate file presence
+  if (empty($this->fileName) || empty($this->fileTempPath)) {
+      $this->errors[] = "The file location was not available.";
+      return false;
+  }
 
-    if(file_exists($this->productPath."/".$this->fileName)){
+  // Check if the directory is writable
+  if (!is_writable($this->productPath)) {
+      $this->errors[] = $this->productPath . " must be writable.";
+      return false;
+  }
+
+  // Check if the file already exists
+  if (file_exists($this->productPath . "/" . $this->fileName)) {
       $this->errors[] = "The file {$this->fileName} already exists.";
       return false;
-    }
+  }
 
-    if(move_uploaded_file($this->fileTempPath,$this->productPath.'/'.$this->fileName))
-    {
+  // Validate file type (add your allowed extensions here)
+  $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Example types
+  if (!in_array(mime_content_type($this->fileTempPath), $allowedTypes)) {
+      $this->errors[] = "Invalid file type. Only JPEG, PNG, and GIF files are allowed.";
+      return false;
+  }
 
-      if($this->insert_media()){
-        unset($this->fileTempPath);
-        return true;
+  // Validate file size (example: max 2MB)
+  if (filesize($this->fileTempPath) > 2097152) {
+      $this->errors[] = "The file size exceeds the maximum limit of 2MB.";
+      return false;
+  }
+
+  // Attempt to move the uploaded file
+  if (move_uploaded_file($this->fileTempPath, $this->productPath . '/' . $this->fileName)) {
+      // Call the method to insert media info into the database
+      if ($this->insert_media()) {
+          unset($this->fileTempPath); // Clean up temporary path
+          return true; // Successfully processed
       }
-
-    } else {
-
+  } else {
       $this->errors[] = "The file upload failed, possibly due to incorrect permissions on the upload folder.";
       return false;
-    }
-
   }
+}
+
   /*--------------------------------------------------------------*/
   /* Function for Process user image
   /*--------------------------------------------------------------*/

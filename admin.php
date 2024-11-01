@@ -1,5 +1,6 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
+
 <head>
     <title>Dashboard - GYYMS admin</title>
     <?php include 'layouts/title-meta.php'; ?>
@@ -20,16 +21,28 @@ $c_categorie = count_by_id('categories');
 $c_product = count_by_id('products');
 $c_sale = count_by_id('sales');
 $c_user = count_by_id('users');
+$c_gym = count_by_id('gym_equipment');
 $products_sold = find_highest_selling_product('10');
 $recent_products = find_recent_product_added('5');
 $recent_sales = find_recent_sale_added('5');
-$low_stock_threshold = 5;
+
+// Fetch low stock products
+$low_stock_threshold = 5; // Set your low stock threshold here
+$low_stock_data = get_low_stock_products($low_stock_threshold);
 
 // Fetch all categories
 $all_categories = find_all('categories');
 
-// Array to hold low stock categories and their total quantities
-$low_stock_data = [];
+$low_stock_data_array = []; // Initialize an array to hold results
+
+if ($low_stock_data && $low_stock_data->num_rows > 0) {
+    while ($row = $low_stock_data->fetch_assoc()) {
+        $low_stock_data_array[] = $row;
+    }
+} else {
+    // Optional: Log for debugging
+    error_log("No low stock products found.");
+}
 
 // Loop through each category to calculate total quantity
 foreach ($all_categories as $category) {
@@ -53,13 +66,20 @@ foreach ($all_categories as $category) {
         }
     }
 }
+
+// Debugging output for low stock data
+var_dump($low_stock_data); // Uncomment for debugging
+
+
 ?>
 <?php include 'layouts/menu.php'; ?> 
 
 <div class="page-wrapper" style="padding-top:2%;">
     <div class="content container-fluid">
     <h3 class="page-title">Inventory Management</h3>
+   
         <div class="row">
+        
             <!-- Category Panel -->
             <div class="col-md-3">
                 <a href="categorie.php" style="color:black;">
@@ -80,7 +100,7 @@ foreach ($all_categories as $category) {
                 <a href="product.php" style="color:black;">
                     <div class="panel panel-box clearfix">
                         <div class="panel-icon pull-left bg-blue2">
-                            <i class="fa fa-shopping-cart"></i>
+                            <i class="fa fa-th"></i>
                         </div>
                         <div class="panel-value pull-right">
                             <h2 class="margin-top"><?php echo $c_product['total']; ?></h2>
@@ -89,8 +109,43 @@ foreach ($all_categories as $category) {
                     </div>
                 </a>
             </div>
-        </div><br>
 
+
+             <!-- Store Panel -->
+             <div class="col-md-3">
+                <a href="store_product.php" style="color:black;">
+                    <div class="panel panel-box clearfix">
+                        <div class="panel-icon pull-left bg-primary">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                        <div class="panel-value pull-right">
+                            <h2 class="margin-top"><?php echo $c_product['total']; ?></h2>
+                            <p class="text-muted">In Store Products</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+       
+
+             <!-- gym equipmentPanel -->
+            <div class="col-md-3">
+                    <a href="gym_equipment.php" style="color:black;">
+                        <div class="panel panel-box clearfix">
+                            <div class="panel-icon pull-left bg-success">
+                            <i class="fa fa-cubes"></i>                            
+                            </div>
+                            <div class="panel-value pull-right">
+                                <h2 class="margin-top"><?php echo $c_gym['total']; ?></h2>
+                                <p class="text-muted">Gym Equipment</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+ 
+        </div>
+        
+
+        <div class="content container-fluid">
         <div class="row">
            <!-- Highest Selling Products -->
                 <div class="col-md-4">
@@ -125,8 +180,10 @@ foreach ($all_categories as $category) {
                                 </table>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
+                
 <!-- Low Stock Panel -->
 <div class="col-md-4">
     <div class="panel panel-default">
@@ -142,28 +199,26 @@ foreach ($all_categories as $category) {
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 50px;">#</th>
-                            <th style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Category Name</th>
+                            <th style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Product Name</th> 
                             <th style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Total Quantity</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($low_stock_data)): ?>
-                            <?php foreach ($low_stock_data as $index => $data): ?>
+                        <?php if (!empty($low_stock_data_array)): ?>
+                            <?php foreach ($low_stock_data_array as $index => $data): ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $index + 1; ?></td>
+                                    <td class="text-center"><?php echo $index + 1; ?></td>                           
                                     <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <a href="categorie.php?id=<?php echo (int)$data['categorie_id']; ?>">
-                                            <?php echo remove_junk(first_character($data['category_name'])); ?>
-                                        </a>
+                                        <?php echo remove_junk(first_character($data['category_name'])); ?> <!-- Display category name -->
                                     </td>
                                     <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <?php echo remove_junk($data['total_quantity']); ?>
+                                        <?php echo remove_junk($data['quantity']); ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="3" class="text-center">No low stock products found.</td>
+                                <td colspan="4" class="text-center">No low stock products found.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -191,9 +246,9 @@ foreach ($all_categories as $category) {
                     <a class="list-group-item clearfix" href="product.php?id=<?php echo (int)$recent_product['id']; ?>">
                         <h4 class="list-group-item-heading" style="display: flex; align-items: center;">
                             <?php if ($recent_product['media_id'] === '0'): ?>
-                                <img class="img-avatar img-circle" src="vuploads/products/no_image.png" alt="" style="width: 40px; height: 40px; margin-right: 10px;">
+                                <img class="img-avatar img-circle" src="uploads/products/no_image.png" alt="" style="width: 40px; height: 40px; margin-right: 10px;">
                             <?php else: ?>
-                                <img class="img-avatar img-circle" src="vuploads/products/<?php echo $recent_product['image']; ?>" alt="" style="width: 40px; height: 40px; margin-right: 10px;">
+                                <img class="img-avatar img-circle" src="uploads/products/<?php echo $recent_product['image']; ?>" alt="" style="width: 40px; height: 40px; margin-right: 10px;">
                             <?php endif; ?>
                             <span style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <?php echo remove_junk(first_character($recent_product['categorie'])); ?>
@@ -205,14 +260,12 @@ foreach ($all_categories as $category) {
                         
                     </a>
                 <?php endforeach; ?>
-            </div>
-        </div>
+            </div> 
     </div>
 </div>
 
-        </div>
-    </div>
-</div>
+  
+
 
 <?php include_once('vlayouts/footer.php'); ?>
 <?php include 'layouts/customizer.php'; ?>

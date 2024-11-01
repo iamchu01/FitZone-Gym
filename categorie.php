@@ -14,7 +14,17 @@ function setEditCategory(id, name) {
 function confirmEdit() {
     return confirm("changing affects all product list Are you sure you want to save these changes?");
   }
-  
+
+  $(document).ready(function() {
+    $('#category-search').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('tbody tr').filter(function() {
+            $(this).toggle($(this).find('td:nth-child(2)').text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+});
+
+
 </script>
 
 <?php
@@ -108,7 +118,9 @@ if (isset($_POST['add_cat'])) {
 <?php include 'layouts/menu.php'; ?> 
 <div class="page-wrapper" style="padding-top:2%;">
     <div class="content container-fluid">
-        <h3 class="page-title">Products</h3>
+   <div class="row">
+      <div class="col"> <h3 class="page-title">Products</h3>
+    </div>  
         <div class="row">
             <div class="col-md-12">
                 <?php echo display_msg($msg); ?>
@@ -133,11 +145,39 @@ if (isset($_POST['add_cat'])) {
                     </div>
                 </div>
             </div>
-           
-            <div class="col-md-12">
+          
+            </div>
+            <div class="col">
+      <div class="dropdown position-absolute top-0 end-0">
+  <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Inventory management Navigation bar" data-toggle="tooltip">
+    <span class="fa fa-navicon"></span>
+  </a>
+
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+  <li><a class="dropdown-item" href="admin.php"><span class="fa fa-home"></span> Inventory Overview</a></li>
+    <li><a class="dropdown-item" href="categorie.php"><span class="fa fa-th"></span> Add Product</a></li>
+    <li><a class="dropdown-item" href="product.php"><span class="fa fa-shopping-cart"></span> Product Stock List</a></li>
+    <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-cubes"></span> Gym equpment</a></li>
+    
+    <!-- Add more links as needed -->
+  </ul>
+</div>
+
+    </div>
+        <div class="col-md-12">
+        <div class="panel panel-default">
+        <div class="panel-heading clearfix"> 
+             <div class="col">Search Product</div>     
+                    <div class="col-md-4">
+                        <div class="input-group">                                             
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" id="category-search" class="form-control" placeholder="Type Product name...">
+                        </div>
+                    </div>
+                    </div>
             <div class="panel-body">
-                <div class="table-responsive">
-                <table class="table custom-table table-dataTable">
+            <div class="table-responsive">
+            <table class="table custom-table table-dataTable">
         <thead>
             <tr>
                 <th class="text-center" style="width: 50px;">#</th>
@@ -169,7 +209,7 @@ if (isset($_POST['add_cat'])) {
                                 <!-- Delete Button -->
                                 <form action="categorie.php" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<?php echo (int)$cat['id']; ?>">
-                                    <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this category?');">
+                                    <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this Product?');">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
                                 </form>
@@ -180,11 +220,17 @@ if (isset($_POST['add_cat'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
-                </div>
-    
-</div>
             </div>
-  
+          
+        
+        </div>
+        </div>
+    
+            </div>
+            </div>
+</div>
+</div>
+            
 
             
 
