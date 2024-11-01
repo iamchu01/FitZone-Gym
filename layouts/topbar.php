@@ -68,7 +68,7 @@
         <!-- /Flag //! REMOVED -->
         
         <!-- Notifications -->
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
             <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                 <i class="fa fa-bell-o"></i> <span class="badge rounded-pill"></span>
             </a>
@@ -84,11 +84,11 @@
                     <a href="activities.php">View all Notifications</a>
                 </div>
             </div>
-        </li>
+        </li> -->
         <!-- /Notifications -->
         
         <!-- Message Notifications -->
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
             <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                 <i class="fa fa-comment-o"></i> <span class="badge rounded-pill">8</span>
             </a>
@@ -190,7 +190,7 @@
                     <a href="chat.php">View all Messages</a>
                 </div>
             </div>
-        </li>
+        </li> -->
         <!-- /Message Notifications -->
 
         <li class="nav-item dropdown has-arrow main-drop">

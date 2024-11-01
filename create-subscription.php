@@ -3,360 +3,208 @@
 
 <head>
 
-    <title>Create Subscription - Gym Admin</title>
+    <title>Subscription - HRMS admin template</title>
 
     <?php include 'layouts/title-meta.php'; ?>
+
     <?php include 'layouts/head-css.php'; ?>
-
-    <style>
-
-.form-label {
-    font-size: 18px;
-    font-weight: 600; 
-    color: #2c3e50; 
-    margin-bottom: 5px; 
-    display: block;
-    line-height: 1.5; 
-}
-
-
-.form-label span {
-    color: #e74c3c; 
-}
-
-
-input, select, textarea {
-    font-size: 16px; 
-    padding: 12px; 
-    border-radius: 8px; 
-    border: 1px solid #ccc; 
-}
-
-input:focus, select:focus, textarea:focus {
-    border-color: #5cbf6b; 
-    outline: none; 
-    box-shadow: 0 0 5px rgba(92, 191, 107, 0.3); 
-}
-
-.mb-3 {
-    margin-bottom: 25px; 
-}
-
-
-.input-group-text {
-    background-color: #f5f5f5; /* Subtle background color for currency symbol */
-    font-weight: bold;
-    border: 1px solid #ccc;
-    border-radius: 0;
-}
-
-
-input[type="number"] {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 0 8px 8px 0; /* Rounded corners on the right side for a modern look */
-    border: 1px solid #ccc;
-}
-
-input::placeholder {
-    color: #aaa; /* Subtle placeholder color */
-}
-
-
-
-.card-header {
-    background: linear-gradient(90deg, #5cbf6b 0%, #4caf50 100%);
-    color: #f0f0f0;
-    padding: 15px;
-    font-size: 24px;
-    font-weight: 600; 
-    text-align: center;
-    border-radius: 8px 8px 0 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-bottom: 3px solid #218838;
-}
-
-
-.card-header .card-title-custom {
-    color: #f0f0f0 !important; 
-    font-size: 26px !important; 
-    font-weight: bold; 
-    letter-spacing: 1px; 
-    margin: 0;
-}
-
-.card-header {
-    border-bottom: 3px solid #218838;
-}
-
-
-.feature-input-group {
-    display: flex;
-    align-items: center; 
-    margin-bottom: 10px;
-}
-
-.feature-input-group input {
-    flex: 1;
-    padding: 10px; 
-    font-size: 16px; 
-    margin-right: 10px; 
-}
-
-
-.remove-feature-btn {
-    margin-left: 10px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px; 
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.remove-feature-btn:hover {
-    background-color: #b02a37;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-
-.btn-add-feature{
-    color: #fff;
-    background-color: #28a745;
-    border: none;
-    padding: 12px 20px; 
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px; 
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    font-weight: 600;
-}
-
-.btn-add-feature:hover{
-    background-color: #218838;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.btn-custom-green.mt-2 {
-    margin-top: 10px;
-}
-
-.btn-create-subscription {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    font-weight: 600;
-}
-
-.btn-create-subscription:hover {
-    background-color: #218838;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.btn-preview-subscription {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    font-weight: bold;
-}
-
-.btn-preview-subscription:hover {
-    background-color: #0056b3;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.btn-save-draft {
-    background-color: #6c757d; 
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    font-weight: bold;
-}
-
-.btn-save-draft:hover {
-    background-color: #5a6268;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.d-flex {
-    display: flex;
-    justify-content: space-between; 
-    gap: 10px;
-}
-
-.btn-create-subscription, .btn-preview-subscription, .btn-save-draft {
-    width: auto; 
-    flex: 1; 
-}
-
-
-.d-grid .mt-2 {
-    margin-top: 10px; 
-}
-
-textarea {
-    font-size: 16px; 
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-/* Styling for the Pricing section label */
-.pricing-section-label {
-    font-size: 20px; /* Slightly larger font size for section header */
-    font-weight: bold; /* Bold to emphasize the section */
-    color: #2c3e50; /* Darker color for better contrast */
-    display: block; /* Ensure it stays on its own line */
-}
-
-
-    </style>
 
 </head>
 
 <body>
+
     <div class="main-wrapper">
     <?php include 'layouts/menu.php'; ?>
-
-    <!-- Page Wrapper -->
-    <div class="page-wrapper">
-    
-        <!-- Page Content -->
-        <div class="content container-fluid">
+   <div class="page-wrapper">
             
-            <!-- Page Header -->
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h3 class="page-title">Create Subscription Plan</h3>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Create Subscription Plan</li>
-                        </ul>
+                <!-- Page Content -->
+                <div class="content container-fluid">
+                
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Subscription</h3>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Subscription</li>
+                                </ul>
+                            </div>
+                            <div class="col-auto float-end ms-auto">
+                                <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#create_subscription"><i class="fa fa-plus"></i> Create Subscription</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+                    
+                    <!-- //* search bar -->
+            <div class="row filter-row">
+                <div class="col-md-6 col-md-3">  
+                    <div class="form-group form-focus">
+                        <input type="text" class="form-control floating">
+                        <label class="focus-label">Search</label>
+                    </div>
+                </div>    
+            </div>
+            <!-- //* search bar -->
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Employee ID</th>
+                                            <th>Email</th>
+                                            <th>Mobile</th>
+                                            <th class="text-nowrap">Join Date</th>
+                                            <th>Role</th>
+                                            <th class="text-end no-sort">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a href="profile.php" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
+                                                    <a href="profile.php">John Doe <span>Web Designer</span></a>
+                                                </h2>
+                                            </td>
+                                            <td>FT-0001</td>
+                                            <td>johndoe@example.com</td>
+                                            <td>9876543210</td>
+                                            <td>1 Jan 2013</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Web Developer </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">Software Engineer</a>
+                                                        <a class="dropdown-item" href="#">Software Tester</a>
+                                                        <a class="dropdown-item" href="#">Frontend Developer</a>
+                                                        <a class="dropdown-item" href="#">UI/UX Developer</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- /Page Header -->
-
-            <!-- Content Starts -->
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title card-title-custom">New Subscription Plan Details</h4>
+                <!-- /Page Content -->
+                
+                <!-- Add Employee Modal -->
+                <div id="create_subscription" class="modal custom-modal fade" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Create Subscription</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Subscription Title <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Description</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Offer <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Fee <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="email">
+                                            </div>
+                                        </div>
+                                        
+                                    <div class="submit-section">
+                                        <button class="btn btn-primary submit-btn">Create</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form action="process-subscription.php" method="POST">
-                                <!-- Plan Name -->
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <label for="planName" class="form-label">Plan Name <span>*</span></label>
-                                        <input type="text" class="form-control" id="planName" name="planName" placeholder="Enter plan name (e.g., Weekly, Monthly)" required>
+                    </div>
+                </div>
+                <!-- /Add Employee Modal -->
+                
+                <!-- Edit Employee Modal -->
+                <div id="edit_subscription" class="modal custom-modal fade" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Employee</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row">
+                                      
                                     </div>
-
-                                    <!-- Plan Duration -->
-                                    <div class="col-md-6 mb-4">
-                                        <label for="planDuration" class="form-label">Plan Duration <span>*</span></label>
-                                        <select class="form-select" id="planDuration" name="planDuration" required>
-                                            <option value="">Select Plan Duration</option>
-                                            <option value="weekly">Weekly</option>
-                                            <option value="monthly">Monthly</option>
-                                            <option value="halfMonth">Half Month</option>
-                                        </select>
+                                    <div class="submit-section">
+                                        <button class="btn btn-primary submit-btn">Save</button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Edit Employee Modal -->
+                
+                <!-- Archive Subscription -->
+                <div class="modal custom-modal fade" id="archive_subscription" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="form-header">
+                                    <h3>Archive Subscription</h3>
+                                    <p>Are you sure want to archive?</p>
                                 </div>
-
-
-
-                                <!-- Pricing Section -->
-                               <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <label for="regularPrice" class="form-label">Regular Price <span>*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="regularPrice" name="regularPrice" placeholder="Enter regular price" step="0.01" min="0" required onkeydown="preventE(event)">
-                                    </div>
-                                </div>
-
-                                <!-- Student Price -->
-                                <div class="col-md-6 mb-4">
-                                    <label for="studentPrice" class="form-label">Student Price <span>*</span> </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="studentPrice" name="studentPrice" placeholder="Enter student price" step="0.01" min="0" required required onkeydown="preventE(event)">
+                                <div class="modal-btn delete-action">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="javascript:void(0);" class="btn btn-primary continue-btn">Archive</a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                                
-
-                                <!-- Customizable Features Section -->
-                                <div class="mb-4">
-                                    <label class="form-label">Included Features <span>*</span></label>
-                                    <div id="featuresContainer">
-                                        <div class="feature-input-group">
-                                            <input type="text" class="form-control" name="features[]" placeholder="Enter feature (e.g., Free Gym Shirt)" required>
-                                            <button type="button" class="remove-feature-btn" onclick="removeFeature(this)">Remove</button>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn-add-feature" onclick="addFeature()">Add Feature</button>
-                                </div>
-
-                                <!-- Plan Description -->
-                                <div class="mb-4">
-                                    <label for="planDescription" class="form-label">Plan Description</label>
-                                    <textarea class="form-control" id="planDescription" name="planDescription" rows="4" placeholder="Enter additional details about the subscription plan"></textarea>
-                                </div>
-
-                                <!-- Status Toggle -->
-                                <!-- <div class="mb-4">
-                                    <label for="planStatus" class="form-label">Plan Status</label>
-                                    <select class="form-select" id="planStatus" name="planStatus">
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                    </select>
-                                </div> -->
-
-                                <!-- Buttons: Submit, Preview, Save as Draft -->
-                                <div class="d-flex justify-content-between mb-2">
-                                    <button type="submit" class="btn-create-subscription">Create Subscription</button>
-                                    <!-- <button type="button" class="btn-preview-subscription">Preview Subscription</button>
-                                    <button type="button" class="btn-save-draft">Save as Draft</button> -->
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
+                <!-- /Delete Employee Modal -->
+                
             </div>
-            <!-- /Content End -->
-            
-        </div>
-        <!-- /Page Content -->
-        
-    </div>
-    <!-- /Page Wrapper -->
+            <!-- /Page Wrapper -->
+
 
 </div>
 <!-- end main wrapper-->
@@ -365,44 +213,7 @@ textarea {
 <!-- JAVASCRIPT -->
 <?php include 'layouts/vendor-scripts.php'; ?>
 
-<script>
-// JavaScript to dynamically add and remove features
-function addFeature() {
-    const featureGroup = document.createElement('div');
-    featureGroup.classList.add('feature-input-group');
 
-    const featureInput = document.createElement('input');
-    featureInput.type = 'text';
-    featureInput.name = 'features[]';
-    featureInput.classList.add('form-control');
-    featureInput.placeholder = 'Enter feature (e.g., Free Gym Shirt)';
-    featureInput.required = true;
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.classList.add('remove-feature-btn');
-    removeBtn.innerHTML = 'Remove';
-    removeBtn.onclick = function() {
-        removeFeature(removeBtn);
-    };
-
-    featureGroup.appendChild(featureInput);
-    featureGroup.appendChild(removeBtn);
-
-    document.getElementById('featuresContainer').appendChild(featureGroup);
-}
-
-function removeFeature(button) {
-    const featureGroup = button.parentElement;
-    document.getElementById('featuresContainer').removeChild(featureGroup);
-}
-
-function preventE(event) {
-    if (event.key === 'e' || event.key === 'E' || event.key === '+' || event.key === '-') {
-        event.preventDefault(); // Prevents these keys from being input
-    }
-}
-</script>
 
 </body>
 
