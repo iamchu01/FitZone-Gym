@@ -47,7 +47,7 @@ $page = $components[2];
                         <li><a class="<?php echo ($page == 'add-member.php')?'active':'';?>" href="add-member.php">Members</a></li>
                         <li><a class="<?php echo ($page == 'create-subscription.php')?'active':'';?>" href="create-subscription.php">Subscription</a></li>
                         <li>
-                            <a class="<?php echo ($page == 'admin.php' || $page == 'add_product.php' || $page == 'product.php' ||  $page == 'categorie.php') ? 'active' : ''; ?>" href="admin.php">Inventory Management</a>
+                            <a class="<?php echo ($page == 'gym_equipment.php' || $page == 'admin.php' || $page == 'add_product.php' || $page == 'product.php' ||  $page == 'categorie.php') ? 'active' : ''; ?>" href="admin.php">Inventory Management</a>
                         </li>
 
                         <!-- <li><a class="<?php echo ($page == 'category-list.php')?'active':'';?>" href="category-list.php">Category List</a></li>                  -->
@@ -91,6 +91,7 @@ $page = $components[2];
                     <a href="#"><i class="la la-tools"></i> <span>Utilities</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'discount.php') ? 'active' : ''; ?>" href="discount.php">Discounts</a></li>
+                        <li><a class="<?php echo ($page == 'media.php') ? 'active' : ''; ?>" href="media.php">Media</a></li>
                         <li><a class="<?php echo ($page == 'stock-in-out.php') ? 'active' : ''; ?>" href="stock-in-out.php">Stock In / Out</a></li>
                         <li><a class="<?php echo ($page == 'archive.php') ? 'active' : ''; ?>" href="archive.php">Archive</a></li>
                         <li><a class="<?php echo ($page == 'renewal-and-cancellation.php')?'active':'';?>" href="renewal-and-cancellation.php">Renewal & Cancellations</a></li>

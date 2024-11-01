@@ -9,7 +9,7 @@ class MySqli_DB {
     function __construct() {
       $this->db_connect();
     }
-
+  
 /*--------------------------------------------------------------*/
 /* Function for Open database connection
 /*--------------------------------------------------------------*/
@@ -26,7 +26,7 @@ public function db_connect()
                die("Failed to Select Database". mysqli_connect_error());
              }
          }
-}
+        }
 /*--------------------------------------------------------------*/
 /* Function for Close database connection
 /*--------------------------------------------------------------*/
@@ -105,8 +105,8 @@ public function while_loop($loop){
 }
 
 
-
 }
+
 
 
 $db = new MySqli_DB();

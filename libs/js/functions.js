@@ -96,33 +96,4 @@ function suggetion() {
         });
   });
 
-function find_low_stock_products($threshold = 10) {
-  global $db; // Assuming $db is your database connection variable
 
-  $sql = "SELECT id, name, quantity, reorder_level FROM products WHERE quantity < ?";
-  
-  if ($stmt = $db->prepare($sql)) {
-      // Bind parameters
-      $stmt->bind_param("i", $threshold); // 'i' specifies the variable type (integer)
-      
-      // Execute the statement
-      $stmt->execute();
-      
-      // Get the result
-      $result = $stmt->get_result();
-      
-      // Fetch all low stock products
-      $low_stock_products = [];
-      while ($row = $result->fetch_assoc()) {
-          $low_stock_products[] = $row;
-      }
-      
-      // Close the statement
-      $stmt->close();
-      
-      return $low_stock_products; // Return the array of low stock products
-  } else {
-      // Handle error
-      return [];
-  }
-}
