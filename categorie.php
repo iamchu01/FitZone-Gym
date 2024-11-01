@@ -209,7 +209,7 @@ if (isset($_POST['add_cat'])) {
                                 <!-- Delete Button -->
                                 <form action="categorie.php" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<?php echo (int)$cat['id']; ?>">
-                                    <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this category?');">
+                                    <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this Product?');">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
                                 </form>

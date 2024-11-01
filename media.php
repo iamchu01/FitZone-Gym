@@ -29,12 +29,10 @@
           <div class="col-md-6">
           <?php echo display_msg($msg); ?>
         </div>
-          <div class="col-md-12">
-          <div class="row">
-        
+        <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading clearfix">
-            <span class="glyphicon glyphicon-camera"></span>
+            <span class="fa fa-camera"></span>
             <span>All Photos</span>
             <div class="pull-right">
               <form class="form-inline" action="media.php" method="POST" enctype="multipart/form-data">
@@ -66,7 +64,7 @@
                 <tr class="list-inline">
                  <td class="text-center"><?php echo count_id();?></td>
                   <td class="text-center">
-                      <img src="vuploads/products/<?php echo $media_file['file_name'];?>" class="img-thumbnail" />
+                      <img src="uploads/products/<?php echo $media_file['file_name'];?>" class="img-thumbnail" />
                   </td>
                 <td class="text-center">
                   <?php echo $media_file['file_name'];?>
@@ -76,7 +74,7 @@
                 </td>
                 <td class="text-center">
                   <a href="delete_media.php?id=<?php echo (int) $media_file['id'];?>" class="btn btn-danger btn-xs"  title="Edit">
-                    <span class="glyphicon glyphicon-trash"></span>
+                    <span class="fa fa-trash"></span>
                   </a>
                 </td>
                </tr>
@@ -85,7 +83,6 @@
           </div>
         </div>
       </div>
-          </div>
           
         </div>
 
