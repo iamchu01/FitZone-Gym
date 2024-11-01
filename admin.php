@@ -1,5 +1,6 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
+
 <head>
     <title>Dashboard - GYYMS admin</title>
     <?php include 'layouts/title-meta.php'; ?>
@@ -59,7 +60,9 @@ foreach ($all_categories as $category) {
 <div class="page-wrapper" style="padding-top:2%;">
     <div class="content container-fluid">
     <h3 class="page-title">Inventory Management</h3>
+   
         <div class="row">
+        
             <!-- Category Panel -->
             <div class="col-md-3">
                 <a href="categorie.php" style="color:black;">
@@ -89,8 +92,44 @@ foreach ($all_categories as $category) {
                     </div>
                 </a>
             </div>
-        </div><br>
+       
 
+             <!-- gym equipmentPanel -->
+            <div class="col-md-3">
+                    <a href="gym_equipment.php" style="color:black;">
+                        <div class="panel panel-box clearfix">
+                            <div class="panel-icon pull-left bg-success">
+                            <i class="fa fa-cubes"></i>                            
+                            </div>
+                            <div class="panel-value pull-right">
+                                <h2 class="margin-top"><?php echo $c_product['total']; ?></h2>
+                                <p class="text-muted">Gym Equipment</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+      <div class="dropdown position-absolute top-0 end-0">
+  <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Inventory management Navigation bar" data-toggle="tooltip">
+    <span class="fa fa-navicon"></span>
+  </a>
+
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+  <li><a class="dropdown-item" href="admin.php"><span class="fa fa-home"></span> Inventory Overview</a></li>
+    <li><a class="dropdown-item" href="categorie.php"><span class="fa fa-th"></span> Add Product</a></li>
+    <li><a class="dropdown-item" href="product.php"><span class="fa fa-shopping-cart"></span> Product Stock List</a></li>
+    <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-cubes"></span> Gym equipment</a></li>
+    
+    <!-- Add more links as needed -->
+  </ul>
+</div>
+
+    </div>
+            </div>
+           
+        </div>
+
+        <div class="content container-fluid">
         <div class="row">
            <!-- Highest Selling Products -->
                 <div class="col-md-4">
@@ -125,8 +164,10 @@ foreach ($all_categories as $category) {
                                 </table>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
+                
 <!-- Low Stock Panel -->
 <div class="col-md-4">
     <div class="panel panel-default">
@@ -142,7 +183,7 @@ foreach ($all_categories as $category) {
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 50px;">#</th>
-                            <th style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Category Name</th>
+                            <th style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Product Name</th>
                             <th style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Total Quantity</th>
                         </tr>
                     </thead>
@@ -210,9 +251,8 @@ foreach ($all_categories as $category) {
     </div>
 </div>
 
-        </div>
-    </div>
-</div>
+  
+
 
 <?php include_once('vlayouts/footer.php'); ?>
 <?php include 'layouts/customizer.php'; ?>

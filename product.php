@@ -6,14 +6,12 @@
     <?php require_once('vincludes/load.php'); ?>
     <?php include 'layouts/head-css.php'; ?>
     <script>
-      $(document).ready(function(){
-        $('#addProductModal').on('show.bs.modal', function (e) {
-            var modal = $(this);
-            modal.find('.modal-body').load('add_product.php');
-        });
-      });
-      $(document).ready(function() {
-    // Event listener for the perishable select dropdown
+$(document).ready(function() {
+    $('#addProductModal').on('show.bs.modal', function (e) {
+        var modal = $(this);
+        modal.find('.modal-body').load('add_product.php');
+    });
+
     $('#perishable-select').on('change', function() {
         if ($(this).val() === 'perishable') {
             $('#expiration-date-group').show(); // Show expiration date group
@@ -22,6 +20,13 @@
             $('#expiration-date').val(''); // Clear the expiration date if non-perishable
         }
     });
+
+    // Optional: Initialize visibility when the modal is shown
+    $('#addProductModal').on('show.bs.modal', function() {
+        $('#perishable-select').trigger('change'); // Trigger change to set initial visibility
+    });
+});
+
 
     $('#category-search').on('keyup', function() {
         var value = $(this).val().toLowerCase();
@@ -33,7 +38,6 @@
     $('#addProductModal').on('show.bs.modal', function() {
         $('#perishable-select').trigger('change'); // Trigger change to set initial visibility
     });
-});
 
   </script>
   <style>
@@ -64,24 +68,24 @@
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
         $is_perishable = isset($_POST['is-perishable']) ? 1 : 0;
 
-        // Check for expiration date based on the product type
+        // Initialize the expiration date
+        $expiration_date = NULL; // Default to NULL for non-perishable
         if ($is_perishable) {
-            $expiration_date = remove_junk($db->escape($_POST['expiration-date']));
-        } else {
-            $expiration_date = NULL; // You can use NULL for non-perishable
-            $status = 'Non-Perishable'; // Status text for non-perishable
+            $expiration_date = remove_junk($db->escape($_POST['expiration-date'])); // Get expiration date from POST
         }
 
         // Handle media id
         $media_id = !empty($_POST['product-photo']) ? remove_junk($db->escape($_POST['product-photo'])) : '0';
 
-        $date = make_date(); // Assuming this generates the current date
+        $date = make_date(); // Current date
 
-        // Insert query
+        // Prepare the insert query
         $query  = "INSERT INTO products (quantity, buy_price, sale_price, categorie_id, media_id, date, expiration_date, is_perishable) VALUES (";
         $query .= "'{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}', ";
-        $query .= ($is_perishable) ? "'{$expiration_date}', 1" : "NULL, 0"; // Adjusted here
+        $query .= $is_perishable ? "'{$expiration_date}', 1" : "NULL, 0"; // Ensure correct handling of NULL
         $query .= ")";
+
+        // Execute the query
         if ($db->query($query)) {
             $session->msg('s', "Product added ");
             redirect('product.php', false);
@@ -95,7 +99,6 @@
     }
 }
 
-
 ?>
 <?php include 'layouts/menu.php'; ?> 
 <div class="page-wrapper">
@@ -105,10 +108,22 @@
      <div class="row">
       <div class="col"> <h3 class="page-title">Product Stock List </h3>
     </div>
-      <div class="col">
-      <a href="admin.php?" class="btn btn-danger position-absolute top-0 end-0" title="Inventory management page" data-toggle="tooltip">
-                      <span class="fa fa-backward"></span>
-                    </a>      
+    <div class="col">
+      <div class="dropdown position-absolute top-0 end-0">
+  <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Inventory management Navigation bar" data-toggle="tooltip">
+    <span class="fa fa-navicon"></span>
+  </a>
+
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+  <li><a class="dropdown-item" href="admin.php"><span class="fa fa-home"></span> Inventory Overview</a></li>
+    <li><a class="dropdown-item" href="categorie.php"><span class="fa fa-th"></span> Add Product</a></li>
+    <li><a class="dropdown-item" href="product.php"><span class="fa fa-shopping-cart"></span> Product Stock List</a></li>
+    <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-cubes"></span> Gym equipment</a></li>
+    
+    <!-- Add more links as needed -->
+  </ul>
+</div>
+
     </div>
     <div class="col-md-12">
      <?php echo display_msg($msg); ?>
@@ -168,12 +183,21 @@
             <td class="text-center"><?php echo read_date($product['date']); ?></td>
             <td class="text-center">
                 <div class="btn-group">
-                    <a href="#" class="btn btn-info btn-xs btn-edit" title="Edit" data-toggle="tooltip" data-id="<?php echo (int)$product['id']; ?>">
-                        <span class="fa fa-edit"></span>
+                    <div class="dropdown action-label">
+                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-dot-circle-o text-primary"></i> Actions
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" class="btn btn-info btn-xs btn-edit" title="Edit" data-toggle="tooltip" data-id="<?php echo (int)$product['id']; ?>">
+                    <i class="fa fa-edit"></i> Edit
                     </a>
                     <a href="delete_product.php?id=<?php echo (int)$product['id'];?>" class="btn btn-danger btn-xs" title="Delete" data-toggle="tooltip">
-                        <span class="fa fa-trash"></span>
+                    <i class="fa fa-trash"></i> Delete
                     </a>
+                            </div>
+                    </div>
+                    
+                    
                 </div>
             </td>
         </tr>
