@@ -1,7 +1,24 @@
 <?php 
-    include 'layouts/session.php';
-    include 'layouts/head-main.php';
-    include 'layouts/db-connection.php';
+include 'layouts/session.php';
+include 'layouts/head-main.php';
+include 'layouts/db-connection.php';
+
+// Check if an ID is passed
+if (isset($_GET['id'])) {
+    $instructor_id = intval($_GET['id']);
+    $query = "SELECT * FROM tbl_instructors WHERE instructor_id = $instructor_id";
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        $instructor = $result->fetch_assoc();
+    } else {
+        echo "Instructor not found.";
+        exit;
+    }
+} else {
+    echo "No instructor ID provided.";
+    exit;
+}
 ?>
 
 <head>
@@ -39,57 +56,57 @@
             <!-- /Page Header -->
             
             <div class="card mb-0">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="profile-view">
-                                <div class="profile-img-wrap mt-4">
-                                    <div class="profile-img">
-                                        <a href="#"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="profile-view">
+                                    <div class="profile-img-wrap mt-4">
+                                        <div class="profile-img">
+                                            <a href="#"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="profile-basic">
-                                    <div class="row">
-                                        <div class="col-md-5 mt-3">
-                                            <div class="profile-info-left mx-4">
-                                                <h3 class="user-name mt-4">John Doe</h3>
-                                                <small class="text-muted">Instructor</small>
-                                                <div class="small doj text-muted">Date of Join : 06/12/2000</div>
-                                                <div class="small doj text-muted">Specialization : Group Fitness, Strength and Conditioning</div>
+                                    <div class="profile-basic">
+                                        <div class="row">
+                                            <div class="col-md-5 mt-3">
+                                                <div class="profile-info-left mx-4">
+                                                    <h3 class="user-name mt-4"><?php echo htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']); ?></h3>
+                                                    <small class="text-muted">Instructor</small>
+                                                    <div class="small doj text-muted">Date of Join: <?php echo htmlspecialchars($instructor['created_at']); ?></div>
+                                                    <div class="small doj text-muted">Specialization: <?php echo htmlspecialchars($instructor['specialization']); ?></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <ul class="personal-info">
+                                                    <li>
+                                                        <div class="title">Phone:</div>
+                                                        <div class="text"><?php echo htmlspecialchars($instructor['phone_number']); ?></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">Birthdate:</div>
+                                                        <div class="text"><?php echo htmlspecialchars($instructor['date_of_birth']); ?></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">Age:</div>
+                                                        <div class="text"><?php echo htmlspecialchars($instructor['age']); ?> years old</div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">Gender:</div>
+                                                        <div class="text"><?php echo htmlspecialchars($instructor['gender']); ?></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="title">Address:</div>
+                                                        <div class="text"><?php echo htmlspecialchars($instructor['address']); ?></div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <ul class="personal-info">
-                                                <li>
-                                                    <div class="title">Phone:</div>
-                                                    <div class="text"><a href="">9876543210</a></div>
-                                                </li>  
-                                                <li>
-                                                    <div class="title">Birthdate:</div>
-                                                    <div class="text">06/12/200</div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Age:</div>
-                                                    <div class="text">24 years old</div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Gender:</div>
-                                                    <div class="text">Male</div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Address:</div>
-                                                    <div class="text">1861 Bayonne Ave, Manchester Township, NJ, 08759</div>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
+                                    <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal" class="edit-icon" href="#"><i class="fa fa-pencil"></i></a></div>
                                 </div>
-                                <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal" class="edit-icon" href="#"><i class="fa fa-pencil"></i></a></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             
             <!-- Profile Info Tab -->
             <!-- <div class="tab-content">
@@ -232,8 +249,8 @@
                 <!-- /Profile Info Tab -->
                 
                 
-            </div>
         </div>
+    </div>
         <!-- /Page Content -->
         
         <!-- //* Profile Information Modal -->

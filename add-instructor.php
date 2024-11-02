@@ -88,9 +88,10 @@
                                             <tr>
                                                 <td>
                                                     <h2 class="table-avatar">
-                                                        <a href="instructor-profile.php" class="avatar"><img src="assets/img/profiles/avatar-19.jpg" alt=""></a>
-                                                        <a href="instructor-profile.php"><?php echo $full_name; ?></a>
+                                                        <a href="instructor-profile.php?id=<?php echo $row['instructor_id']; ?>" class="avatar"><img src="assets/img/profiles/avatar-19.jpg" alt=""></a>
+                                                        <a href="instructor-profile.php?id=<?php echo $row['instructor_id']; ?>"><?php echo $full_name; ?></a>
                                                     </h2>
+
                                                 </td>
                                                 <td><?php echo $phone_number; ?></td>
                                                 <td><?php echo $gender; ?></td>
