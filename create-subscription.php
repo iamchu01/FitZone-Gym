@@ -54,12 +54,14 @@
                                 <table class="table table-striped custom-table datatable">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Employee ID</th>
-                                            <th>Email</th>
-                                            <th>Mobile</th>
-                                            <th class="text-nowrap">Join Date</th>
-                                            <th>Role</th>
+                                            <th>Subscription Name</th>
+                                            <th>Subscription Type</th>
+                                            <th>Pricing</th>
+                                            <!-- <th>Duration</th> -->
+                                            <th>Payment Method</th>
+                                            <th>Member Limits</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th class="text-end no-sort">Action</th>
                                         </tr>
                                     </thead>
@@ -90,8 +92,8 @@
                                                 <div class="dropdown dropdown-action">
                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_subscription"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#archive_subscription"><i class="fa fa-archive m-r-5"></i> Archive</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -104,7 +106,7 @@
                 </div>
                 <!-- /Page Content -->
                 
-                <!-- Add Employee Modal -->
+                <!-- Create Subscription Modal -->
                 <div id="create_subscription" class="modal custom-modal fade" role="dialog">
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
@@ -119,26 +121,62 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-form-label">Subscription Title <span class="text-danger">*</span></label>
+                                                <label class="col-form-label">Subscription Name <span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Subscription Type <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="drop down weekly or monthly">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Pricing <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="i don't know">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Duration <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="length of the subscription 1month or 6month">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Payment Method <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="drop down gcash or cash">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Member Limits <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="number">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Access Features <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Start Date <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="date time picker">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">End Date <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" placeholder="date time picker">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="col-form-label">Description</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Offer <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Fee <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="email">
+                                                <textarea class="form-control" type="text"></textarea>
                                             </div>
                                         </div>
                                         
@@ -150,9 +188,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Add Employee Modal -->
+                <!-- /Create Subscription Modal  -->
                 
-                <!-- Edit Employee Modal -->
+                <!-- Edit Subscription Modal-->
                 <div id="edit_subscription" class="modal custom-modal fade" role="dialog">
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
@@ -175,9 +213,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Edit Employee Modal -->
+                <!-- /Edit Subscription Modal -->
                 
-                <!-- Archive Subscription -->
+                <!-- Archive Subscription Modal -->
                 <div class="modal custom-modal fade" id="archive_subscription" role="dialog">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -200,7 +238,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Delete Employee Modal -->
+                <!-- /Archive Subscription Modal  -->
                 
             </div>
             <!-- /Page Wrapper -->

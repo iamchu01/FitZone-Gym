@@ -117,7 +117,7 @@
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <!-- Add an ID to the archive link for JavaScript to target -->
                                                             <a id="archive-link-<?php echo $row['instructor_id']; ?>" class="dropdown-item <?php echo ($status === 'Inactive') ? '' : 'disabled'; ?>" href="#" data-bs-toggle="modal" data-bs-target="#archive_instructor" data-id="<?php echo $row['instructor_id']; ?>" title="<?php echo ($status === 'Inactive') ? '' : 'Only inactive instructors can be archived'; ?>">
-                                                                <i class="fa fa-trash-o m-r-5"></i> Archive
+                                                                <i class="fa fa-archive m-r-5"></i> Archive
                                                             </a>
                                                         </div>
                                                     </div>
@@ -154,6 +154,13 @@
                                         </button>
                                 </div>
                                 <div class="modal-body">
+                                    <div class="profile-img-wrap edit-img">
+                                        <img class="inline-block" src="assets/img/profiles/avatar-02.jpg" alt="user">
+                                        <div class="fileupload btn">
+                                            <span class="btn-text">edit</span>
+                                            <input class="upload" type="file">
+                                        </div>
+                                    </div>
                                     
                                     <!-- //* Add Instructor Form -->
                                         <form id="addUserForm" class="needs-validation instructor-info" novalidate method="POST" action="process-add-instructor.php">
