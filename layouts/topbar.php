@@ -200,9 +200,9 @@
                 <span>Admin</span>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="profile.php">My Profile</a>
-                <a class="dropdown-item" href="settings.php">Settings</a>
-                <a class="dropdown-item" href="index.php">Logout</a>
+                <a class="dropdown-item" href="admin-profile.php">My Profile</a>
+                <a class="dropdown-item" href="admin-settings.php">Settings</a>
+                <a class="dropdown-item" href="admin-login.php">Logout</a>
             </div>
         </li>
     </ul>
