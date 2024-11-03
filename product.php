@@ -7,27 +7,44 @@
     <?php include 'layouts/head-css.php'; ?>
     <script>
 $(document).ready(function() {
-    $('#addProductModal').on('show.bs.modal', function (e) {
-        var modal = $(this);
-        modal.find('.modal-body').load('add_product.php');
-    });
+    // Check selling price against buying price
+    $('input[name="saleing-price"], input[name="buying-price"]').on('input', function() {
+        var buyingPrice = parseFloat($('input[name="buying-price"]').val());
+        var sellingPrice = parseFloat($('input[name="saleing-price"]').val());
 
-    $('#perishable-select').on('change', function() {
-        if ($(this).val() === 'perishable') {
-            $('#expiration-date-group').show(); // Show expiration date group
+        // Check if selling price is less than buying price
+        if (!isNaN(sellingPrice) && !isNaN(buyingPrice) && sellingPrice < buyingPrice) {
+            // Show validation message
+            $('input[name="saleing-price"]').addClass('is-invalid');
+            $('.selling-price-feedback').text('Selling price must be greater than or equal to buying price.').show();
+            $('button[type="submit"]').prop('disabled', true); // Disable submit button
         } else {
-            $('#expiration-date-group').hide(); // Hide expiration date group
-            $('#expiration-date').val(''); // Clear the expiration date if non-perishable
+            // Clear validation message
+            $('input[name="saleing-price"]').removeClass('is-invalid');
+            $('.selling-price-feedback').text('').hide();
+            $('button[type="submit"]').prop('disabled', false); // Enable submit button if valid
         }
     });
-
-    // Optional: Initialize visibility when the modal is shown
-    $('#addProductModal').on('show.bs.modal', function() {
-        $('#perishable-select').trigger('change'); // Trigger change to set initial visibility
+    $('#is-perishable').change(function() {
+        if ($(this).is(':checked')) {
+            $('#expiration-date-group').show();
+        } else {
+            $('#expiration-date-group').hide();
+        }
     });
-});
+      // Validate before form submission
+      $('form').on('submit', function(e) {
+        let isPerishable = $('#perishable-select').val() === 'perishable';
+        let expirationDate = $('input[name="expiration-date"]').val();
 
+        // Reset feedback messages
+        $('.expiration-date-feedback').hide();
 
+        if (isPerishable && !expirationDate) {
+            e.preventDefault(); // Prevent form submission
+            $('.expiration-date-feedback').text('Expiration date is required for perishable items.').show(); // Show validation message
+        }
+    });
     $('#category-search').on('keyup', function() {
         var value = $(this).val().toLowerCase();
         $('tbody tr').filter(function() {
@@ -38,6 +55,18 @@ $(document).ready(function() {
     $('#addProductModal').on('show.bs.modal', function() {
         $('#perishable-select').trigger('change'); // Trigger change to set initial visibility
     });
+    
+// Check item code uniqueness (existing code)
+$('input[name="item-code"]').on('input', function() {
+        var itemCode = $(this).val();
+        // AJAX request to check item code...
+    });
+
+    // Check selling price against buying price
+   
+});
+  
+
 
   </script>
   <style>
@@ -52,13 +81,30 @@ $(document).ready(function() {
   </style>
 </head> 
 <?php
+function is_about_to_expire($expiration_date) {
+    $current_date = new DateTime();
+    $expiration_date = new DateTime($expiration_date);
+    $interval = $current_date->diff($expiration_date);
+    
+    // Check if the expiration date is within the next year (365 days)
+    return ($interval->days <= 31 && $interval->invert == 0);
+}
+$products = join_product_table();
+$all_categories = find_all('categories');
 
-  $products = join_product_table();
-  $all_categories = find_all('categories');
-  $all_photo = find_all('media');
-  $min_expiration_date = date('Y-m-d', strtotime('+5 months'));
-  if (isset($_POST['add_product'])) {
-    $req_fields = array('product-categorie', 'product-quantity', 'buying-price', 'saleing-price');
+$all_photo = find_all('media');
+$min_expiration_date = date('Y-m-d', strtotime('+5 months'));
+
+if (isset($_POST['add_product'])) {
+    var_dump($_POST); 
+    echo isset($_POST['expiration-date']) ? $_POST['expiration-date'] : 'Expiration date not set';
+
+    $item_code = remove_junk($db->escape($_POST['item-code']));
+    $expiration_date = $_POST['expiration-date'];
+    $is_perishable = isset($_POST['is_perishable']) ? (int)$_POST['is_perishable'] : 0; // Default to non-perishable
+
+
+    $req_fields = array('product-categorie', 'product-quantity', 'buying-price', 'saleing-price', 'item-code');
     validate_fields($req_fields);
 
     if (empty($errors)) {
@@ -66,38 +112,55 @@ $(document).ready(function() {
         $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
         $p_buy   = remove_junk($db->escape($_POST['buying-price']));
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
-        $is_perishable = isset($_POST['is-perishable']) ? 1 : 0;
+        $is_perishable = isset($_POST['is_perishable']) && $_POST['is_perishable'] == "1" ? 1 : 0;
+        $expiration_date = $is_perishable && !empty($_POST['expiration-date']) ? $db->escape($_POST['expiration-date']) : NULL;
+    
 
-        // Initialize the expiration date
-        $expiration_date = NULL; // Default to NULL for non-perishable
+        // Initialize expiration date to NULL for non-perishable items
+        $expiration_date = NULL;
         if ($is_perishable) {
-            $expiration_date = remove_junk($db->escape($_POST['expiration-date'])); // Get expiration date from POST
+            if (isset($_POST['expiration-date']) && $_POST['expiration-date'] >= $min_expiration_date) {
+                $expiration_date = remove_junk($db->escape($_POST['expiration-date']));
+            } else {
+                $session->msg("d", "Expiration date is required and must be at least 5 months from today for perishable items.");
+                redirect('product.php', false);
+                exit; // Stop further execution if expiration date is invalid
+            }
         }
 
-        // Handle media id
+        // Handle media ID
         $media_id = !empty($_POST['product-photo']) ? remove_junk($db->escape($_POST['product-photo'])) : '0';
 
-        $date = make_date(); // Current date
+        // Check for unique item code
+        $query_check = "SELECT * FROM products WHERE item_code = '{$item_code}' LIMIT 1";
+        $result_check = $db->query($query_check);
 
-        // Prepare the insert query
-        $query  = "INSERT INTO products (quantity, buy_price, sale_price, categorie_id, media_id, date, expiration_date, is_perishable) VALUES (";
-        $query .= "'{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}', ";
-        $query .= $is_perishable ? "'{$expiration_date}', 1" : "NULL, 0"; // Ensure correct handling of NULL
-        $query .= ")";
-
-        // Execute the query
-        if ($db->query($query)) {
-            $session->msg('s', "Product added ");
+        if ($result_check->num_rows > 0) {
+            $session->msg("d", "Item code must be unique. This code already exists.");
             redirect('product.php', false);
         } else {
-            $session->msg('d', ' Sorry failed to add!');
-            redirect('product.php', false);
+            $date = make_date(); // Get the current date
+
+            $query  = "INSERT INTO products (quantity, buy_price, sale_price, categorie_id, media_id, date, expiration_date, is_perishable, item_code) VALUES ";
+            $query .= "('{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}', ";
+            $query .= $expiration_date ? "'{$expiration_date}', " : "NULL, ";
+            $query .= "{$is_perishable}, '{$item_code}')";
+            
+            // Execute the query
+            if ($db->query($query)) {
+                $session->msg('s', "Product added ");
+                redirect('product.php', false);
+            } else {
+                $session->msg('d', 'Sorry, failed to add!');
+                redirect('product.php', false);
+            }
         }
     } else {
         $session->msg("d", $errors);
         redirect('product.php', false);
     }
 }
+
 
 ?>
 <?php include 'layouts/menu.php'; ?> 
@@ -120,8 +183,6 @@ $(document).ready(function() {
     <li><a class="dropdown-item" href="product.php"><span class="fa fa-th-large"></span> Product Stock List</a></li>
     <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-shopping-cart"></span> Store Products</a></li>
     <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-cubes"></span> Gym equipment</a></li>
-    
-    <!-- Add more links as needed -->
   </ul>
 </div>
 
@@ -140,32 +201,53 @@ $(document).ready(function() {
                         <input type="text" id="category-search" class="form-control" placeholder="Type Product name...">
                 </div>
             </div>
-            <div class="pull-right">
+            <div class="color-legend" style="margin-bottom: 15px;">
+        <div style="display: flex; align-items: center;">
+            <div style="width: 20px; height: 20px; background-color: #ffc107; margin-right: 5px; border-radius: 3px;"></div>
+            <span>In Stock: Low (below 10)</span>
+        </div>
+        <div style="display: flex; align-items: center;">
+            <div style="width: 20px; height: 20px; background-color: #dc3545; margin-right: 5px; border-radius: 3px;"></div>
+            <span>Out of Stock/soon to expire items span 1month 31 days</span>
+        </div>
+    </div>
+            <!-- <div class="pull-right">
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
-            </div>
+            </div> -->
         </div>
         <div class="panel-body">
-        <div class="table-responsive">
-            <table class="table custom-table datatable">
-            <thead >
-              <tr>
-                <th class="text-canter" style="width: 50px;">#</th>
-                <th class="text-canter" style="width: 10%;"> Photo</th>
-                <th class="text-canter" style="width: 50%;"> Name </th>
-                <th class="text-canter" style="width: 10%;"> In-Stock </th>
-                <th class="text-canter" style="width: 10%;"> Buying Price </th>
-                <th class="text-canter" style="width: 10%;"> Selling Price </th>
-                <th class="text-canter" style="width: 10%;"> Expire Date </th>
-                <th class="text-canter" style="width: 10%;"> Product Batch </th>
-                <th class="text-canter" style="width: 100px;"> Actions </th>
-              </tr>
+    <div class="table-responsive">
+        <table class="table table-bordered datatable">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 30px;">#</th>
+                    <th class="text-center" style="width: 10%;">Photo</th>
+                    <th class="text-center" style="width: 50%;">Name</th>
+                    <th class="text-center" style="width: 10%;">Item Code</th>
+                    <th class="text-center" style="width: 10%;">In-Stock</th>
+                    <th class="text-center" style="width: 10%;">Buying Price</th>
+                    <th class="text-center" style="width: 10%;">Selling Price</th>
+                    <th class="text-center" style="width: 10%;">Expire Date</th>
+                    <th class="text-center" style="width: 10%;">Product Batch</th>
+                    <th class="text-center" style="width: 100px;">Actions</th>
+                </tr>
             </thead>
             <tbody>
     <?php foreach ($products as $product): ?>
-        <tr class="<?php 
-    echo ($product['quantity'] == 0) ? 'bg-danger' : 
-         (($product['quantity'] < 5) ? 'bg-red' : ''); 
-                                                        ?>">
+        <?php 
+            // Determine the row class based on quantity and expiration
+            $rowClass = '';
+            if ($product['quantity'] == 0) {
+                $rowClass = 'bg-danger';
+            } elseif ($product['quantity'] < 10) {
+                $rowClass = 'bg-warning';
+            }
+            // Check if the product is about to expire within one year
+            if (isset($product['expiration_date']) && is_about_to_expire($product['expiration_date'])) {
+                $rowClass = 'bg-danger'; // Override with secondary color if about to expire
+            }
+        ?>
+        <tr class="<?php echo $rowClass; ?>">
             <td class="text-center"><?php echo count_id(); ?></td>
             <td>
                 <?php if ($product['media_id'] === '0'): ?>
@@ -175,40 +257,48 @@ $(document).ready(function() {
                 <?php endif; ?>
             </td>
             <td class="text-center"><?php echo remove_junk($product['categorie']); ?></td>
+            <td class="text-center"><?php echo remove_junk($product['item_code']); ?></td>
             <td class="text-center"><?php echo remove_junk($product['quantity']); ?></td>
             <td class="text-center"><?php echo remove_junk($product['buy_price']); ?></td>
             <td class="text-center"><?php echo remove_junk($product['sale_price']); ?></td>
             <td class="text-center">
-                <?php echo isset($product['is_perishable']) && $product['is_perishable'] ? read_date($product['expiration_date']) : 'Non-Perishable'; ?>
+                <?php 
+                if (isset($product['is_perishable']) && $product['is_perishable'] == 0) {
+                    echo 'Non-Perishable';
+                } elseif (isset($product['expiration_date']) && !empty($product['expiration_date'])) {
+                    // Display the expiration date
+                    echo htmlspecialchars($product['expiration_date']);
+                } else {
+                    echo 'No expiration date available';
+                }
+                ?>
             </td>
             <td class="text-center"><?php echo read_date($product['date']); ?></td>
             <td class="text-center">
                 <div class="btn-group">
                     <div class="dropdown action-label">
-                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-dot-circle-o text-primary"></i> Actions
+                        <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-dot-circle-o text-primary"></i> Actions
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" class="dropdown-item" title="Edit" data-toggle="tooltip" data-id="<?php echo (int)$product['id']; ?>">
+                                <i class="fa fa-edit"></i> Edit
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" class="btn btn-info btn-xs btn-edit" title="Edit" data-toggle="tooltip" data-id="<?php echo (int)$product['id']; ?>">
-                    <i class="fa fa-edit"></i> Edit
-                    </a>
-                    <a href="delete_product.php?id=<?php echo (int)$product['id'];?>" class="btn btn-danger btn-xs" title="Delete" data-toggle="tooltip">
-                    <i class="fa fa-trash"></i> Delete
-                    </a>
-                            </div>
+                            <a href="delete_product.php?id=<?php echo (int)$product['id'];?>" class="dropdown-item" title="Delete" data-toggle="tooltip" onclick="return confirm('Are you sure you want to delete this product batch?');">
+                                <i class="fa fa-trash"></i> Delete
+                            </a>
+                        </div>
                     </div>
-                    
-                    
                 </div>
             </td>
         </tr>
     <?php endforeach; ?>
 </tbody>
 
-          </tabel>
-            </div>
-          
-        </div>
+        </table>
+    </div>
+</div>
+
       </div>
     </div>
   </div>
@@ -220,7 +310,7 @@ $(document).ready(function() {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addProductModalLabel"></h5>
-                <button type="button" class=" btn btn-danger" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -236,18 +326,10 @@ $(document).ready(function() {
                             </div>
                             <div class="panel-body">
                                 <form method="post" action="" class="clearfix">
-                                    <!-- <div class="form-group " style="display: none;">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-th-large"></i></span>
-                                            <input type="text" class="form-control" name="product-title" placeholder="Product Title" >
-                                        </div>
-                                    </div> -->
-
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <select class="form-control" name="product-categorie" required>
-                                                    
                                                     <option value="">Select Product</option>
                                                     <?php foreach ($all_categories as $cat): ?>
                                                         <option value="<?php echo (int)$cat['id'] ?>"><?php echo $cat['name'] ?></option>
@@ -286,21 +368,31 @@ $(document).ready(function() {
                                                     <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price" required>
                                                     <span class="input-group-addon">.00</span>
                                                 </div>
+                                                <div class="invalid-feedback selling-price-feedback" style="display:none;"></div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="form-group">
-                                        <label for="perishable-select">Select Product Type:</label>
-                                        <select id="perishable-select" class="form-control">
-                                            <option value="non-perishable">Non-Perishable</option>
-                                            <option value="perishable">Perishable</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+                                            <input type="text" class="form-control" name="item-code" placeholder="Item Code" required>
+                                        </div>
+                                        <div class="invalid-feedback item-code-feedback" style="display:none;"></div>
+                                    </div>
+
+                                    <!-- Checkbox for Perishable -->
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="is-perishable" name="is_perishable" value="1">
+                                            <label class="form-check-label" for="is-perishable">Is Perishable</label>
+                                        </div>
                                     </div>
 
                                     <div class="form-group" id="expiration-date-group" style="display: none;">
                                         <label for="expiration-date">Expiration Date</label>
                                         <input type="date" class="form-control" name="expiration-date" id="expiration-date" min="<?php echo $min_expiration_date; ?>">
+                                        <div class="expiration-date-feedback text-danger" style="display: none;"></div> <!-- Feedback message container -->
                                     </div>
 
                                     <button type="submit" name="add_product" class="btn btn-primary">Add product</button>
@@ -313,8 +405,9 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+
 <!-- Edit Product Modal -->
-<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+<div class="modal" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -391,7 +484,7 @@ $(document).ready(function() {
 
                                     <div class="form-group" id="edit-expiration-date-group" style="display: none;">
                                         <label for="edit-expiration-date">Expiration Date</label>
-                                        <input type="date" class="form-control" name="expiration-date" id="edit-expiration-date" min="<?php echo $min_expiration_date; ?>">
+                                        <input type="date" class="form-control" name="expiration-date" id="edit-expiration-date" min="<?php echo $min_expiration_date; ?>" required>
                                     </div>
 
                                     <button type="submit" name="edit_product" class="btn btn-primary">Update Product</button>

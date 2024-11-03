@@ -208,17 +208,37 @@ function tableExists($table){
    /* Function for Finding all product name
    /* JOIN with categorie  and media database table
    /*--------------------------------------------------------------*/
-  function join_product_table(){
-     global $db;
-     $sql  =" SELECT p.id,p.name,p.quantity,p.buy_price,p.sale_price,p.media_id,p.date,c.name";
-    $sql  .=" AS categorie,m.file_name AS image";
-    $sql  .=" FROM products p";
-    $sql  .=" LEFT JOIN categories c ON c.id = p.categorie_id";
-    $sql  .=" LEFT JOIN media m ON m.id = p.media_id";
-    $sql  .=" ORDER BY p.id ASC";
-    return find_by_sql($sql);
+   function join_product_table() {
+    global $db;
 
-   }
+    // SQL query to select product details and join related category and media information
+    $sql  = "SELECT 
+                p.id, 
+                p.name, 
+                p.quantity, 
+                p.buy_price, 
+                p.sale_price, 
+                p.media_id, 
+                p.date, 
+                p.expiration_date, 
+                p.is_perishable, 
+                c.name AS categorie, 
+                m.file_name AS image, 
+                p.item_code 
+             FROM 
+                products p 
+             LEFT JOIN 
+                categories c ON c.id = p.categorie_id 
+             LEFT JOIN 
+                media m ON m.id = p.media_id 
+             ORDER BY 
+                p.id ASC";
+
+    // Execute the query and return the result set
+    return find_by_sql($sql);
+}
+
+
   /*--------------------------------------------------------------*/
   /* Function for Finding all product name
   /* Request coming from ajax.php for auto suggest
@@ -360,7 +380,18 @@ function get_low_stock_products($threshold) {
             FROM products 
             JOIN categories ON products.categorie_id = categories.id 
             WHERE products.quantity <= " . (int)$threshold;
-  return $db->query($query);
+  
+  $result = $db->query($query);
+  $low_stock_data = [];
+
+  // Fetch each row as an associative array and add it to $low_stock_data
+  if ($result) {
+      while ($row = $result->fetch_assoc()) {
+          $low_stock_data[] = $row;
+      }
+  }
+
+  return $low_stock_data; // Return as an array of associative arrays
 }
 
 ?>

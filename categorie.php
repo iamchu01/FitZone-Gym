@@ -177,7 +177,7 @@ if (isset($_POST['add_cat'])) {
                     </div>
             <div class="panel-body">
             <div class="table-responsive">
-            <table class="table custom-table table-dataTable">
+            <table class="table custom-table datatable">
         <thead>
             <tr>
                 <th class="text-center" style="width: 50px;">#</th>
