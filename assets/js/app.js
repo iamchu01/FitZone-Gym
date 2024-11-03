@@ -4,9 +4,9 @@ Template Name: SmartHR - php Admin Template
 Version      : 3.6
 */
 // Show the loader
-function showLoader() {
-    document.getElementById('loading').style.display = 'flex';
-}
+// function showLoader() {
+//     document.getElementById('loading').style.display = 'flex';
+// }
 
 // Hide the loader
 function hideLoader() {
@@ -14,13 +14,13 @@ function hideLoader() {
 }
 
 // Example: Simulate a process (like fetching data) with a 2 second delay
-window.onload = function() {
-    showLoader();
+// window.onload = function() {
+//     showLoader();
     
-    setTimeout(function() {
-        hideLoader();
-    }, 2000); // Hide the loader after 2 seconds
-};
+//     setTimeout(function() {
+//         hideLoader();
+//     }, 2000); // Hide the loader after 2 seconds
+// };
 
 $(document).ready(function() {
 	

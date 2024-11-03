@@ -15,11 +15,10 @@ $page = $components[2];
                     <span>Main</span>
                 </li>
 
-                <!--//* DASHBOARD LINK -->
-               <li class="<?php echo ($page == 'admin-dashboard.php') ?: ''; ?>"> 
+             
+                <li class="<?php echo ($page == 'admin-dashboard.php')?'active':'';?>" href="admin-dashboard.php"> 
                     <a href="admin-dashboard.php"><i class="la la-home"></i> <span>Dashboard</span></a>
                 </li>
-                
                  <hr style="border: 0; border-top: 1px solid #A0A0A0; margin: 10px 0;">
 
                 <!-- //* CALENDAR -->
@@ -92,7 +91,8 @@ $page = $components[2];
                     <ul style="display: none;">
                         <li><a class="<?php echo ($page == 'discount.php') ? 'active' : ''; ?>" href="discount.php">Discounts</a></li>
                         <li><a class="<?php echo ($page == 'media.php') ? 'active' : ''; ?>" href="media.php">Media</a></li>
-                        <li><a class="<?php echo ($page == 'stock-in-out.php') ? 'active' : ''; ?>" href="stock-in-out.php">Stock In / Out</a></li>
+                        <li><a class="<?php echo ($page == 'stock-out.php') ? 'active' : ''; ?>" href="stock-out.php">Stock Out</a></li>
+                        <li><a class="<?php echo ($page == 'stock-in.php') ? 'active' : ''; ?>" href="stock-in.php">Stock in</a></li>
                         <li><a class="<?php echo ($page == 'archive.php') ? 'active' : ''; ?>" href="archive.php">Archive</a></li>
                         <li><a class="<?php echo ($page == 'renewal-and-cancellation.php')?'active':'';?>" href="renewal-and-cancellation.php">Renewal & Cancellations</a></li>
                     </ul>

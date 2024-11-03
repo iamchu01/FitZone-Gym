@@ -27,7 +27,7 @@ $recent_products = find_recent_product_added('5');
 $recent_sales = find_recent_sale_added('5');
 
 // Fetch low stock products
-$low_stock_threshold = 5; // Set your low stock threshold here
+$low_stock_threshold = '10'; // Set your low stock threshold here
 $low_stock_data = get_low_stock_products($low_stock_threshold);
 
 // Fetch all categories
@@ -35,14 +35,7 @@ $all_categories = find_all('categories');
 
 $low_stock_data_array = []; // Initialize an array to hold results
 
-if ($low_stock_data && $low_stock_data->num_rows > 0) {
-    while ($row = $low_stock_data->fetch_assoc()) {
-        $low_stock_data_array[] = $row;
-    }
-} else {
-    // Optional: Log for debugging
-    error_log("No low stock products found.");
-}
+
 
 // Loop through each category to calculate total quantity
 foreach ($all_categories as $category) {
@@ -52,23 +45,23 @@ foreach ($all_categories as $category) {
     $query = "SELECT SUM(quantity) AS total_quantity FROM products WHERE categorie_id = '{$categorie_id}'";
     $result = $db->query($query);
 
-    if ($result && $row = $result->fetch_assoc()) {
-        $total_quantity = $row['total_quantity'] ? (int)$row['total_quantity'] : 0;
+    // if ($result && $row = $result->fetch_assoc()) {
+    //    // $total_quantity = $row['total_quantity'] ? (int)$row['total_quantity'] : 0;
 
-        // Check if the total quantity is less than or equal to the threshold
-        if ($total_quantity <= $low_stock_threshold) {
-            // Add to low stock data if the condition is met
-            $low_stock_data[] = [
-                'category_name' => $category['name'],
-                'total_quantity' => $total_quantity,
-                'categorie_id' => $categorie_id // Keep track of the category ID for linking
-            ];
-        }
-    }
+    //     // Check if the total quantity is less than or equal to the threshold
+    //     if ($total_quantity <= $low_stock_threshold) {
+    //         // Add to low stock data if the condition is met
+    //         $low_stock_data[] = [
+    //             'category_name' => $category['name'],
+    //             'total_quantity' => $total_quantity,
+    //             'categorie_id' => $categorie_id // Keep track of the category ID for linking
+    //         ];
+    //     }
+    // }
 }
 
 // Debugging output for low stock data
-var_dump($low_stock_data); // Uncomment for debugging
+// var_dump($low_stock_data); // Uncomment for debugging
 
 
 ?>
@@ -183,8 +176,8 @@ var_dump($low_stock_data); // Uncomment for debugging
                         
                     </div>
                 </div>
-                
-<!-- Low Stock Panel -->
+   
+            <!-- low stock Products -->         
 <div class="col-md-4">
     <div class="panel panel-default">
         <div class="panel-heading bg-danger">
@@ -204,21 +197,21 @@ var_dump($low_stock_data); // Uncomment for debugging
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($low_stock_data_array)): ?>
-                            <?php foreach ($low_stock_data_array as $index => $data): ?>
+                        <?php if (!empty($low_stock_data)): ?> <!-- Use low_stock_data instead -->
+                            <?php foreach ($low_stock_data as $index => $data): ?> <!-- Corrected here -->
                                 <tr>
                                     <td class="text-center"><?php echo $index + 1; ?></td>                           
                                     <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <?php echo remove_junk(first_character($data['category_name'])); ?> <!-- Display category name -->
+                                        <?php echo remove_junk(first_character($data['category_name'])); ?>
                                     </td>
                                     <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <?php echo remove_junk($data['quantity']); ?>
+                                        <?php echo $data['quantity']; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4" class="text-center">No low stock products found.</td>
+                                <td colspan="3" class="text-center">No low stock products found.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -227,9 +220,6 @@ var_dump($low_stock_data); // Uncomment for debugging
         </div>
     </div>
 </div>
-
-
-
 
             <!-- Recently Added Products -->
             <div class="col-md-4">

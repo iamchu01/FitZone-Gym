@@ -77,7 +77,7 @@ $path = "fitzone-gym" . DS . "layouts" . DS . "menu.php";
             
             <div class="panel-body">
                 <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped datatable">
           <thead>
             <tr>
               <th class="text-center">#</th>
@@ -97,6 +97,7 @@ $path = "fitzone-gym" . DS . "layouts" . DS . "menu.php";
           </thead>
           <tbody>
             <?php foreach ($all_equipment as $equipment): ?>
+              
             <tr>
               <td class="text-center"><?php echo count_id(); ?></td>
               <td> <?php echo remove_junk($equipment['name']); ?> </td>
