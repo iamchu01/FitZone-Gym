@@ -48,7 +48,7 @@
                <div class="col-md-6 col-md-3">
                   <div class="form-group form-focus">
                      <input type="text" id="searchInput" class="form-control floating" placeholder="">
-                     <label class="focus-label">Search by name</label>
+                     <label class="focus-label">Search</label>
                   </div>
                </div>
             </div>

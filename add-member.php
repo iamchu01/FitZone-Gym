@@ -54,7 +54,7 @@ include 'layouts/db-connection.php';
                <div class="col-md-6 col-md-3">
                   <div class="form-group form-focus">
                      <input type="text" id="searchMemberInput" class="form-control floating">
-                     <label class="focus-label">Search by name</label>
+                     <label class="focus-label">Search</label>
                   </div>
                </div>
             </div>
