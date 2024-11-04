@@ -67,7 +67,7 @@
                                 include 'layouts/db-connection.php'; // Include the $conn variable for database connection
 
                                 // Fetch archived instructors from the database
-                                $query = "SELECT * FROM tbl_instructors WHERE archive_status = 'Archived' ORDER BY instructor_id DESC";
+                                $query = "SELECT * FROM tbl_add_instructors WHERE archive_status = 'Archived' ORDER BY instructor_id DESC";
                                 $result = $conn->query($query);
 
                                 if ($result->num_rows > 0) {

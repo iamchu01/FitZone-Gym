@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check that both values are present
     if (!empty($instructor_id) && ($new_status === 'Active' || $new_status === 'Inactive')) {
-        $sql = "UPDATE tbl_instructors SET status = '$new_status' WHERE instructor_id = '$instructor_id'";
+        $sql = "UPDATE tbl_add_instructors SET status = '$new_status' WHERE instructor_id = '$instructor_id'";
 
         if ($conn->query($sql) === TRUE) {
             echo "Status updated successfully";

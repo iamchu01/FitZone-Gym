@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $instructorId = intval($_POST['id']);
 
     // Update the archive_status to 'Unarchived' and set the status to 'Active'
-    $query = "UPDATE tbl_instructors SET archive_status = 'Unarchived', status = 'Active' WHERE instructor_id = $instructorId";
+    $query = "UPDATE tbl_add_instructors SET archive_status = 'Unarchived', status = 'Active' WHERE instructor_id = $instructorId";
 
     if ($conn->query($query) === TRUE) {
         echo "Instructor restored successfully.";

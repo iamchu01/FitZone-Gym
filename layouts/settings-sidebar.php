@@ -21,6 +21,9 @@ $page = $components[2];
                     <li class="<?php echo ($page == 'admin-roles-permissions.php')?'active':'';?>"> 
                         <a href="admin-roles-permissions.php"><i class="fas fa-users-cog"></i> <span>Roles & Permissions</span></a>
                     </li>
+                    <li class="<?php echo ($page == 'subscription-settings.php')?'active':'';?>"> 
+                        <a href="subscription-settings.php"><i class="fas fa-clipboard-list"></i> <span>Subscription Settings</span></a>
+                    </li>
                    
                 </ul>
                 

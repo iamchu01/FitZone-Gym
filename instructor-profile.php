@@ -6,7 +6,7 @@ include 'layouts/db-connection.php';
 // Check if an ID is passed
 if (isset($_GET['id'])) {
     $instructor_id = intval($_GET['id']);
-    $query = "SELECT * FROM tbl_instructors WHERE instructor_id = $instructor_id";
+    $query = "SELECT * FROM tbl_add_instructors WHERE instructor_id = $instructor_id";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
@@ -71,7 +71,7 @@ if (isset($_GET['id'])) {
                                                 <div class="profile-info-left mx-4">
                                                     <h3 class="user-name mt-4"><?php echo htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name']); ?></h3>
                                                     <small class="text-muted">Instructor</small>
-                                                    <div class="small doj text-muted">Date of Join: <?php echo htmlspecialchars($instructor['created_at']); ?></div>
+                                                    <div class="small doj text-muted">Date of Join: <?php echo htmlspecialchars($instructor['instructor_join_date']); ?></div>
                                                     <div class="small doj text-muted">Specialization: <?php echo htmlspecialchars($instructor['specialization']); ?></div>
                                                 </div>
                                             </div>

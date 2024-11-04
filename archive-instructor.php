@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Update the archive_status to 'Archived' and capture the date/time
     $archiveDate = date('Y-m-d H:i:s');
-    $query = "UPDATE tbl_instructors SET archive_status = 'Archived', archive_at = '$archiveDate', status = 'Inactive' WHERE instructor_id = $instructorId";
+    $query = "UPDATE tbl_add_instructors SET archive_status = 'Archived', archive_at = '$archiveDate', status = 'Inactive' WHERE instructor_id = $instructorId";
     
     if ($conn->query($query) === TRUE) {
         // Return a plain success message for the JavaScript to handle
