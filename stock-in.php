@@ -127,35 +127,24 @@ $all_photo = find_all('media');
 $min_expiration_date = date('Y-m-d', strtotime('+5 months'));
 
 if (isset($_POST['add_product'])) {
-   // var_dump($_POST); 
-    //echo isset($_POST['expiration-date']) ? $_POST['expiration-date'] : 'Expiration date not set';
-
     $item_code = remove_junk($db->escape($_POST['item-code']));
-    $expiration_date = $_POST['expiration-date'];
     $is_perishable = isset($_POST['is_perishable']) ? (int)$_POST['is_perishable'] : 0; // Default to non-perishable
+    $expiration_date = NULL; // Initialize to NULL for non-perishable items
 
-
-    $req_fields = array('product-categorie', 'product-quantity', 'buying-price', 'saleing-price', 'item-code');
+    $req_fields = ['product-categorie', 'product-quantity', 'buying-price', 'saleing-price', 'item-code'];
     validate_fields($req_fields);
-
+    
     if (empty($errors)) {
         $p_cat   = remove_junk($db->escape($_POST['product-categorie']));
-        $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
-        $p_buy   = remove_junk($db->escape($_POST['buying-price']));
-        $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
-        $is_perishable = isset($_POST['is_perishable']) && $_POST['is_perishable'] == "1" ? 1 : 0;
-        $expiration_date = $is_perishable && !empty($_POST['expiration-date']) ? $db->escape($_POST['expiration-date']) : NULL;
-    
-
-        // Initialize expiration date to NULL for non-perishable items
-        $expiration_date = NULL;
+        $p_qty   = (int)remove_junk($db->escape($_POST['product-quantity'])); // Ensure quantity is an integer
+        $p_buy   = (float)remove_junk($db->escape($_POST['buying-price'])); // Ensure buying price is a float
+        $p_sale  = (float)remove_junk($db->escape($_POST['saleing-price'])); // Ensure selling price is a float
+        
         if ($is_perishable) {
             if (isset($_POST['expiration-date']) && $_POST['expiration-date'] >= $min_expiration_date) {
                 $expiration_date = remove_junk($db->escape($_POST['expiration-date']));
             } else {
-                $session->msg("d", "Expiration date is required and must be at least 5 months from today for perishable items.");
-                redirect('product.php', false);
-                exit; // Stop further execution if expiration date is invalid
+                $errors[] = "Expiration date is required and must be at least 5 months from today for perishable items.";
             }
         }
 
@@ -167,8 +156,7 @@ if (isset($_POST['add_product'])) {
         $result_check = $db->query($query_check);
 
         if ($result_check->num_rows > 0) {
-            $session->msg("d", "Item code must be unique. This code already exists.");
-            redirect('product.php', false);
+            $errors[] = "Item code must be unique. This code already exists.";
         } else {
             $date = make_date(); // Get the current date
 
@@ -179,47 +167,20 @@ if (isset($_POST['add_product'])) {
             
             // Execute the query
             if ($db->query($query)) {
-                $session->msg('s', "Product added ");
+                $session->msg('s', "Product added successfully!");
                 redirect('product.php', false);
             } else {
-                $session->msg('d', 'Sorry, failed to add!');
+                error_log("Database Insert Error: " . $db->error); // Log error for debugging
+                $session->msg('d', 'Sorry, failed to add product!');
                 redirect('product.php', false);
             }
         }
     } else {
-        $session->msg("d", $errors);
+        $session->msg("d", implode("<br>", $errors)); // Show all errors
         redirect('product.php', false);
     }
 }
 
-if (isset($_POST['add_cat'])) {
-    $req_field = array('categorie-name');
-    validate_fields($req_field);
-    $cat_name = remove_junk($db->escape($_POST['categorie-name']));
-    
-    // Check for duplicate category name
-    $query = "SELECT * FROM categories WHERE name = '{$cat_name}' LIMIT 1";
-    $result = $db->query($query);
-    if ($result->num_rows > 0) {
-        $session->msg("d", "Product '{$cat_name}' already exists.");
-        redirect('categorie.php', false);
-    }
-    
-    if (empty($errors)) {
-        $sql  = "INSERT INTO categories (name)";
-        $sql .= " VALUES ('{$cat_name}')";
-        if ($db->query($sql)) {
-            $session->msg("s", "Successfully Added New Product");
-            redirect('stock-in.php', false);
-        } else {
-            $session->msg("d", "Sorry Failed to insert.");
-            redirect('stock-in.php', false);
-        }
-    } else {
-        $session->msg("d", $errors);
-        redirect('stock-in.php', false);
-    }
-}
 $category_stock = [];
 
 // Fetch quantities for each category
@@ -240,51 +201,14 @@ foreach ($all_categories as $cat) {
 <div class="page-wrapper" style="padding-top:2%;">
     <div class="content container-fluid">
    <div class="row">
-      <div class="col"> <h3 class="page-title">Products</h3>
+      <div class="col"> <h3 class="page-title">Stock In</h3>
     </div>  
         <div class="row">
             <div class="col-md-12">
                 <?php echo display_msg($msg); ?>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>
-                            <span class="fa fa-th"></span>
-                            <span>Add New Product</span>
-                        </strong>
-                    </div>
-                    <div class="panel-body">
-                        <form method="post" action="categorie.php">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="categorie-name" placeholder="Product Name" required>
-                            </div>
-                            <button type="submit" name="add_cat" class="btn btn-primary">Add Product</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-          
-            </div>
-            <div class="col">
-      <div class="dropdown position-absolute top-0 end-0">
-  <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Inventory management Navigation bar" data-toggle="tooltip">
-    <span class="fa fa-navicon"></span>
-  </a>
 
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-  <li><a class="dropdown-item" href="admin.php"><span class="fa fa-home"></span> Inventory Overview</a></li>
-    <li><a class="dropdown-item" href="categorie.php"><span class="fa fa-th"></span> Add Product</a></li>
-    <li><a class="dropdown-item" href="product.php"><span class="fa fa-shopping-cart"></span> Product Stock List</a></li>
-    <li><a class="dropdown-item" href="gym_equipment.php"><span class="fa fa-cubes"></span> Gym equpment</a></li>
-    
-    <!-- Add more links as needed -->
-  </ul>
-</div>
-
-    </div>
         <div class="col-md-12">
         <div class="panel panel-default">
         <div class="panel-heading clearfix"> 
@@ -297,6 +221,9 @@ foreach ($all_categories as $cat) {
                     </div>
                     <div class="pull-right">
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
+            </div>
+                    <div class="pull-right">
+                <a href="stock-out.php" class="btn btn-danger" >Stock Out</a>
             </div>
                     </div>
                     
@@ -323,16 +250,9 @@ foreach ($all_categories as $cat) {
                         <i class="fa fa-dot-circle-o text-primary"></i> Actions
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editCategoryModal" 
-                            onclick="setEditCategory(<?php echo $cat['id']; ?>, '<?php echo remove_junk(ucfirst($cat['name'])); ?>')">
-                            <i class="fa fa-edit"></i> Edit
+                        <a href="categorie.php" class="dropdown-item">
+                            <i class="fa fa-arrows"></i> Edit
                         </a>
-                        <form action="categorie.php" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="<?php echo (int)$cat['id']; ?>">
-                            <button type="submit" name="delete_cat" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this Product?');">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-                        </form>
                     </div>
                 </div>
             </td>

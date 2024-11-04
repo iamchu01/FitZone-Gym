@@ -1,8 +1,8 @@
-
 <?php include 'layouts/session.php'; ?>
 <?php
 require_once('vincludes/load.php');
-// Check what level user has permission to view this page
+
+// Check user permission for this page
 // page_require_level(2);
 
 $product = find_by_id('products', (int)$_GET['id']);
@@ -17,7 +17,7 @@ if ($product['quantity'] > 0) {
     redirect('product.php');
 }
 
-// Proceed to delete the product if quantity is zero
+// Proceed to delete the product only
 $delete_id = delete_by_id('products', (int)$product['id']);
 if ($delete_id) {
     $session->msg("s", "Product deleted.");

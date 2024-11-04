@@ -210,8 +210,9 @@ if (isset($_POST['add_product'])) {
             <div style="width: 20px; height: 20px; background-color: #dc3545; margin-right: 5px; border-radius: 3px;"></div>
             <span>Out of Stock/soon to expire items span 1month 31 days</span>
         </div>
-    </div>
-            <!-- <div class="pull-right">
+        </div>
+    <!-- </div>
+            <div class="pull-right">
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
             </div> -->
         </div>

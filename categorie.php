@@ -81,6 +81,19 @@ if (isset($_POST['edit_cat'])) {
     }
     redirect('categorie.php', false);
 }
+$category_stock = [];
+
+// Fetch quantities for each category
+foreach ($all_categories as $cat) {
+    $query = "SELECT SUM(quantity) AS total_quantity FROM products WHERE categorie_id = '{$cat['id']}'";
+    $result = $db->query($query);
+    
+    if ($result && $row = $result->fetch_assoc()) {
+        $category_stock[$cat['id']] = $row['total_quantity'] ? $row['total_quantity'] : 0;
+    } else {
+        $category_stock[$cat['id']] = 0; // Default to 0 if no products found
+    }
+}
 
 ?>
 <?php
@@ -182,6 +195,7 @@ if (isset($_POST['add_cat'])) {
             <tr>
                 <th class="text-center" style="width: 50px;">#</th>
                 <th>Products List</th>
+                <th class="text-center" style="width: 100px;">In-Stock</th>
                 <th class="text-center" style="width: 100px;">Actions</th>
             </tr>
         </thead>
@@ -193,7 +207,7 @@ if (isset($_POST['add_cat'])) {
                     
                     <!-- Product Name -->
                     <td><?php echo remove_junk(ucfirst($cat['name'])); ?></td>
-
+                    <td class="text-center"><?php echo $category_stock[$cat['id']]; ?></td> <!-- Display In-Stock quantity -->
                     <!-- Actions Dropdown -->
                     <td class="text-center">
                         <div class="dropdown action-label">
