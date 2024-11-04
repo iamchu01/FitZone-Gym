@@ -118,5 +118,13 @@ function randString($length = 5)
 }
 
 
+// function join_product_table1() {
+//   global $db; // Access the global database connection
+//   $sql = "SELECT p.id, c.categorie AS name, p.item_code, p.quantity, p.buy_price, p.sale_price, 
+//           p.expiration_date, p.date, p.media_id, p.is_perishable
+//           FROM products p
+//           JOIN categories c ON p.categorie_id = c.id"; // Assuming categorie_id in products references id in categories
+//   return $db->query($sql);
+// }
 
 ?>

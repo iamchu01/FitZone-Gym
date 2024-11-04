@@ -211,10 +211,10 @@ function tableExists($table){
    function join_product_table() {
     global $db;
 
-    // SQL query to select product details and join related category and media information
+    // SQL query to select product details and use category name as the product name
     $sql  = "SELECT 
                 p.id, 
-                p.name, 
+                c.name AS name,  -- Use category name as product name
                 p.quantity, 
                 p.buy_price, 
                 p.sale_price, 
@@ -238,6 +238,17 @@ function tableExists($table){
     return find_by_sql($sql);
 }
 
+
+// function join_product_table1() {
+//   global $db; // Access the global database connection
+//   $sql = "SELECT p.id, c.name AS name, p.item_code, p.quantity, p.buy_price, p.sale_price, 
+//                  p.expiration_date, p.date, p.is_perishable, m.file_name AS image
+//           FROM products p
+//           LEFT JOIN categories c ON p.categorie_id = c.id
+//           LEFT JOIN media m ON m.id = p.media_id   ORDER BY 
+//                 p.id ASC"; // Join with media table to get the image
+//   return $db->query($sql);
+// }
 
   /*--------------------------------------------------------------*/
   /* Function for Finding all product name
@@ -392,6 +403,13 @@ function get_low_stock_products($threshold) {
   }
 
   return $low_stock_data; // Return as an array of associative arrays
+}
+function report_name($table, $id) {
+  global $db; // Assuming you're using a global database connection
+  $id = (int)$id;
+  $sql = "SELECT * FROM {$table} WHERE id = '{$id}' LIMIT 1";
+  $result = $db->query($sql);
+  return ($result->num_rows === 1) ? $result->fetch_assoc() : null;
 }
 
 ?>

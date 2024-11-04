@@ -197,24 +197,27 @@ foreach ($all_categories as $category) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($low_stock_data)): ?> <!-- Use low_stock_data instead -->
-                            <?php foreach ($low_stock_data as $index => $data): ?> <!-- Corrected here -->
+                            <?php if (!empty($low_stock_data)): ?>
+                                <?php foreach ($low_stock_data as $index => $data): ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $index + 1; ?></td>
+                                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            <a href="product.php?id=<?php echo $data['id']; ?>"> <!-- Link to the product page -->
+                                                <?php echo remove_junk(first_character($data['category_name'])); ?>
+                                            </a>
+                                        </td>
+                                        <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            <?php echo $data['quantity']; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $index + 1; ?></td>                           
-                                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <?php echo remove_junk(first_character($data['category_name'])); ?>
-                                    </td>
-                                    <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <?php echo $data['quantity']; ?>
-                                    </td>
+                                    <td colspan="3" class="text-center">No low stock products found.</td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="3" class="text-center">No low stock products found.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
+                            <?php endif; ?>
+                        </tbody>
+
                 </table>
             </div>
         </div>
