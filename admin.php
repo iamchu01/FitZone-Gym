@@ -113,7 +113,7 @@ foreach ($all_categories as $category) {
                         </div>
                         <div class="panel-value pull-right">
                             <h2 class="margin-top"><?php echo $c_product['total']; ?></h2>
-                            <p class="text-muted">In Store Products</p>
+                            <p class="text-muted">E-Store Products</p>
                         </div>
                     </div>
                 </a>
