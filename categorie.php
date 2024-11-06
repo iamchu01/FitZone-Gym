@@ -56,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_cat'])) {
   // Proceed with deletion if there are no products linked to this category
   $delete_id = delete_by_id('categories', $categorie_id);
   if ($delete_id) {
-      $session->msg("s", "Category deleted.");
+      $session->msg("s", "product deleted.");
       redirect('categorie.php');
   } else {
-      $session->msg("d", "Category deletion failed.");
+      $session->msg("d", "product deletion failed.");
       redirect('categorie.php');
   }
 }

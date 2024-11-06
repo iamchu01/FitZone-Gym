@@ -104,27 +104,11 @@ $all_photo = find_all('media');
                                     <?php if (count($outreport) > 0): ?>
                                         <?php foreach ($outreport as $report): ?>
                                             <tr>
-                                                <td class="text-center"><?php echo count_id(); ?></td>
-                                                <?php 
-                                                $product_id = $report['product_id'];
-                                                $product = report_name('products', $product_id);
-                                                ?>
-                                                <td class="text-center">
-                                                    <?php 
-                                                    if ($product) {
-                                                        $category = report_name('categories', $product['categorie_id']);
-                                                        if ($category) {
-                                                            echo remove_junk($category['name']);
-                                                        } else {
-                                                            echo 'Unknown Category';
-                                                        }
-                                                    } else {
-                                                        echo 'Unknown Product';
-                                                    }
-                                                    ?>
-                                                </td>
+                                                <td class="text-center"><?php echo count_id(); ?></td>                                              
+                                               
+                                                <td class="text-center"><?php echo remove_junk($report['product_name']); ?></td>
                                                 <td class="text-center"><?php echo remove_junk($report['quantity']); ?></td>
-                                                <td class="text-center"><?php echo read_date($report['batch']); ?></td>
+                                                <td class="text-center"><?php echo read_date($report['date']); ?></td>
                                                 <td class="text-center"><?php echo remove_junk($report['reason']); ?></td>
                                                 <td class="text-center"><?php echo remove_junk($report['item_code']); ?></td>
                                             </tr>  

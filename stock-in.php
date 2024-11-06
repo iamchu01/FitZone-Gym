@@ -7,9 +7,9 @@
     <?php include 'layouts/head-css.php'; ?>
 </head> 
 <script type="text/javascript">
-function setEditCategory(id, name) {
-    document.getElementById('edit_cat_id').value = id;
-    document.getElementById('edit_cat_name').value = name;
+function setEditCategory(name) {
+   
+    document.getElementById('product-category').value = name;
 }
 function confirmEdit() {
     return confirm("changing affects all product list Are you sure you want to save these changes?");
@@ -52,6 +52,27 @@ function confirmEdit() {
             e.preventDefault(); // Prevent form submission
             $('.expiration-date-feedback').text('Expiration date is required for perishable items.').show(); // Show validation message
         }
+    });
+    $('#addProductModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var categoryId = button.data('category-id'); // Extract category ID
+        var categoryName = button.data('category-name'); // Extract category name
+
+        var modal = $(this);
+        modal.find('#addProductModalLabel').text('Stock in Product: ' + categoryName); // Set modal header
+
+        // Reset dropdown
+        var $dropdown = modal.find('#product-category');
+        $dropdown.val(categoryId); // Set selected category in dropdown
+
+        // Check if the first option is already set, if not update it
+        if ($dropdown.find('option[value=""]').length > 0) {
+            $dropdown.find('option[value=""]').text('Selected: ' + categoryName); // Change the default option text
+        }
+    });
+    $('#submitProduct').on('click', function() {
+        // Handle form submission here
+        $('#addProductForm').submit(); // Or your AJAX logic to submit the form
     });
     
     $('#category-search').on('keyup', function() {
@@ -168,19 +189,18 @@ if (isset($_POST['add_product'])) {
             // Execute the query
             if ($db->query($query)) {
                 $session->msg('s', "Product added successfully!");
-                redirect('product.php', false);
+                redirect('stock-in.php', false);
             } else {
-                error_log("Database Insert Error: " . $db->error); // Log error for debugging
-                $session->msg('d', 'Sorry, failed to add product!');
-                redirect('product.php', false);
+                // error_log("Database Insert Error: " . $db->error); // Log error for debugging
+                // $session->msg('d', 'Sorry, failed to add product!');
+                redirect('stock-in.php', false);
             }
         }
     } else {
         $session->msg("d", implode("<br>", $errors)); // Show all errors
-        redirect('product.php', false);
+        redirect('stock-in.php', false);
     }
 }
-
 $category_stock = [];
 
 // Fetch quantities for each category
@@ -219,17 +239,18 @@ foreach ($all_categories as $cat) {
                             <input type="text" id="category-search" class="form-control" placeholder="Type Product name...">
                         </div>
                     </div>
+                    <!-- <div class="pull-right">
+                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a> -->
+            <!-- </div>
                     <div class="pull-right">
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Stock in</a>
-            </div>
-                    <div class="pull-right">
-                <a href="stock-out.php" class="btn btn-danger" >Stock Out</a>
-            </div>
+                <a href="stock-out.php" class="btn btn-danger" >Stock Out</a> -->
+           
                     </div>
-                    
+                   
+                  
             <div class="panel-body">
             <div class="table-responsive">
-            <table class="table custom-table datatable">
+            <table class="table table-bordered datatable">
         <thead>
             <tr>
                 <th class="text-center" style="width: 50px;">#</th>
@@ -241,22 +262,27 @@ foreach ($all_categories as $cat) {
         <tbody>
     <?php foreach ($all_categories as $cat): ?>
         <tr>
-            <td class="text-center"><?php echo count_id(); ?></td>
-            <td><?php echo remove_junk(ucfirst($cat['name'])); ?></td>
-            <td class="text-center"><?php echo $category_stock[$cat['id']]; ?></td> <!-- Display In-Stock quantity -->
-            <td class="text-center">
-                <div class="dropdown action-label">
-                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-dot-circle-o text-primary"></i> Actions
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="categorie.php" class="dropdown-item">
-                            <i class="fa fa-arrows"></i> Edit
-                        </a>
-                    </div>
-                </div>
-            </td>
-        </tr>
+    <td class="text-center"><?php echo count_id(); ?></td>
+    <td><?php echo remove_junk(ucfirst($cat['name'])); ?></td>
+    <td class="text-center"><?php echo $category_stock[$cat['id']]; ?></td> <!-- Display In-Stock quantity -->
+    <td class="text-center">
+        <div class="dropdown action-label">
+            <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-dot-circle-o text-primary"></i> Actions
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              
+            <a href="#" class="dropdown-item" 
+   data-toggle="modal" 
+   data-target="#addProductModal" 
+   onclick="setEditCategory(<?php echo $cat['id']; ?>, '<?php echo addslashes($cat['name']); ?>');"> 
+   Stock In
+</a>
+            </div>
+        </div>
+    </td>
+</tr>
+
     <?php endforeach; ?>
 </tbody>
     </table>
@@ -280,38 +306,40 @@ foreach ($all_categories as $cat) {
                 </button>
             </div>
             <div class="modal-body" style="margin: 1px;">
-                <div class="row no-gutters"> <!-- Add no-gutters for no margin between columns -->
-                    <div class="col-12"> <!-- Use col-12 for full width -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>
-                                    <span class="fa fa-th-large"></span>
-                                    <span>Stock in Product</span>
-                                </strong>
-                            </div>
-                            <div class="panel-body">
-                                <form method="post" action="" class="clearfix">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <select class="form-control" name="product-categorie" required>
-                                                    <option value="">Select Product</option>
-                                                    <?php foreach ($all_categories as $cat): ?>
-                                                        <option value="<?php echo (int)$cat['id'] ?>"><?php echo $cat['name'] ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select class="form-control" name="product-photo">
-                                                    <option value="">Select Product Photo</option>
-                                                    <?php foreach ($all_photo as $photo): ?>
-                                                        <option value="<?php echo (int)$photo['id'] ?>"><?php echo $photo['file_name'] ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+    <div class="row no-gutters">
+        <div class="col-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>
+                        <span class="fa fa-th-large"></span>
+                        <span>Stock in Product</span>
+                    </strong>
+                </div>
+                <div class="panel-body">
+                <form method="post" action="stock-in.php" class="clearfix">
+                                    <!-- Hidden input for category ID -->
+                                    <input type="hidden" id="edit_cat_id" name="edit_cat_id" value="">
 
+                    <div class="form-group">
+    <div class="row">
+        <div class="col-md-6">
+            <select class="form-control" name="product-categorie" id="product-category" required>
+                <option value=""></option>
+                <?php foreach ($all_categories as $cat): ?>
+                    <option value="<?php echo (int)$cat['id']; ?>"><?php echo $cat['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <select class="form-control" name="product-photo">
+                <option value="">Select Product Photo</option>
+                <?php foreach ($all_photo as $photo): ?>
+                    <option value="<?php echo (int)$photo['id'] ?>"><?php echo $photo['file_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+</div>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
