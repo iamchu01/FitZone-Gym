@@ -106,7 +106,7 @@ foreach ($all_categories as $category) {
 
              <!-- Store Panel -->
              <div class="col-md-3">
-                <a href="store_product.php" style="color:black;">
+                <a href="store.php" style="color:black;">
                     <div class="panel panel-box clearfix">
                         <div class="panel-icon pull-left bg-primary">
                             <i class="fa fa-shopping-cart"></i>
